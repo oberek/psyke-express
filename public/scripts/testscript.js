@@ -37,7 +37,7 @@ var id = makeid();
 var peer = new Peer(id, {
     // host: 'localhost',
     host: 'psyke-express.herokuapp.com',
-    // port: 3000,
+    port: 8080,
     path: '/peer'
 });
 
