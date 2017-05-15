@@ -30,12 +30,13 @@ $('#peer-connect').on('click', function (evt) {
     console.log(peerID.val());
 
     connections[peerID.val()] = peer.connect(peerID.val());
-})
+});
 
 var id = makeid();
 
 var peer = new Peer(id, {
-    host: 'localhost',
+    // host: 'localhost',
+    host: 'psyke-express.herokuapp.com',
     port: 3000,
     path: '/peer'
 });
