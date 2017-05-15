@@ -5,6 +5,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var ExpressPeerServer = require('peer').ExpressPeerServer;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -23,8 +24,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/* Thomas's testing code, feel free to change /test into a pug page, just make sure it does the same thing */
+app.get('/test', function (req, res) {
+    res.sendFile(path.join(__dirname, 'views/test.html'));
+});
+
 app.use('/', index);
 app.use('/users', users);
+
+var server = app.listen(PORT);
+
+var options = {
+  debug: true
+};
+
+app.use('/peer', ExpressPeerServer(server, options));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -46,5 +60,18 @@ app.use(function(err, req, res, next) {
 
 module.exports = app;
 
-console.log("Listening on port: "+PORT);
-app.listen(PORT);
+server.on('connection', function (id) {
+    // console.log(id);
+    // console.log('============================================================');
+    console.log('Someone connected');
+});
+server.on('disconnect', function (id) {
+    //console.log(id);
+    console.log('Someone disconnected');
+});
+
+//server.listen(PORT);
+
+//console.log('listening on: ' + process.env.IP + ':' + process.env.PORT);
+console.log('listening on: localhost:' + PORT);
+server.listen(PORT);
