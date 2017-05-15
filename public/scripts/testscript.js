@@ -21,6 +21,17 @@ function makeid() {
     return text;
 }
 
+var connections = {};
+var peerID = $('#peer-id');
+
+$('#peer-connect').on('click', function (evt) {
+    evt.preventDefault();
+
+    console.log(peerID.val());
+
+    connections[peerID.val()] = peer.connect(peerID.val());
+})
+
 var id = makeid();
 
 var peer = new Peer(id, {
