@@ -1,0 +1,12 @@
+html
+    head
+        title psyke test
+        script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=', crossorigin='anonymous')
+    body
+        #container
+        script(src='http://cdn.peerjs.com/0.3/peer.min.js')
+        // PeerJS API Key: vs6hpivac4sra4i
+        form
+            input#peer-id(required='', type='text', placeholder='Peer ID')
+            button#peer-connect(type='submit') Connect
+        script(src='/scripts/testscript.js')
