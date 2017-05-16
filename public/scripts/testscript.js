@@ -37,21 +37,18 @@ $(document).ready(function () {
     var id = makeid();
 
     var peer = new Peer(id, {
-        // host: 'localhost',
         host: 'localhost',
-        port: 3000,
+        port: 8080,
         path: '/peer'
     });
 
     // var peer = new Peer(id, {
-    //     // host: 'localhost',
     //     host: 'psyke-express.herokuapp.com',
     //     port: 8080,
     //     path: '/peer'
     // });
 
     // var peer = new Peer(id, {
-    //     // host: 'localhost',
     //     host: 'psyke-tenurian.c9users.io',
     //     port: 8080,
     //     path: '/peer'
