@@ -46,6 +46,7 @@ $(document).ready(function () {
 
     function dropUser(id) {
         console.log(id);
+        delete room.members[id];
         $('#user-' + id).remove();
     }
 
@@ -135,6 +136,17 @@ $(document).ready(function () {
                                console.log(this.peer + ' has left the chat');
                                dropUser(this.peer);
                                //post data to server
+                                $.ajax({
+                                    url: window.location.protocol + '/updateRoom/'+room_id,
+                                    type: 'post',
+                                    data: {
+                                        room: JSON.stringify(room)
+                                    },
+                                    dataType: 'json',
+                                    success: function (data) {
+                                        console.log(data);
+                                    }
+                                })
                             });
 
                             conn.on('error', function (err) {

@@ -68,7 +68,7 @@ app.post('/join_room/:room_id/:user_id', function (req, res) {
   console.log(JSON.stringify(test_rooms[room_id], '\n'));
 
     res.cookie('user_id', user_id, {maxAge: 9000000});
-    res.cookie('room_id', room_id, {maxAge: 1000*60*2});
+    res.cookie('room_id', room_id, {maxAge: 1000});
 
   res.redirect('/chat');
    // res.render('chat', { title: 'chat test', room_id: req.params.room_id, user_id: req.params.user_id });
@@ -106,6 +106,11 @@ app.get('/getRoom/:room_id', function (req, res) {
     console.log(JSON.stringify(test_rooms[req.params.room_id], '\n'));
 
     res.send(JSON.stringify(test_rooms[req.params.room_id]));
+});
+
+app.post('/updateRoom/:room_id', function (req, res) {
+   test_rooms[req.params.room_id] = JSON.parse(req.body.room);
+   res.sendStatus(200);
 });
 
 /*Don't mess with this line or use any routes called 'peer' or this will break*/
