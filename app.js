@@ -9,7 +9,6 @@ var ExpressPeerServer = require('peer').ExpressPeerServer;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var test = require('./routes/test');
 
 var app = express();
 
