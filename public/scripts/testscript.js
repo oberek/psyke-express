@@ -48,6 +48,14 @@ $(document).ready(function () {
     });
 
     callPeer = function(e){
+        console.log(e);
+
+        var userid = e.id.substr(e.id.indexOf('-')+1);
+
+        console.log('userid should be: ' + userid);
+
+        console.log('getting user media');
+
         navigator.getUserMedia(
             {audio:true, video:false},
             function(stream){
@@ -57,12 +65,6 @@ $(document).ready(function () {
                 console.log("success\n"+data);
             });
     }
-
-    $('.call-button').on('click', function (e) {
-        e.preventDefault();
-
-        console.log(this);
-    })
 
     var id = makeid();
 
