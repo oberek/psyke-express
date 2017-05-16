@@ -14,11 +14,13 @@ html
             h1 Loading Chat Room...
             h3 <Please wait>
         #chatbox
-            h3#room-name
+            h3#room-name #{room_id}
             #box
                 #current-users
+                    h4 Current Users:
                     ul#users
                 #message-container
+                    h4 Messages:
                     ul#messages
             form#message-box
                 input#user-input(type='text', required='', placeholder='Enter Message here, or /w <NAME> to whisper someone')

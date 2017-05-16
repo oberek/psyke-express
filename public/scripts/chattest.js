@@ -33,12 +33,20 @@ $(document).ready(function () {
         path: '/peer'
     });
 
+
+    window.addEventListener('beforeunload', function (e) {
+        peer.disconnect();
+        // (e || window.event).returnValue = null;
+        return null;
+    });
+
     function addUser(mem) {
         $('#users').append($('<li class="user" id="user-' + mem.id + '">').text(mem.name));
     }
 
     function dropUser(id) {
-        $('user-' + id).remove();
+        console.log(id);
+        $('#user-' + id).remove();
     }
 
     function postMessage(data) {
@@ -121,6 +129,16 @@ $(document).ready(function () {
                                     default:
                                         break;
                                 }
+                            });
+
+                            conn.on('close', function () {
+                               console.log(this.peer + ' has left the chat');
+                               dropUser(this.peer);
+                               //post data to server
+                            });
+
+                            conn.on('error', function (err) {
+                               console.log(err);
                             });
                         });
                         //calls[mem.id] = peer.call(v.mem, window.localStream);
