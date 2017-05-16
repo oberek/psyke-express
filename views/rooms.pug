@@ -1,14 +1,11 @@
 html
     head
         title= title
-        script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js', integrity='sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=', crossorigin='anonymous')
+        script(src="https://code.jquery.com/jquery-3.2.1.js", integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=", crossorigin="anonymous")
     body
+        span#peer-id
         script(src='/scripts/peer.js')
         #room-selector
             h3 Choose a Room
             ul#rooms
-        #current-room
-            form
-                input#message(required='', type='text', placeholder='Enter Message or /w to whisper')
-                button#send-message(type='submit') Send
         script(src='/scripts/roomtest.js')

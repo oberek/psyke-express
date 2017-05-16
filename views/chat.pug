@@ -1,0 +1,27 @@
+//
+   Created by tfeue on 5/16/2017.
+
+html
+    head
+        title= title
+        script(src="https://code.jquery.com/jquery-3.2.1.js", integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=", crossorigin="anonymous")
+        link(type='text/css', rel='stylesheet', href='/stylesheets/style.css')
+    body
+        input#user-id.hidden(value=user_id)
+        input#username.hidden(value=username)
+        input#room-id.hidden(value=room_id)
+        #loading
+            h1 Loading Chat Room...
+            h3 <Please wait>
+        #chatbox
+            h3#room-name
+            #box
+                #current-users
+                    ul#users
+                #message-container
+                    ul#messages
+            form#message-box
+                input#user-input(type='text', required='', placeholder='Enter Message here, or /w <NAME> to whisper someone')
+                input#send-message(type='submit', value='Send')
+        script(src='/scripts/peer.js')
+        script(src='/scripts/chattest.js')
