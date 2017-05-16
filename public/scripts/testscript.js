@@ -38,10 +38,24 @@ $(document).ready(function () {
 
     var peer = new Peer(id, {
         // host: 'localhost',
-        host: 'psyke-express.herokuapp.com',
-        port: 8080,
+        host: 'localhost',
+        port: 3000,
         path: '/peer'
     });
+
+    // var peer = new Peer(id, {
+    //     // host: 'localhost',
+    //     host: 'psyke-express.herokuapp.com',
+    //     port: 8080,
+    //     path: '/peer'
+    // });
+
+    // var peer = new Peer(id, {
+    //     // host: 'localhost',
+    //     host: 'psyke-tenurian.c9users.io',
+    //     port: 8080,
+    //     path: '/peer'
+    // });
 
     peer.on('open', function (id) {
         var output = 'My peer ID is: ' + id;
