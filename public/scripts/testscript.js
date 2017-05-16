@@ -1,12 +1,11 @@
 "use-strict";
+
+var connections = {};
+
 $(document).ready(function () {
 
     //Compatibility thing.
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    /**
-     * Created by tfeue on 5/12/2017.
-     */
-
     /*quick and dirty ID generation... by no means is this safe however*/
     function makeid() {
         var text = '';
@@ -14,8 +13,8 @@ $(document).ready(function () {
         var lowercase = 'abcdefghijklmnopqrstuvwxyz';
         var uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         var numbers = '0123456789';
-        var possible = uppercase + lowercase + numbers;
 
+        var possible = uppercase + lowercase + numbers;
         for (var i = 0; i < 16; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
@@ -23,7 +22,6 @@ $(document).ready(function () {
         return text;
     }
 
-    var connections = {};
     var peerID = $('#peer-id');
 
     $('#peer-connect').on('click', function (evt) {
@@ -54,11 +52,13 @@ $(document).ready(function () {
     //     path: '/peer'
     // });
 
+    //id and peer.id are identical... do we want to keep the function as is or remove the parameter and just use peer.id?
+    //ultimately I think it will depend on how user logins are handled
     peer.on('open', function (id) {
         var output = 'My peer ID is: ' + id;
         document.getElementById('container').innerHTML = output;
         console.log(output);
-        console.log(peer.id);
+        console.log("::" + peer.id);
     });
 
     peer.on('connection', function (conn) {
