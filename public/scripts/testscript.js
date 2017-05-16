@@ -28,8 +28,9 @@ $(document).ready(function () {
         evt.preventDefault();
 
         console.log(peerID.val());
-
-        connections[peerID.val()] = peer.connect(peerID.val());
+        var conn = peer.connect(peerID.val());
+        console.log(conn);
+        connections[peerID.val()] = conn;
     });
 
     var id = makeid();
