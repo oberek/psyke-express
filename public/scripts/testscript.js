@@ -2,6 +2,7 @@
 
 var connections = {};
 var callPeer = function () {};
+var broadcast = function () {};
 
 $(document).ready(function () {
 
@@ -85,6 +86,16 @@ $(document).ready(function () {
         port: 8080,
         path: '/peer'
     });
+    
+    broadcast = function (data){
+        $.each(Object.keys(connections), function (i, v) {
+            
+            console.log(v);
+            
+            connections[v].send(data);
+            
+        })
+    }
 
     //id and peer.id are identical... do we want to keep the function as is or remove the parameter and just use peer.id?
     //ultimately I think it will depend on how user logins are handled
@@ -98,6 +109,13 @@ $(document).ready(function () {
     peer.on('connection', function (conn) {
 
         console.log(conn.peer + 'has connected to you');
+        
+        if(connections[conn.peer] === null || connections[conn.peer] === undefined){
+            console.log("Connecting back to " + conn.peer);
+            
+            connections[peer] = peer.connect(conn.peer);
+            
+        }
 
         //this might create in infinite loop
         //var responseConnection = peer.connect(conn.peer);
