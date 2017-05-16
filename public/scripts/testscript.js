@@ -31,7 +31,20 @@ $(document).ready(function () {
         var conn = peer.connect(peerID.val());
         console.log(conn);
         connections[peerID.val()] = conn;
+
+        
     });
+
+    function callPeer(){
+        navigator.getUserMedia(
+            {audio:true, video:false},
+            function(stream){
+            window.localStream = stream;
+            },
+            function(data){
+                console.log("success\n"+data);
+            });
+    }
 
     var id = makeid();
 
