@@ -58,6 +58,7 @@ $(document).ready(function () {
         var output = 'My peer ID is: ' + id;
         document.getElementById('container').innerHTML = output;
         console.log(output);
+        console.log(peer.id);
     });
 
     peer.on('connection', function (conn) {
