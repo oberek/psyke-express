@@ -39,7 +39,7 @@ $(document).ready(function () {
 
         var contact_name = $('<p>').text(peerID.val());
 
-        var call_button = $('<button class="call-button" id="call-'+peerID.val()+'">').text('call');
+        var call_button = $('<button class="call-button" id="call-'+peerID.val()+'" onclick="callPeer(this)">').text('call');
 
         contact_body.append(contact_name).append(call_button);
         contact_li.append(contact_body);
