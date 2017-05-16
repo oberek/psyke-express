@@ -42,6 +42,7 @@ var options = {
   debug: true
 };
 
+/*Don't mess with this line or use any routes called 'peer' or this will break*/
 app.use('/peer', ExpressPeerServer(server, options));
 
 // catch 404 and forward to error handler

@@ -32,10 +32,21 @@ $(document).ready(function () {
         console.log(conn);
         connections[peerID.val()] = conn;
 
-        $('#contacts').append($('<li>').text(peerID.val()));
+        var contact_li = $('<li>');
+
+        var contact_body = $('<div>');
+
+        var contact_name = $('<p>').text(peerID.val());
+
+        var call_button = $('<button class="call-button" id="call-'+peerID.val()+'">').text('call');
+
+        contact_body.append(contact_name).append(call_button);
+        contact_li.appendChild(contact_body);
+
+        $('#contacts').append(contact_li);
     });
 
-    function callPeer(){
+    function callPeer(e){
         navigator.getUserMedia(
             {audio:true, video:false},
             function(stream){
@@ -45,6 +56,12 @@ $(document).ready(function () {
                 console.log("success\n"+data);
             });
     }
+
+    $('.call-button').on('click', function (e) {
+        e.preventDefault();
+
+        console.log(this);
+    })
 
     var id = makeid();
 
