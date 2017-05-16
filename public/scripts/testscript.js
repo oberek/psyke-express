@@ -35,11 +35,11 @@ $(document).ready(function () {
 
     var id = makeid();
 
-    var peer = new Peer(id, {
-        host: 'localhost',
-        port: 8080,
-        path: '/peer'
-    });
+    // var peer = new Peer(id, {
+    //     host: 'localhost',
+    //     port: 8080,
+    //     path: '/peer'
+    // });
 
     // var peer = new Peer(id, {
     //     host: 'psyke-express.herokuapp.com',
@@ -47,11 +47,11 @@ $(document).ready(function () {
     //     path: '/peer'
     // });
 
-    // var peer = new Peer(id, {
-    //     host: 'psyke-tenurian.c9users.io',
-    //     port: 8080,
-    //     path: '/peer'
-    // });
+    var peer = new Peer(id, {
+        host: 'psyke-tenurian.c9users.io',
+        port: 8080,
+        path: '/peer'
+    });
 
     //id and peer.id are identical... do we want to keep the function as is or remove the parameter and just use peer.id?
     //ultimately I think it will depend on how user logins are handled
@@ -75,7 +75,7 @@ $(document).ready(function () {
         });
 
         conn.on('data', function (data) {
-            console.log(data);
+            console.log("data: " + data);
         });
 
         //not supported by Firefox (Mozilla needs to git gud)
