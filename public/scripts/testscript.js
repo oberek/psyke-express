@@ -32,7 +32,7 @@ $(document).ready(function () {
         console.log(conn);
         connections[peerID.val()] = conn;
 
-        
+        $('#contacts').append($('<li>').text(peerID.val()));
     });
 
     function callPeer(){
