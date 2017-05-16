@@ -75,7 +75,7 @@ $(document).ready(function () {
         });
 
         conn.on('data', function (data) {
-            console.log("data: " + data);
+            console.log("data: " + JSON.stringify(data));
         });
 
         //not supported by Firefox (Mozilla needs to git gud)
