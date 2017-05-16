@@ -9,6 +9,7 @@ var ExpressPeerServer = require('peer').ExpressPeerServer;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var test = require('./routes/test');
 
 var app = express();
 
@@ -25,12 +26,15 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 /* Thomas's testing code, feel free to change /test into a pug page, just make sure it does the same thing */
-app.get('/test', function (req, res) {
-    res.sendFile(path.join(__dirname, 'views/test.html'));
-});
+// app.get('/test', function (req, res) {
+//     res.sendFile(path.join(__dirname, 'views/test.html'));
+// });
 
 app.use('/', index);
 app.use('/users', users);
+app.get('/test', function(req, res, next) {
+  res.render('test', { title: 'test page' });
+});
 
 var server = app.listen(PORT);
 
