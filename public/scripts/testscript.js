@@ -1,6 +1,7 @@
 "use-strict";
 
 var connections = {};
+var callPeer = function () {};
 
 $(document).ready(function () {
 
@@ -41,12 +42,12 @@ $(document).ready(function () {
         var call_button = $('<button class="call-button" id="call-'+peerID.val()+'">').text('call');
 
         contact_body.append(contact_name).append(call_button);
-        contact_li.appendChild(contact_body);
+        contact_li.append(contact_body);
 
         $('#contacts').append(contact_li);
     });
 
-    function callPeer(e){
+    callPeer = function(e){
         navigator.getUserMedia(
             {audio:true, video:false},
             function(stream){
