@@ -1,0 +1,8 @@
+.mono{
+    font-family: monospace !important;
+}
+
+.hidden{
+    visibility: hidden;
+    display: none;
+}

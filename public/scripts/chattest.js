@@ -5,8 +5,6 @@ var room = null;
 var connections = {};
 var calls = {};
 
-var synchrotron;
-
 $(document).ready(function () {
     $('chatbox').hide();
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -35,8 +33,17 @@ $(document).ready(function () {
         path: '/peer'
     });
 
+    function sendDisconnect() {
+        $.each(Object.keys(room.members), function (i, v) {
+           if(v !== user_id){
+               v.send({type: 'disconnect', user_id: user_id});
+           }
+        });
+    }
+
 
     $(document).on('beforeunload', function (e) {
+        sendDisconnect();
         console.log('.');
         dropUser(user_id);
         peer.disconnect();
@@ -46,6 +53,7 @@ $(document).ready(function () {
     // (e || window.event).returnValue = null;
 
     $(document).on('unload', function (e) {
+        sendDisconnect();
         console.log('.');
         dropUser(user_id);
         peer.disconnect();
@@ -76,6 +84,40 @@ $(document).ready(function () {
         });
     }
 
+    function addConnEventListeners(conn){
+        conn.on('data', function (data) {
+            console.log(data);
+            decodeData(data);
+        });
+
+        conn.on('close', function () {
+            console.log(this.peer + ' has left the chat');
+            dropUser(this.peer);
+        });
+
+        conn.on('error', function (err) {
+            console.log(err);
+        });
+    }
+
+    function addDataConnection(conn){
+        console.log('Adding dataConneciton for ' + conn.peer);
+        console.log(conn);
+        if(conn.open){
+            console.log(conn.peer + '\'s connection is already open');
+            addConnEventListeners(conn);
+            conn.send({type: 'info-request', user_id: user_id});
+        } else {
+            console.log('Waiting for ' + conn.peer + ' to open connection');
+            addConnEventListeners(conn);
+            conn.on('open', function () {
+                console.log(conn.peer + ' has opened');
+                addConnEventListeners(conn);
+                conn.send({type: 'info-request', user_id: user_id});
+            });
+        }
+    }
+
     function postMessage(data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
     }
@@ -92,12 +134,63 @@ $(document).ready(function () {
         });
     }
 
+    var sync = function(room, user_id){
+        const memberCount = Object.keys(room.members).length;
+        $.each(Object.keys(room.members), function (i, v) {
+            if (v !== user_id) {
+                if (Object.keys(room.members).indexOf(v) >= 0) {
+                    if(connections[v] === undefined){
+                        dropUser(v);
+                    } else {
+                        if (!connections[v].open) {
+                            dropUser(v);
+                        }
+                    }
+                } else {
+                    dropUser(v);
+                }
+            }
+        });
+    };
+
+    function decodeData(data){
+        console.log("Data: "+data);
+        switch (data.type) {
+            case 'info-request':
+                connections[data.user_id].send({
+                    type: 'info-response',
+                    user_id: user_id,
+                    content: {
+                        id: user_id,
+                        name: username
+                    }
+                });
+                break;
+            case 'info-response':
+                room.members[data.user_id] = data.content;
+                addUser(data.content);
+                break;
+            case 'message':
+                postMessage(data);
+                break;
+            case 'disconnect':
+                console.log(data.user_id + ' requested disconnect');
+                dropUser(data.user_id);
+                break;
+            default:
+                console.log(data);
+                break;
+        }
+    }
+
     function step2() {
         $.ajax({
             url: window.location.protocol + '/getRoom/' + room_id,
             success: function (data) {
-                $('#loading').hide();
+                $('#loading').remove();
                 room = JSON.parse(data);
+
+                $('#room-name').text(room.name);
 
                 $('#message-box').on('submit', function (e) {
                     e.preventDefault();
@@ -107,103 +200,20 @@ $(document).ready(function () {
                     user_input.val('');
                 });
 
-                // synchrotron = setInterval(function () {
-                //     // console.log('sync');
-                //     const memberCount = Object.keys(room.members).length;
-                //     // console.log(memberCount);
-                //     $.each(Object.keys(room.members), function (i, v) {
-                //         // console.log(v);
-                //         if (v !== user_id) {
-                //             if (Object.keys(room.members).indexOf(v) >= 0) {
-                //                 if (!connections[v].open) {
-                //                     // console.log('connection is closed::'+v);
-                //                     // console.log(connections[v].open);
-                //                     dropUser(v);
-                //                 }
-                //             } else {
-                //                 dropUser(v);
-                //             }
-                //         }
-                //     });
-                //
-                //     // console.log(Object.keys(room.members).length);
-                //
-                //     if (memberCount !== Object.keys(room.members).length) {
-                //
-                //         $.ajax({
-                //             url: window.location.protocol + '/getRoom/' + room_id,
-                //             success: function (data) {
-                //                 room = JSON.parse(data);
-                //             }
-                //         });
-                //     }
-                //
-                // }, 2 * 1000);
-
-                // clearInterval(synchrotron);
-
                 console.log(room);
                 $.each(Object.keys(room.members), function (i, v) {
                     var mem = room.members[v];
 
                     addUser(mem);
 
-                    console.log(mem.id + ':::' + user_id);
-
-                    if (mem.id === user_id) {
-                        console.log('cannot connect to self');
-                    } else {
+                    if (mem.id !== user_id) {
                         console.log('Attempting connection to ' + mem.id);
                         var conn = peer.connect(mem.id);
+
+                        console.log(peer.connections);
+
                         connections[mem.id] = conn;
-                        conn.on('open', function () {
-                            conn.on('data', function (data) {
-                                console.log(data);
-                                switch (data.type) {
-                                    case 'info-request':
-                                        connections[data.user_id].send({
-                                            type: 'info-response',
-                                            user_id: user_id,
-                                            content: {
-                                                id: user_id,
-                                                name: username
-                                            }
-                                        });
-                                        break;
-                                    case 'info-response':
-                                        room.members[data.user_id] = data.content;
-                                        addUser(data.content);
-                                        break;
-                                    case 'message':
-                                        postMessage(data);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            });
-
-                            conn.on('close', function () {
-                                console.log(this.peer + ' has left the chat');
-                                dropUser(this.peer);
-                                //post data to server
-                                //moved inot the dropUser function
-                                // $.ajax({
-                                //     url: window.location.protocol + '/updateRoom/' + room_id,
-                                //     type: 'post',
-                                //     data: {
-                                //         room: JSON.stringify(room)
-                                //     },
-                                //     dataType: 'json',
-                                //     success: function (data) {
-                                //         console.log(data);
-                                //     }
-                                // });
-                            });
-
-                            conn.on('error', function (err) {
-                                console.log(err);
-                            });
-                        });
+                        addDataConnection(conn);
                         //calls[mem.id] = peer.call(v.mem, window.localStream);
                     }
                 });
@@ -215,34 +225,7 @@ $(document).ready(function () {
                     console.log(connections[conn.peer]);
                     if (connections[conn.peer] === undefined || connections[conn.peer] === null) {
                         connections[conn.peer] = conn;
-                        conn.on('open', function () {
-                            conn.on('data', function (data) {
-                                console.log(data);
-                                switch (data.type) {
-                                    case 'info-request':
-                                        connections[data.user_id].send({
-                                            type: 'info-response',
-                                            user_id: user_id,
-                                            content: {
-                                                id: user_id,
-                                                name: username
-                                            }
-                                        });
-                                        break;
-                                    case 'info-response':
-                                        room.members[data.user_id] = data.content;
-                                        addUser(data.content);
-                                        break;
-                                    case 'message':
-                                        postMessage(data);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            });
-
-                            conn.send({type: 'info-request', user_id: user_id});
-                        });
+                        addDataConnection(conn);
                     } else {
                         console.warn('PeerID ' + conn.peer + ' already connected');
                     }
@@ -256,13 +239,7 @@ $(document).ready(function () {
                 peer.on('disconnect', function () {
                     console.log('You have been disconnected.');
                 });
-                // peer.on('data', function (data) {
-                //     console.log(data);
-                // });
-
-
             }
         });
     }
-
 });

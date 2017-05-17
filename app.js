@@ -1,9 +1,6 @@
 const PORT = 8080;
 var express = require('express');
 var path = require('path');
-// var fs = require('fs');
-// var http = require('http');
-// var https = require('https');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -23,7 +20,7 @@ app.set('view engine', 'pug');
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -34,18 +31,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.get('/test', function(req, res) {
-  res.render('test', { title: 'test page' });
+app.get('/test', function (req, res) {
+    res.render('test', {title: 'test page'});
 });
 
 app.get('/rooms', function (req, res) {
-   res.render('rooms', { title: 'rooms test'});
+    res.render('rooms', {title: 'rooms test'});
 });
 
 var server = app.listen(PORT);
 
 var options = {
-  debug: true
+    debug: true
 };
 
 var test_rooms = {
@@ -60,47 +57,47 @@ app.post('/join_room/:room_id/:user_id', function (req, res) {
     var user_id = req.params.user_id;
     var room_id = req.params.room_id;
 
-  console.log('room_id: '+room_id);
-  console.log('user_id: '+user_id);
+    console.log('room_id: ' + room_id);
+    console.log('user_id: ' + user_id);
 
-  test_rooms[room_id].members[user_id] = {
-      id: user_id,
-      name: user_id
-  };
+    test_rooms[room_id].members[user_id] = {
+        id: user_id,
+        name: user_id.substr(0, 5)
+    };
 
-  console.log(JSON.stringify(test_rooms[room_id], '\n'));
+    console.log(JSON.stringify(test_rooms[room_id], '\n'));
 
     res.cookie('user_id', user_id, {maxAge: 9000000});
-    res.cookie('room_id', room_id, {maxAge: 1000*60*2});
+    res.cookie('room_id', room_id, {maxAge: 1000 * 60 * 2});
 
-  res.redirect('/chat');
-   // res.render('chat', { title: 'chat test', room_id: req.params.room_id, user_id: req.params.user_id });
+    res.redirect('/chat');
+    // res.render('chat', { title: 'chat test', room_id: req.params.room_id, user_id: req.params.user_id });
 });
 
 app.get('/chat', function (req, res) {
     var room_id = req.cookies['room_id'];
     var user_id = req.cookies['user_id'];
 
-    if(room_id === null || room_id === undefined || user_id === null || user_id === undefined){
-      //throw error
+    if (room_id === null || room_id === undefined || user_id === null || user_id === undefined) {
+        //throw error
         res.redirect('/rooms');
     } else {
-        res.render('chat', { title: 'chat test', room_id: room_id, user_id: user_id, username:user_id });
+        res.render('chat', {title: 'chat test', room_id: room_id, user_id: user_id, username: user_id});
     }
 });
 
 app.get('/getRooms', function (req, res) {
 
-  var i, getRooms = [];
+    var i, getRooms = [];
 
-  for(i = 0; i < Object.keys(test_rooms).length; i++){
-      getRooms[i] = {
-          id: Object.keys(test_rooms)[i],
-          name: test_rooms[Object.keys(test_rooms)[i]].name
-      }
-  }
+    for (i = 0; i < Object.keys(test_rooms).length; i++) {
+        getRooms[i] = {
+            id: Object.keys(test_rooms)[i],
+            name: test_rooms[Object.keys(test_rooms)[i]].name
+        }
+    }
 
-  res.send(JSON.stringify(getRooms));
+    res.send(JSON.stringify(getRooms));
 });
 // redundant with the above code
 app.get('/getRoom/:room_id', function (req, res) {
@@ -112,40 +109,37 @@ app.get('/getRoom/:room_id', function (req, res) {
 });
 
 app.post('/updateRoom/:room_id', function (req, res) {
-   test_rooms[req.params.room_id] = JSON.parse(req.body.room);
-   res.sendStatus(200);
+    test_rooms[req.params.room_id] = JSON.parse(req.body.room);
+    res.sendStatus(200);
 });
 
 /*Don't mess with this line or use any routes called 'peer' or this will break*/
 app.use('/peer', ExpressPeerServer(server, options));
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
 });
 
 // error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
 });
 
 module.exports = app;
 
 server.on('connection', function (id) {
-    // console.log(id);
-    // console.log('============================================================');
     console.log('Someone connected');
 });
 server.on('disconnect', function (id) {
-    //console.log(id);
     console.log('Someone disconnected');
 });
 
