@@ -35,9 +35,9 @@ $(document).ready(function () {
 
     function sendDisconnect() {
         $.each(Object.keys(room.members), function (i, v) {
-           if(v !== user_id){
-               v.send({type: 'disconnect', user_id: user_id});
-           }
+            if (v !== user_id) {
+                v.send({type: 'disconnect', user_id: user_id});
+            }
         });
     }
 
@@ -67,11 +67,16 @@ $(document).ready(function () {
 
     function addCallStream(call) {
         call.on('stream', function (stream) {
-            $('#user-'+call.peer).append($('<audio class="hidden userstream" id="audio-'+call.peer+'" src="'+URL.createObjectURL(stream)+'" autoplay=""></audio>'));
+            var user_li = $('#user-' + call.peer);
+            user_li.append($('<audio class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
+            var stream_controls = $('<div class="stream-controls">');
+
+
+            user_li.append(stream_controls);
         });
 
         call.on('close', function () {
-           console.log(call.peer + ' has left voice chat');
+            console.log(call.peer + ' has left voice chat');
         });
     }
 
@@ -94,7 +99,7 @@ $(document).ready(function () {
         });
     }
 
-    function addConnEventListeners(conn){
+    function addConnEventListeners(conn) {
         conn.on('data', function (data) {
             console.log(data);
             console.log((new Date).getTime());
@@ -111,11 +116,11 @@ $(document).ready(function () {
         });
     }
 
-    function addDataConnection(conn){
+    function addDataConnection(conn) {
         console.log((new Date).getTime());
         console.log('Adding dataConneciton for ' + conn.peer);
         console.log(conn);
-        if(conn.open){
+        if (conn.open) {
             console.log(conn.peer + '\'s connection is already open');
             console.log((new Date).getTime());
             addConnEventListeners(conn);
@@ -132,8 +137,16 @@ $(document).ready(function () {
         }
     }
 
+    function postError(err) {
+        messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
+    }
+
     function postMessage(data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
+    }
+
+    function postWhisper(whisper) {
+        messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name:room.members[whisper.sender].name) + ': ' + whisper.content));
     }
 
     function broadcast(msg) {
@@ -148,12 +161,12 @@ $(document).ready(function () {
         });
     }
 
-    var sync = function(room, user_id){
+    var sync = function (room, user_id) {
         const memberCount = Object.keys(room.members).length;
         $.each(Object.keys(room.members), function (i, v) {
             if (v !== user_id) {
                 if (Object.keys(room.members).indexOf(v) >= 0) {
-                    if(connections[v] === undefined){
+                    if (connections[v] === undefined) {
                         dropUser(v);
                     } else {
                         if (!connections[v].open) {
@@ -167,8 +180,8 @@ $(document).ready(function () {
         });
     };
 
-    function decodeData(data){
-        console.log("Data: "+data);
+    function decodeData(data) {
+        console.log("Data: " + data);
         switch (data.type) {
             case 'info-request':
                 connections[data.user_id].send({
@@ -186,6 +199,9 @@ $(document).ready(function () {
                 break;
             case 'message':
                 postMessage(data);
+                break;
+            case 'whisper':
+                postWhisper(data);
                 break;
             case 'disconnect':
                 console.log(data.user_id + ' requested disconnect');
@@ -210,7 +226,51 @@ $(document).ready(function () {
                     e.preventDefault();
 
                     var msg = user_input.val();
-                    broadcast(msg);
+
+                    if (msg.indexOf('/w') === 0) {
+                        if (msg.length <= 3) {
+                            postError({msg: 'You must supply a username to whisper to.'});
+                        } else {
+                            var splitter = msg.split(' ');
+                            console.log(splitter);
+                            if (splitter.length >= 3) {
+                                var unam = splitter[1];
+                                console.log(unam);
+                                if (unam === username) {
+                                    postError({msg: 'You can\'t whisper to yourself'});
+                                } else {
+                                    var target = null;
+                                    $.each(Object.keys(room.members), function (i, v) {
+                                        var v_name = room.members[v].name;
+                                        console.log(v_name);
+                                        console.log(v_name === unam);
+                                        if (target === null && v_name === unam) {
+                                            target = room.members[v];
+                                        }
+                                    });
+                                    if (target === null) {
+                                        postError({msg: 'User not found.'});
+                                    } else {
+                                        var msg_content = msg.substr(msg.indexOf(splitter[2]));
+                                        console.log(msg_content);
+                                        var whisper = {
+                                            type: 'whisper',
+                                            content: msg_content,
+                                            target: target.id,
+                                            sender: user_id
+                                        };
+                                        postWhisper(whisper);
+                                        connections[target.id].send(whisper);
+                                    }
+                                }
+                            } else {
+                                postError({msg: 'You must supply a message'});
+                            }
+                        }
+                    } else {
+                        broadcast(msg);
+                    }
+
                     user_input.val('');
                 });
 

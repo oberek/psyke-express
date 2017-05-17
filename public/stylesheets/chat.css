@@ -12,22 +12,22 @@ body {
     margin: 0;
 }
 
-#container{
+#container {
     width: 100%;
-    height:100%;
+    height: 100%;
     display: flex;
     flex-flow: column;
 }
 
-#content{
+#content {
     width: 100%;
-    height:100%;
+    height: 100%;
     display: flex;
     flex-flow: row;
     flex: 1 1 auto;
 }
 
-#voice{
+#voice {
     flex: 0 1 20%;
 }
 
@@ -65,7 +65,7 @@ body {
     margin: 0;
     padding: 0;
     overflow-y: scroll;
-    background-color: #555
+    background-color: #727272;
 }
 
 #message-box {
@@ -99,7 +99,7 @@ body {
     margin-right: 10px;
 }
 
-#current-users h3{
+#current-users h3 {
     text-align: center;
 }
 
@@ -108,15 +108,23 @@ body {
     color: black;
 }
 
-#messages li:nth-child(odd) {
-    background-color: rgba(225, 225, 225, 0.7);
+#messages li:not(.whisper):not(.error):nth-child(odd) {
+    background-color: rgba(167, 167, 167, 0.7);
 }
 
-#messages li:nth-child(even) {
-    background-color: rgba(105, 105, 105, 0.7);
+#messages li:not(.whisper):not(.error):nth-child(even) {
+    background-color: rgba(95, 95, 95, 0.7);
 }
 
-.user{
+.whisper {
+    background-color: rgba(140, 6, 157, 0.49) !important;
+}
+
+.error {
+    background-color: rgba(157, 6, 6, 0.49) !important;
+}
+
+.user {
     list-style: none;
     text-align: center;
     background-color: #777777;
