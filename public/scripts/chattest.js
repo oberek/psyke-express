@@ -5,6 +5,8 @@ var room = null;
 var connections = {};
 var calls = {};
 
+var synchrotron;
+
 $(document).ready(function () {
     $('chatbox').hide();
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -34,9 +36,20 @@ $(document).ready(function () {
     });
 
 
-    window.addEventListener('beforeunload', function (e) {
+    $(document).on('beforeunload', function (e) {
+        console.log('.');
+        dropUser(user_id);
         peer.disconnect();
-        // (e || window.event).returnValue = null;
+        peer.destroy();
+        return null;
+    });
+    // (e || window.event).returnValue = null;
+
+    $(document).on('unload', function (e) {
+        console.log('.');
+        dropUser(user_id);
+        peer.disconnect();
+        peer.destroy();
         return null;
     });
 
@@ -47,22 +60,25 @@ $(document).ready(function () {
     function dropUser(id) {
         console.log(id);
         delete room.members[id];
+        delete connections[id];
         $('#user-' + id).remove();
+
+        $.ajax({
+            url: window.location.protocol + '/updateRoom/' + room_id,
+            type: 'post',
+            data: {
+                room: JSON.stringify(room)
+            },
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+            }
+        });
     }
 
     function postMessage(data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
     }
-
-    // function ConnectionSetup(conn) {
-    //     console.log('connection setup');
-    //
-    //
-    //
-    //     conn.on('close', function () {
-    //         connections[conn.peer] = null;
-    //     });
-    // }
 
     function broadcast(msg) {
         var data = {
@@ -91,6 +107,40 @@ $(document).ready(function () {
                     user_input.val('');
                 });
 
+                // synchrotron = setInterval(function () {
+                //     // console.log('sync');
+                //     const memberCount = Object.keys(room.members).length;
+                //     // console.log(memberCount);
+                //     $.each(Object.keys(room.members), function (i, v) {
+                //         // console.log(v);
+                //         if (v !== user_id) {
+                //             if (Object.keys(room.members).indexOf(v) >= 0) {
+                //                 if (!connections[v].open) {
+                //                     // console.log('connection is closed::'+v);
+                //                     // console.log(connections[v].open);
+                //                     dropUser(v);
+                //                 }
+                //             } else {
+                //                 dropUser(v);
+                //             }
+                //         }
+                //     });
+                //
+                //     // console.log(Object.keys(room.members).length);
+                //
+                //     if (memberCount !== Object.keys(room.members).length) {
+                //
+                //         $.ajax({
+                //             url: window.location.protocol + '/getRoom/' + room_id,
+                //             success: function (data) {
+                //                 room = JSON.parse(data);
+                //             }
+                //         });
+                //     }
+                //
+                // }, 2 * 1000);
+
+                // clearInterval(synchrotron);
 
                 console.log(room);
                 $.each(Object.keys(room.members), function (i, v) {
@@ -133,24 +183,25 @@ $(document).ready(function () {
                             });
 
                             conn.on('close', function () {
-                               console.log(this.peer + ' has left the chat');
-                               dropUser(this.peer);
-                               //post data to server
-                                $.ajax({
-                                    url: window.location.protocol + '/updateRoom/'+room_id,
-                                    type: 'post',
-                                    data: {
-                                        room: JSON.stringify(room)
-                                    },
-                                    dataType: 'json',
-                                    success: function (data) {
-                                        console.log(data);
-                                    }
-                                })
+                                console.log(this.peer + ' has left the chat');
+                                dropUser(this.peer);
+                                //post data to server
+                                //moved inot the dropUser function
+                                // $.ajax({
+                                //     url: window.location.protocol + '/updateRoom/' + room_id,
+                                //     type: 'post',
+                                //     data: {
+                                //         room: JSON.stringify(room)
+                                //     },
+                                //     dataType: 'json',
+                                //     success: function (data) {
+                                //         console.log(data);
+                                //     }
+                                // });
                             });
 
                             conn.on('error', function (err) {
-                               console.log(err);
+                                console.log(err);
                             });
                         });
                         //calls[mem.id] = peer.call(v.mem, window.localStream);

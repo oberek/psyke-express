@@ -1,6 +1,9 @@
 const PORT = 8080;
 var express = require('express');
 var path = require('path');
+// var fs = require('fs');
+// var http = require('http');
+// var https = require('https');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
@@ -68,7 +71,7 @@ app.post('/join_room/:room_id/:user_id', function (req, res) {
   console.log(JSON.stringify(test_rooms[room_id], '\n'));
 
     res.cookie('user_id', user_id, {maxAge: 9000000});
-    res.cookie('room_id', room_id, {maxAge: 1000});
+    res.cookie('room_id', room_id, {maxAge: 1000*60*2});
 
   res.redirect('/chat');
    // res.render('chat', { title: 'chat test', room_id: req.params.room_id, user_id: req.params.user_id });
