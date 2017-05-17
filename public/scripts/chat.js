@@ -3,6 +3,9 @@
  */
 var connections = {};
 var peer;
+
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
 $(document).ready(function () {
     $('chatbox').hide();
 
@@ -41,8 +44,6 @@ $(document).ready(function () {
     peer.on('open', function () {
         console.log('Local peer just opened');
     });
-
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
     navigator.getUserMedia({audio: true, video: false}, function (stream) {
         // Set your video displays

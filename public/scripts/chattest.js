@@ -65,6 +65,16 @@ $(document).ready(function () {
         $('#users').append($('<li class="user" id="user-' + mem.id + '">').text(mem.name));
     }
 
+    function addCallStream(call) {
+        call.on('stream', function (stream) {
+            $('#user-'+call.peer).append($('<audio class="hidden userstream" id="audio-'+call.peer+'" src="'+URL.createObjectURL(stream)+'" autoplay=""></audio>'));
+        });
+
+        call.on('close', function () {
+           console.log(call.peer + ' has left voice chat');
+        });
+    }
+
     function dropUser(id) {
         console.log(id);
         delete room.members[id];
@@ -87,6 +97,7 @@ $(document).ready(function () {
     function addConnEventListeners(conn){
         conn.on('data', function (data) {
             console.log(data);
+            console.log((new Date).getTime());
             decodeData(data);
         });
 
@@ -101,16 +112,19 @@ $(document).ready(function () {
     }
 
     function addDataConnection(conn){
+        console.log((new Date).getTime());
         console.log('Adding dataConneciton for ' + conn.peer);
         console.log(conn);
         if(conn.open){
             console.log(conn.peer + '\'s connection is already open');
+            console.log((new Date).getTime());
             addConnEventListeners(conn);
             conn.send({type: 'info-request', user_id: user_id});
         } else {
             console.log('Waiting for ' + conn.peer + ' to open connection');
-            addConnEventListeners(conn);
+            // addConnEventListeners(conn);
             conn.on('open', function () {
+                console.log((new Date).getTime());
                 console.log(conn.peer + ' has opened');
                 addConnEventListeners(conn);
                 conn.send({type: 'info-request', user_id: user_id});
@@ -201,11 +215,12 @@ $(document).ready(function () {
                 });
 
                 console.log(room);
+
+                addUser(room.members[user_id]);
+
                 $.each(Object.keys(room.members), function (i, v) {
                     var mem = room.members[v];
-
-                    addUser(mem);
-
+                    // addUser(mem);
                     if (mem.id !== user_id) {
                         console.log('Attempting connection to ' + mem.id);
                         var conn = peer.connect(mem.id);
@@ -214,7 +229,9 @@ $(document).ready(function () {
 
                         connections[mem.id] = conn;
                         addDataConnection(conn);
-                        //calls[mem.id] = peer.call(v.mem, window.localStream);
+                        var call = peer.call(mem.id, window.localStream);
+                        calls[mem.id] = call;
+                        addCallStream(call);
                     }
                 });
 
@@ -232,8 +249,10 @@ $(document).ready(function () {
                 });
 
                 peer.on('call', function (call) {
-                    //call.answer(window.localStream);
-                    console.log('Somebody is calling');
+                    console.log(call.peer + ' is calling');
+                    calls[call.peer] = call;
+                    addCallStream(call);
+                    call.answer(window.localStream);
                 });
 
                 peer.on('disconnect', function () {
