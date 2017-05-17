@@ -105,15 +105,12 @@ body {
 
 #messages li {
     padding: 5px 10px;
-    color: black;
+    color: #DDD;
+    background-color: #222;
 }
 
-#messages li:not(.whisper):not(.error):nth-child(odd) {
-    background-color: rgba(167, 167, 167, 0.7);
-}
-
-#messages li:not(.whisper):not(.error):nth-child(even) {
-    background-color: rgba(95, 95, 95, 0.7);
+#messages li:nth-child(odd) {
+    background-color: #333;
 }
 
 .whisper {
