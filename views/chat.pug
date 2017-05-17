@@ -30,5 +30,8 @@ html
                     ul#messages
                     form#message-box
                         input#user-input(type='text', required='', autocomplete="off", placeholder='Enter Message here, or /w <NAME> to whisper someone')
-                        button#send-message(type='submit', value='Send') Send
+                        input#file-upload.hidden(type='file' accept='image/*|audio/*|video/*')
+                        button#uploadBtn
+                            i.fa.fa-cloud-upload
+                        //button#send-message(type='submit', value='Send') Send
         script(src='/scripts/chattest.js')
