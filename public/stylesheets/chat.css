@@ -64,7 +64,7 @@ body {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     background-color: #727272;
 }
 

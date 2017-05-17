@@ -137,16 +137,23 @@ $(document).ready(function () {
         }
     }
 
+    function autoScroll() {
+        messages[0].scrollTop = messages[0].scrollHeight;
+    }
+
     function postError(err) {
         messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
+        autoScroll();
     }
 
     function postMessage(data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
+        autoScroll();
     }
 
     function postWhisper(whisper) {
         messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name:room.members[whisper.sender].name) + ': ' + whisper.content));
+        autoScroll();
     }
 
     function broadcast(msg) {
