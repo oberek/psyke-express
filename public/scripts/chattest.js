@@ -74,8 +74,6 @@ $(document).ready(function () {
             var user_li = $('#user-' + call.peer);
             user_li.append($('<audio class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
             var stream_controls = $('<div class="stream-controls">');
-
-
             user_li.append(stream_controls);
         });
 
@@ -156,7 +154,7 @@ $(document).ready(function () {
     }
 
     function postWhisper(whisper) {
-        messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name:room.members[whisper.sender].name) + ': ' + whisper.content));
+        messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name : room.members[whisper.sender].name) + ': ' + whisper.content));
         autoScroll();
     }
 
@@ -238,14 +236,14 @@ $(document).ready(function () {
 
                     var msg = user_input.val();
 
-                    if (msg.indexOf('/w') === 0) {
-                        if (msg.length <= 3) {
-                            postError({msg: 'You must supply a username to whisper to.'});
-                        } else {
-                            var splitter = msg.split(' ');
-                            console.log(splitter);
-                            if (splitter.length >= 3) {
-                                var unam = splitter[1];
+                    if (msg.indexOf('@') === 0) {
+                        var splitter = msg.split(' ');
+                        console.log(splitter);
+                        if (splitter.length >= 2) {
+                            if (splitter[0].length === 1) {
+                                postError({msg: 'You must supply a username to whisper to.'});
+                            } else {
+                                var unam = splitter[0].substr(msg.indexOf('@')+1);
                                 console.log(unam);
                                 if (unam === username) {
                                     postError({msg: 'You can\'t whisper to yourself'});
@@ -262,7 +260,7 @@ $(document).ready(function () {
                                     if (target === null) {
                                         postError({msg: 'User not found.'});
                                     } else {
-                                        var msg_content = msg.substr(msg.indexOf(splitter[2]));
+                                        var msg_content = msg.substr(msg.indexOf(splitter[1]));
                                         console.log(msg_content);
                                         var whisper = {
                                             type: 'whisper',
@@ -274,11 +272,12 @@ $(document).ready(function () {
                                         connections[target.id].send(whisper);
                                     }
                                 }
-                            } else {
-                                postError({msg: 'You must supply a message'});
                             }
+                        } else {
+                            postError({msg: 'You must supply a message'});
                         }
-                    } else {
+                    }
+                    else {
                         broadcast(msg);
                     }
 
@@ -295,12 +294,10 @@ $(document).ready(function () {
                     if (mem.id !== user_id) {
                         console.log('Attempting connection to ' + mem.id);
                         var conn = peer.connect(mem.id);
-
                         console.log(peer.connections);
-
                         connections[mem.id] = conn;
                         addDataConnection(conn);
-                        if(useVoice){
+                        if (useVoice) {
                             var call = peer.call(mem.id, window.localStream);
                             calls[mem.id] = call;
                             addCallStream(call);
@@ -322,7 +319,7 @@ $(document).ready(function () {
                 });
 
                 peer.on('call', function (call) {
-                    if(useVoice) {
+                    if (useVoice) {
                         console.log(call.peer + ' is calling');
                         calls[call.peer] = call;
                         addCallStream(call);
@@ -338,4 +335,5 @@ $(document).ready(function () {
             }
         });
     }
-});
+})
+;
