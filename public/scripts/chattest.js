@@ -4,6 +4,7 @@
 var room = null;
 var connections = {};
 var calls = {};
+var useVoice = false;
 
 $(document).ready(function () {
     $('chatbox').hide();
@@ -12,10 +13,13 @@ $(document).ready(function () {
     navigator.getUserMedia({audio: true, video: false}, function (stream) {
         // Set your video displays
         // $('#my-video').prop('src', URL.createObjectURL(stream));
+        useVoice = true;
         window.localStream = stream;
         step2();
     }, function () {
-        if (confirm('Something went wrong with your input devices.\nTry again?')) {
+        if (confirm('Something went wrong with your input devices.\nDo you want to continue without audio?')) {
+            step2();
+        } else {
             window.location.reload();
         }
     });
@@ -296,9 +300,11 @@ $(document).ready(function () {
 
                         connections[mem.id] = conn;
                         addDataConnection(conn);
-                        var call = peer.call(mem.id, window.localStream);
-                        calls[mem.id] = call;
-                        addCallStream(call);
+                        if(useVoice){
+                            var call = peer.call(mem.id, window.localStream);
+                            calls[mem.id] = call;
+                            addCallStream(call);
+                        }
                     }
                 });
 
@@ -316,10 +322,14 @@ $(document).ready(function () {
                 });
 
                 peer.on('call', function (call) {
-                    console.log(call.peer + ' is calling');
-                    calls[call.peer] = call;
-                    addCallStream(call);
-                    call.answer(window.localStream);
+                    if(useVoice) {
+                        console.log(call.peer + ' is calling');
+                        calls[call.peer] = call;
+                        addCallStream(call);
+                        call.answer(window.localStream);
+                    } else {
+                        call.close();
+                    }
                 });
 
                 peer.on('disconnect', function () {
