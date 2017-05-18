@@ -81,6 +81,7 @@ $(document).ready(function () {
             call.on('stream', function (stream) {
                 console.log('stream established');
                 var user_li = $('#user-' + call.peer);
+                console.log(user_li);
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
                 var stream_controls = $('<div class="stream-controls">');
                 user_li.append(stream_controls);
