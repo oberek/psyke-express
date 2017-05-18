@@ -74,19 +74,21 @@ $(document).ready(function () {
         console.log(call);
 
         calls[call.peer] = peer.call(call.peer, window.localStream);
-        // call.answer(window.localStream);
-        call.answer();
+        if(calls[call.peer] === undefined) {
 
-        call.on('stream', function (stream) {
-            var user_li = $('#user-' + call.peer);
-            user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
-            var stream_controls = $('<div class="stream-controls">');
-            user_li.append(stream_controls);
-        });
+            call.answer();
 
-        call.on('close', function () {
-            console.log(call.peer + ' has left voice chat');
-        });
+            call.on('stream', function (stream) {
+                var user_li = $('#user-' + call.peer);
+                user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
+                var stream_controls = $('<div class="stream-controls">');
+                user_li.append(stream_controls);
+            });
+
+            call.on('close', function () {
+                console.log(call.peer + ' has left voice chat');
+            });
+        }
     }
 
     function dropUser(id) {
