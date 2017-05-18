@@ -55,14 +55,14 @@
         <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="51">
-              <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+              <caret line="77" column="20" lean-forward="false" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="20" />
               <folding>
                 <element signature="e#0#41#0" expanded="false" />
-                <element signature="e#5174#5434#0" expanded="false" />
-                <element signature="e#5476#6068#0" expanded="false" />
-                <element signature="e#6101#7089#0" expanded="false" />
-                <element signature="e#7429#10059#0" expanded="false" />
-                <element signature="e#11980#12063#0" expanded="false" />
+                <element signature="e#5197#5457#0" expanded="false" />
+                <element signature="e#5499#6091#0" expanded="false" />
+                <element signature="e#6124#7112#0" expanded="false" />
+                <element signature="e#7452#10082#0" expanded="false" />
+                <element signature="e#12003#12086#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -383,12 +383,12 @@
       <workItem from="1494977646244" duration="4310000" />
       <workItem from="1495031490653" duration="264000" />
       <workItem from="1495031790846" duration="23525000" />
-      <workItem from="1495119661523" duration="1122000" />
+      <workItem from="1495119661523" duration="1223000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="61565000" />
+    <option name="totallyTimeSpent" value="61666000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -836,14 +836,14 @@
     <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="51">
-          <caret line="77" column="0" lean-forward="true" selection-start-line="77" selection-start-column="0" selection-end-line="77" selection-end-column="0" />
+          <caret line="77" column="20" lean-forward="false" selection-start-line="77" selection-start-column="20" selection-end-line="77" selection-end-column="20" />
           <folding>
             <element signature="e#0#41#0" expanded="false" />
-            <element signature="e#5174#5434#0" expanded="false" />
-            <element signature="e#5476#6068#0" expanded="false" />
-            <element signature="e#6101#7089#0" expanded="false" />
-            <element signature="e#7429#10059#0" expanded="false" />
-            <element signature="e#11980#12063#0" expanded="false" />
+            <element signature="e#5197#5457#0" expanded="false" />
+            <element signature="e#5499#6091#0" expanded="false" />
+            <element signature="e#6124#7112#0" expanded="false" />
+            <element signature="e#7452#10082#0" expanded="false" />
+            <element signature="e#12003#12086#0" expanded="false" />
           </folding>
         </state>
       </provider>

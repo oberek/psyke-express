@@ -75,6 +75,7 @@ $(document).ready(function () {
 
         calls[call.peer] = peer.call(call.peer, window.localStream);
         // call.answer(window.localStream);
+        call.answer();
 
         call.on('stream', function (stream) {
             var user_li = $('#user-' + call.peer);
