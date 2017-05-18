@@ -5,8 +5,13 @@ var room = null;
 var connections = {};
 var calls = {};
 var useVoice = false;
-
+var MuteLocal;
 $(document).ready(function () {
+
+    MuteLocal = function () {
+        window.localStream.getAudioTracks()[0].enabled = !window.localStream.getAudioTracks()[0].enabled;
+        $('#mute-button').toggleClass('muted', !window.localStream.getAudioTracks()[0].enabled);
+    };
 
     function VolChangeListener() {
         console.log(this);
@@ -21,10 +26,6 @@ $(document).ready(function () {
         console.log(audio.volume);
         audio.volume = newVol;
         console.log(audio.volume);
-    }
-
-    function localMute() {
-        window.localStream.getAudioTracks()[0].enabled = !window.localStream.getAudioTracks()[0].enabled;
     }
 
     $('chatbox').hide();
@@ -92,6 +93,11 @@ $(document).ready(function () {
                 var call = peer.call(mem.id, window.localStream);
                 // calls[mem.id] = call;
                 addCallStream(call);
+            }
+        } else {
+            if(useVoice){
+                var muteButton = $('<button id="mute-button" onclick="MuteLocal();">').append($('<i class="fa fa-microphone-slash">'));
+                $('#user-' + mem.id).append(muteButton);
             }
         }
     }

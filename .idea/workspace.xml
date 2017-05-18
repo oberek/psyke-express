@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8cc829d-df27-4a13-b229-684b966df697" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/chat.js" afterPath="$PROJECT_DIR$/public/scripts/chat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/chat.css" afterPath="$PROJECT_DIR$/public/stylesheets/chat.css" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -34,8 +35,8 @@
       <file leaf-file-name="chat.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/stylesheets/chat.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="74" column="1" lean-forward="false" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
+            <state relative-caret-position="449">
+              <caret line="145" column="14" lean-forward="true" selection-start-line="145" selection-start-column="14" selection-end-line="145" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -54,14 +55,14 @@
       <file leaf-file-name="chat.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="23" column="5" lean-forward="true" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+            <state relative-caret-position="153">
+              <caret line="11" column="54" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="54" />
               <folding>
                 <element signature="e#0#41#0" expanded="false" />
-                <element signature="e#12921#13004#0" expanded="false" />
-                <marker date="1495127352533" expanded="false" signature="6470:6730" ph="{...}" />
-                <marker date="1495127352533" expanded="false" signature="6772:7364" ph="{...}" />
-                <marker date="1495127352533" expanded="false" signature="8725:11355" ph="{...}" />
+                <element signature="e#13286#13369#0" expanded="false" />
+                <marker date="1495128383091" expanded="false" signature="6835:7095" ph="{...}" />
+                <marker date="1495128383091" expanded="false" signature="7137:7729" ph="{...}" />
+                <marker date="1495128383091" expanded="false" signature="9090:11720" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -104,9 +105,10 @@
       <find>overflow</find>
       <find>postmess</find>
       <find>peer.on</find>
-      <find>addUser</find>
       <find>call.answer</find>
       <find>vol-</find>
+      <find>addUser</find>
+      <find>&lt;i</find>
     </findStrings>
     <replaceStrings>
       <replace>roomInfo</replace>
@@ -131,11 +133,11 @@
         <option value="$PROJECT_DIR$/public/stylesheets/style.css" />
         <option value="$PROJECT_DIR$/public/stylesheets/classes.css" />
         <option value="$PROJECT_DIR$/public/scripts/peer.min.js" />
-        <option value="$PROJECT_DIR$/public/stylesheets/chat.css" />
         <option value="$PROJECT_DIR$/public/scripts/chattest.js" />
         <option value="$PROJECT_DIR$/views/chat.pug" />
         <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/public/scripts/chat.js" />
+        <option value="$PROJECT_DIR$/public/stylesheets/chat.css" />
       </list>
     </option>
   </component>
@@ -389,7 +391,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="67586000" />
+    <option name="totallyTimeSpent" value="69011000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -412,7 +414,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14917696" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.21776815" sideWeight="0.49876976" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2177243" sideWeight="0.49876976" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -789,26 +791,10 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/chattest.js" />
-    <entry file="file://$PROJECT_DIR$/views/chat.pug">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/peer.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="3004">
           <caret line="314" column="17" lean-forward="false" selection-start-line="314" selection-start-column="17" selection-end-line="314" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/chat.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="74" column="1" lean-forward="false" selection-start-line="74" selection-start-column="1" selection-end-line="74" selection-end-column="1" />
           <folding />
         </state>
       </provider>
@@ -821,16 +807,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/chat.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="449">
+          <caret line="145" column="14" lean-forward="true" selection-start-line="145" selection-start-column="14" selection-end-line="145" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/views/chat.pug">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="16" lean-forward="true" selection-start-line="17" selection-start-column="16" selection-end-line="17" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="23" column="5" lean-forward="true" selection-start-line="23" selection-start-column="5" selection-end-line="23" selection-end-column="5" />
+        <state relative-caret-position="153">
+          <caret line="11" column="54" lean-forward="true" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="54" />
           <folding>
             <element signature="e#0#41#0" expanded="false" />
-            <element signature="e#12921#13004#0" expanded="false" />
-            <marker date="1495127352533" expanded="false" signature="6470:6730" ph="{...}" />
-            <marker date="1495127352533" expanded="false" signature="6772:7364" ph="{...}" />
-            <marker date="1495127352533" expanded="false" signature="8725:11355" ph="{...}" />
+            <element signature="e#13286#13369#0" expanded="false" />
+            <marker date="1495128383091" expanded="false" signature="6835:7095" ph="{...}" />
+            <marker date="1495128383091" expanded="false" signature="7137:7729" ph="{...}" />
+            <marker date="1495128383091" expanded="false" signature="9090:11720" ph="{...}" />
           </folding>
         </state>
       </provider>

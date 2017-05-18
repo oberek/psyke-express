@@ -122,11 +122,34 @@ body {
 }
 
 .user {
-    list-style: none;
     text-align: center;
     background-color: #777777;
+    color: black;
+    list-style: none;
     margin-top: 10px;
     margin-bottom: 10px;
-    color: black;
     padding: 20px;
+}
+
+#mute-button {
+    margin-left: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+#mute-button:not(.muted) {
+    border: .5px solid #333333;
+    background-color: #777777;
+    color: black;
+}
+
+#mute-button.muted {
+    border: .5px solid #0076a5;
+    background-color: #00B7FF;
+    color: #222222;
+}
+
+i {
+    background-color: inherit;
+    color: inherit;
 }
