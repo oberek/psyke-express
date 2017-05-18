@@ -72,10 +72,8 @@ $(document).ready(function () {
     function addCallStream(call) {
         console.log('Call');
         console.log(call);
-
-        calls[call.peer] = peer.call(call.peer, window.localStream);
         if(calls[call.peer] === undefined) {
-
+            calls[call.peer] = peer.call(call.peer, window.localStream);
             call.answer();
 
             call.on('stream', function (stream) {
@@ -331,8 +329,6 @@ $(document).ready(function () {
                     if (useVoice) {
                         console.log(call.peer + ' is calling');
                         addCallStream(call);
-                        // calls[call.peer] = call;
-                        // call.answer(window.localStream);
                     } else {
                         call.close();
                     }
