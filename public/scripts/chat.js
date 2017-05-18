@@ -73,10 +73,13 @@ $(document).ready(function () {
         console.log('Call');
         console.log(call);
         if(calls[call.peer] === undefined) {
-            calls[call.peer] = peer.call(call.peer, window.localStream);
-            call.answer();
+            calls[call.peer] = call;
+            // call.answer();
+            call.answer(window.localStream);
 
+            console.log('waiting for stream');
             call.on('stream', function (stream) {
+                console.log('stream established');
                 var user_li = $('#user-' + call.peer);
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
                 var stream_controls = $('<div class="stream-controls">');
@@ -307,6 +310,7 @@ $(document).ready(function () {
                         if (useVoice) {
                             var call = peer.call(mem.id, window.localStream);
                             calls[mem.id] = call;
+                            var c_stream = call.stream;
                             addCallStream(call);
                         }
                     }
