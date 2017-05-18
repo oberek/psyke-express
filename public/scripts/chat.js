@@ -7,6 +7,12 @@ var calls = {};
 var useVoice = false;
 
 $(document).ready(function () {
+
+    $('.vol-control').on('change', function () {
+       console.log(this.id);
+       console.log($(this).val());
+    });
+
     $('chatbox').hide();
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
@@ -79,15 +85,16 @@ $(document).ready(function () {
     function addCallStream(call) {
         console.log('Call');
         console.log(call);
+        call.answer(window.localStream);
         if(calls[call.peer] === undefined) {
             calls[call.peer] = call;
             var user_li = $('#user-' + call.peer);
-            call.answer(window.localStream);
             console.log('waiting for stream');
             call.on('stream', function (stream) {
                 console.log('stream established');
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
                 var stream_controls = $('<div class="stream-controls">');
+                stream_controls.append($('<input class="vol-control" id="vol-'+call.peer+'" type="range"/>').val(100));
                 user_li.append(stream_controls);
             });
             call.on('close', function () {
