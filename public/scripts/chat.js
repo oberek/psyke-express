@@ -81,9 +81,8 @@ $(document).ready(function () {
         console.log(call);
         if(calls[call.peer] === undefined) {
             calls[call.peer] = call;
-            // call.answer();
+            var user_li = $('#user-' + call.peer);
             call.answer(window.localStream);
-
             console.log('waiting for stream');
             call.on('stream', function (stream) {
                 console.log('stream established');
@@ -91,7 +90,6 @@ $(document).ready(function () {
                 var stream_controls = $('<div class="stream-controls">');
                 user_li.append(stream_controls);
             });
-
             call.on('close', function () {
                 console.log(call.peer + ' has left voice chat');
             });
