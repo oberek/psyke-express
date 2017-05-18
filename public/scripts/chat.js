@@ -70,7 +70,7 @@ $(document).ready(function () {
         if(mem.id !== user_id) {
             if (useVoice) {
                 var call = peer.call(mem.id, window.localStream);
-                calls[mem.id] = call;
+                // calls[mem.id] = call;
                 addCallStream(call);
             }
         }
