@@ -70,6 +70,8 @@ $(document).ready(function () {
     }
 
     function addCallStream(call) {
+        console.log('Call');
+        console.log(call);
         call.on('stream', function (stream) {
             var user_li = $('#user-' + call.peer);
             user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
