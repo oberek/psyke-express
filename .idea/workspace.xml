@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8cc829d-df27-4a13-b229-684b966df697" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/chat.js" afterPath="$PROJECT_DIR$/public/scripts/chat.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -78,14 +79,14 @@
       <file leaf-file-name="chat.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="71" column="33" lean-forward="false" selection-start-line="71" selection-start-column="33" selection-end-line="71" selection-end-column="33" />
+            <state relative-caret-position="408">
+              <caret line="86" column="50" lean-forward="false" selection-start-line="86" selection-start-column="50" selection-end-line="86" selection-end-column="50" />
               <folding>
                 <element signature="e#0#41#0" expanded="false" />
-                <element signature="e#12054#12137#0" expanded="false" />
-                <marker date="1495122361351" expanded="false" signature="5603:5863" ph="{...}" />
-                <marker date="1495122361351" expanded="false" signature="5905:6497" ph="{...}" />
-                <marker date="1495122361351" expanded="false" signature="7858:10488" ph="{...}" />
+                <element signature="e#11920#12003#0" expanded="false" />
+                <marker date="1495122596275" expanded="false" signature="5469:5729" ph="{...}" />
+                <marker date="1495122596275" expanded="false" signature="5771:6363" ph="{...}" />
+                <marker date="1495122596275" expanded="false" signature="7724:10354" ph="{...}" />
               </folding>
             </state>
           </provider>
@@ -412,7 +413,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="62820000" />
+    <option name="totallyTimeSpent" value="63055000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1021,14 +1022,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="71" column="33" lean-forward="false" selection-start-line="71" selection-start-column="33" selection-end-line="71" selection-end-column="33" />
+        <state relative-caret-position="408">
+          <caret line="86" column="50" lean-forward="false" selection-start-line="86" selection-start-column="50" selection-end-line="86" selection-end-column="50" />
           <folding>
             <element signature="e#0#41#0" expanded="false" />
-            <element signature="e#12054#12137#0" expanded="false" />
-            <marker date="1495122361351" expanded="false" signature="5603:5863" ph="{...}" />
-            <marker date="1495122361351" expanded="false" signature="5905:6497" ph="{...}" />
-            <marker date="1495122361351" expanded="false" signature="7858:10488" ph="{...}" />
+            <element signature="e#11920#12003#0" expanded="false" />
+            <marker date="1495122596275" expanded="false" signature="5469:5729" ph="{...}" />
+            <marker date="1495122596275" expanded="false" signature="5771:6363" ph="{...}" />
+            <marker date="1495122596275" expanded="false" signature="7724:10354" ph="{...}" />
           </folding>
         </state>
       </provider>
