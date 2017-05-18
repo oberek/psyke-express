@@ -67,10 +67,12 @@ $(document).ready(function () {
 
     function addUser(mem) {
         $('#users').append($('<li class="user" id="user-' + mem.id + '">').text(mem.name));
-        if (useVoice) {
-            var call = peer.call(mem.id, window.localStream);
-            calls[mem.id] = call;
-            addCallStream(call);
+        if(mem.id !== user_id) {
+            if (useVoice) {
+                var call = peer.call(mem.id, window.localStream);
+                calls[mem.id] = call;
+                addCallStream(call);
+            }
         }
     }
 
