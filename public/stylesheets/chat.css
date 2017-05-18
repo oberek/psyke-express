@@ -121,7 +121,8 @@ body {
     text-align: center;
 }
 
-.user {
+.user,
+.user>div.stream-controls{
     text-align: center;
     background-color: #777777;
     color: black;
@@ -131,19 +132,22 @@ body {
     padding: 20px;
 }
 
-#mute-button {
+button{
+    border-style: solid;
+    border-width: .5px;
+    border-radius: 5px;
     margin-left: 20px;
     border-radius: 5px;
     padding: 5px;
 }
 
-#mute-button:not(.muted) {
+button:not(.muted) {
     border: .5px solid #333333;
     background-color: #777777;
     color: black;
 }
 
-#mute-button.muted {
+button.muted {
     border: .5px solid #0076a5;
     background-color: #00B7FF;
     color: #222222;

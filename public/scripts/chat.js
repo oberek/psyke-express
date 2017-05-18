@@ -18,7 +18,7 @@ $(document).ready(function () {
         console.log(this.id);
         console.log($(this).val());
         console.log(typeof $(this).val());
-        var stream_id = "audio-"+(this.id).substr(this.id.indexOf('-') + 1);
+        var stream_id = "audio-" + (this.id).substr(this.id.indexOf('-') + 1);
         var newVol = Number.parseFloat($(this).val()) / 100;
         console.log(newVol);
         var audio = document.getElementById(stream_id);
@@ -88,14 +88,14 @@ $(document).ready(function () {
 
     function addUser(mem) {
         $('#users').append($('<li class="user" id="user-' + mem.id + '">').text(mem.name));
-        if(mem.id !== user_id) {
+        if (mem.id !== user_id) {
             if (useVoice) {
                 var call = peer.call(mem.id, window.localStream);
                 // calls[mem.id] = call;
                 addCallStream(call);
             }
         } else {
-            if(useVoice){
+            if (useVoice) {
                 var muteButton = $('<button id="mute-button" onclick="MuteLocal();">').append($('<i class="fa fa-microphone-slash">'));
                 $('#user-' + mem.id).append(muteButton);
             }
@@ -106,7 +106,7 @@ $(document).ready(function () {
         console.log('Call');
         console.log(call);
         call.answer(window.localStream);
-        if(calls[call.peer] === undefined) {
+        if (calls[call.peer] === undefined) {
             calls[call.peer] = call;
             var user_li = $('#user-' + call.peer);
             console.log('waiting for stream');
@@ -114,10 +114,21 @@ $(document).ready(function () {
                 console.log('stream established');
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
                 var stream_controls = $('<div class="stream-controls">');
-                var vol_input = $('<input class="vol-control" id="vol-'+call.peer+'" type="range"/>');
-                vol_input.val(100);
-                vol_input.on('change', VolChangeListener);
-                stream_controls.append(vol_input);
+
+
+                var muteButton = $('<button id="mute-' + call.peer + '">').append($('<i class="fa fa-volume-off">'));
+                muteButton.on('click', function () {
+                    console.log(this.id);
+                    var audio_ele = $('#audio'+(this.id).substr((this.id).indexOf('-')));
+                    $(audio_ele).prop('muted', !$(audio_ele).prop('muted'));
+                    $(this).toggleClass('muted');
+                });
+                stream_controls.append(muteButton);
+
+                // var vol_input = $('<input class="vol-control" id="vol-'+call.peer+'" type="range"/>');
+                // vol_input.val(100);
+                // vol_input.on('change', VolChangeListener);
+                // stream_controls.append(vol_input);
                 user_li.append(stream_controls);
             });
             call.on('close', function () {
