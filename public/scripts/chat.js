@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     $(document).on('beforeunload', function (e) {
         sendDisconnect();
-        console.log('.');
+        //console.log('.');
         dropUser(user_id);
         peer.disconnect();
         peer.destroy();
@@ -54,7 +54,7 @@ $(document).ready(function () {
 
     $(document).on('unload', function (e) {
         sendDisconnect();
-        console.log('.');
+        //console.log('.');
         dropUser(user_id);
         peer.disconnect();
         peer.destroy();
@@ -74,8 +74,6 @@ $(document).ready(function () {
              else {
                 if (user.id !== user_id) {
                     if (useVoice) {
-                        // var call = peer.call(user.id, window.localStream);
-                        // addCallStream(call);
                         connections[v].send({type: 'call-request', user_id: user_id});
                     }
                 } else {
@@ -87,7 +85,7 @@ $(document).ready(function () {
             }
         });
         callJoined = !callJoined;
-        console.log(callJoined);
+        //console.log(callJoined);
     }
 
     function addUser(user) {
@@ -95,21 +93,20 @@ $(document).ready(function () {
     }
 
     function addCallStream(call) {
-        console.log('Call');
-        console.log(call);
+        //console.log('Call');
+        //console.log(call);
         call.answer(window.localStream);
         if (calls[call.peer] === undefined) {
             calls[call.peer] = call;
             var user_li = $('#user-' + call.peer);
-            console.log('waiting for stream');
+            //console.log('waiting for stream');
             call.on('stream', function (stream) {
-                console.log('stream established');
+                //console.log('stream established');
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
-
                 // var stream_controls = $('<div class="stream-controls">');
                 // var muteButton = $('<button id="mute-' + call.peer + '">').append($('<i class="fa fa-volume-off">'));
                 // muteButton.on('click', function () {
-                //     console.log(this.id);
+                //     //console.log(this.id);
                 //     var audio_ele = $('#audio'+(this.id).substr((this.id).indexOf('-')));
                 //     $(audio_ele).prop('muted', !$(audio_ele).prop('muted'));
                 //     $(this).toggleClass('muted');
@@ -118,14 +115,14 @@ $(document).ready(function () {
                 // user_li.append(stream_controls);
             });
             call.on('close', function () {
-                console.log(call.peer + ' has left voice chat');
+                //console.log(call.peer + ' has left voice chat');
                 delete calls[call.peer];
             });
         }
     }
 
     function dropUser(id) {
-        console.log(id);
+        //console.log(id);
         delete room.members[id];
         delete connections[id];
         $('#user-' + id).remove();
@@ -147,36 +144,36 @@ $(document).ready(function () {
 
     function addConnEventListeners(conn) {
         conn.on('data', function (data) {
-            console.log(data);
-            console.log((new Date).getTime());
+            //console.log(data);
+            //console.log((new Date).getTime());
             decodeData(data);
         });
 
         conn.on('close', function () {
-            console.log(this.peer + ' has left the chat');
+            //console.log(this.peer + ' has left the chat');
             dropUser(this.peer);
         });
 
         conn.on('error', function (err) {
-            console.log(err);
+            //console.log(err);
         });
     }
 
     function addDataConnection(conn) {
-        console.log((new Date).getTime());
-        console.log('Adding dataConneciton for ' + conn.peer);
-        console.log(conn);
+        //console.log((new Date).getTime());
+        //console.log('Adding dataConneciton for ' + conn.peer);
+        //console.log(conn);
         if (conn.open) {
-            console.log(conn.peer + '\'s connection is already open');
-            console.log((new Date).getTime());
+            //console.log(conn.peer + '\'s connection is already open');
+            //console.log((new Date).getTime());
             addConnEventListeners(conn);
             conn.send({type: 'info-request', user_id: user_id});
         } else {
-            console.log('Waiting for ' + conn.peer + ' to open connection');
+            //console.log('Waiting for ' + conn.peer + ' to open connection');
             // addConnEventListeners(conn);
             conn.on('open', function () {
-                console.log((new Date).getTime());
-                console.log(conn.peer + ' has opened');
+                //console.log((new Date).getTime());
+                //console.log(conn.peer + ' has opened');
                 addConnEventListeners(conn);
                 conn.send({type: 'info-request', user_id: user_id});
             });
@@ -215,7 +212,7 @@ $(document).ready(function () {
     }
 
     function decodeData(data) {
-        console.log("Data: " + data);
+        //console.log("Data: " + data);
         switch (data.type) {
             case 'info-request':
                 connections[data.user_id].send({
@@ -238,7 +235,7 @@ $(document).ready(function () {
                 postWhisper(data);
                 break;
             case 'disconnect':
-                console.log(data.user_id + ' requested disconnect');
+                //console.log(data.user_id + ' requested disconnect');
                 dropUser(data.user_id);
                 break;
             case 'call-request':
@@ -246,7 +243,7 @@ $(document).ready(function () {
                 addCallStream(call);
                 break;
             default:
-                console.log(data);
+                //console.log(data);
                 break;
         }
     }
@@ -258,21 +255,21 @@ $(document).ready(function () {
 
         if (msg.indexOf('@') === 0) {
             var splitter = msg.split(' ');
-            console.log(splitter);
+            //console.log(splitter);
             if (splitter.length >= 2) {
                 if (splitter[0].length === 1) {
                     postError({msg: 'You must supply a username to whisper to.'});
                 } else {
                     var unam = splitter[0].substr(msg.indexOf('@') + 1);
-                    console.log(unam);
+                    //console.log(unam);
                     if (unam === username) {
                         postError({msg: 'You can\'t whisper to yourself'});
                     } else {
                         var target = null;
                         $.each(Object.keys(room.members), function (i, v) {
                             var v_name = room.members[v].name;
-                            console.log(v_name);
-                            console.log(v_name === unam);
+                            //console.log(v_name);
+                            //console.log(v_name === unam);
                             if (target === null && v_name === unam) {
                                 target = room.members[v];
                             }
@@ -281,7 +278,7 @@ $(document).ready(function () {
                             postError({msg: 'User not found.'});
                         } else {
                             var msg_content = msg.substr(msg.indexOf(splitter[1]));
-                            console.log(msg_content);
+                            //console.log(msg_content);
                             var whisper = {
                                 type: 'whisper',
                                 content: msg_content,
@@ -325,14 +322,14 @@ $(document).ready(function () {
 
                 $('#message-box').on('submit', sendMessage);
 
-                console.log(room);
+                //console.log(room);
 
                 var join_button = $('<button id="call">');
                 join_button.text('Join Call');
 
                 $(join_button).on('click', function () {
                     if(window.localStream === undefined){
-                        console.log('getting user media');
+                        //console.log('getting user media');
                         navigator.getUserMedia({audio: true, video: false}, function (stream) {
                             useVoice = true;
                             window.localStream = stream;
@@ -341,7 +338,7 @@ $(document).ready(function () {
                             postError({msg: 'Something went wrong with your input devices. Aborting call'});
                         });
                     } else {
-                        console.log('user media already exists');
+                        //console.log('user media already exists');
                         step2();
                     }
                 });
@@ -354,9 +351,9 @@ $(document).ready(function () {
                     var mem = room.members[v];
                     // addUser(mem);
                     if (mem.id !== user_id) {
-                        console.log('Attempting connection to ' + mem.id);
+                        //console.log('Attempting connection to ' + mem.id);
                         var conn = peer.connect(mem.id);
-                        console.log(peer.connections);
+                        //console.log(peer.connections);
                         connections[mem.id] = conn;
                         addDataConnection(conn);
                     }
@@ -365,8 +362,8 @@ $(document).ready(function () {
                 $('#chatbox').show();
 
                 peer.on('connection', function (conn) {
-                    console.log('PeerID ' + conn.peer + ' is trying to connect');
-                    console.log(connections[conn.peer]);
+                    //console.log('PeerID ' + conn.peer + ' is trying to connect');
+                    //console.log(connections[conn.peer]);
                     if (connections[conn.peer] === undefined || connections[conn.peer] === null) {
                         connections[conn.peer] = conn;
                         addDataConnection(conn);
@@ -383,7 +380,7 @@ $(document).ready(function () {
                 });
 
                 peer.on('disconnect', function () {
-                    console.log('You have been disconnected.');
+                    //console.log('You have been disconnected.');
                 });
             }
         });

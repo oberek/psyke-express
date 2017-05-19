@@ -39,16 +39,11 @@
           <file leaf-file-name="chat.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="566">
-                  <caret line="78" column="39" lean-forward="false" selection-start-line="78" selection-start-column="39" selection-end-line="78" selection-end-column="39" />
+                <state relative-caret-position="371">
+                  <caret line="139" column="34" lean-forward="true" selection-start-line="139" selection-start-column="34" selection-end-line="139" selection-end-column="34" />
                   <folding>
                     <element signature="e#753#858#0" expanded="false" />
                     <element signature="e#892#1082#0" expanded="false" />
-                    <element signature="e#1132#1290#0" expanded="false" />
-                    <element signature="e#1336#1494#0" expanded="false" />
-                    <element signature="e#2614#2715#0" expanded="false" />
-                    <element signature="e#8265#10127#0" expanded="false" />
-                    <element signature="e#13275#13358#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -83,7 +78,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>mem.id</find>
       <find>has left the</find>
       <find>noti</find>
       <find>= null</find>
@@ -113,6 +107,7 @@
       <find>alert</find>
       <find>join</find>
       <find>call.clowe</find>
+      <find>console.log</find>
     </findStrings>
     <replaceStrings>
       <replace>roomInfo</replace>
@@ -121,6 +116,7 @@
       <replace>postError({msg:</replace>
       <replace>user</replace>
       <replace>callJoined</replace>
+      <replace>//console.log</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -395,12 +391,12 @@
       <workItem from="1495031790846" duration="23525000" />
       <workItem from="1495119661523" duration="2263000" />
       <workItem from="1495130291893" duration="535000" />
-      <workItem from="1495204519520" duration="4138000" />
+      <workItem from="1495204519520" duration="4281000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="74768000" />
+    <option name="totallyTimeSpent" value="74911000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -829,16 +825,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="566">
-          <caret line="78" column="39" lean-forward="false" selection-start-line="78" selection-start-column="39" selection-end-line="78" selection-end-column="39" />
+        <state relative-caret-position="371">
+          <caret line="139" column="34" lean-forward="true" selection-start-line="139" selection-start-column="34" selection-end-line="139" selection-end-column="34" />
           <folding>
             <element signature="e#753#858#0" expanded="false" />
             <element signature="e#892#1082#0" expanded="false" />
-            <element signature="e#1132#1290#0" expanded="false" />
-            <element signature="e#1336#1494#0" expanded="false" />
-            <element signature="e#2614#2715#0" expanded="false" />
-            <element signature="e#8265#10127#0" expanded="false" />
-            <element signature="e#13275#13358#0" expanded="false" />
           </folding>
         </state>
       </provider>
