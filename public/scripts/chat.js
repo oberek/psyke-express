@@ -235,6 +235,7 @@ $(document).ready(function () {
             case 'info-response':
                 room.members[data.user_id] = data.content;
                 addUser(data.content);
+                ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the chat'});
                 break;
             case 'message':
                 ChatMethods.postMessage(data);
@@ -244,9 +245,11 @@ $(document).ready(function () {
                 break;
             case 'disconnect':
                 //console.log(data.user_id + ' requested disconnect');
+                ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has left the chat.'});
                 dropUser(data.user_id);
                 break;
             case 'call-request':
+                ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the call.'});
                 if(useVoice && callJoined){
                     var call = peer.call(data.user_id, window.localStream);
                     addCallStream(call);
