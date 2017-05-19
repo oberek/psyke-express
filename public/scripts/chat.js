@@ -239,8 +239,10 @@ $(document).ready(function () {
                 dropUser(data.user_id);
                 break;
             case 'call-request':
-                var call = peer.call(data.user_id, window.localStream);
-                addCallStream(call);
+                if(useVoice && callJoined){
+                    var call = peer.call(data.user_id, window.localStream);
+                    addCallStream(call);
+                }
                 break;
             default:
                 //console.log(data);
