@@ -12,7 +12,7 @@ var calls = {};
 var useVoice = false;
 var callJoined = false;
 var MuteLocal;
-var ChatMethods = {};
+// var ChatMethods = {};
 $(document).ready(function () {
 
     MuteLocal = function () {
@@ -110,7 +110,7 @@ $(document).ready(function () {
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
             });
             call.on('close', function () {
-                ChatMethods.postNotif({msg: room.members[call.peer].name + ' has left the call'});
+                postNotif({msg: room.members[call.peer].name + ' has left the call'});
                 delete calls[call.peer];
             });
         }
@@ -141,12 +141,12 @@ $(document).ready(function () {
         });
 
         conn.on('close', function () {
-            ChatMethods.postNotif({msg: room.members[this.peer].name + ' has left the chat'});
+            postNotif({msg: room.members[this.peer].name + ' has left the chat'});
             dropUser(this.peer);
         });
 
         conn.on('error', function (err) {
-            ChatMethods.postError({msg: err});
+            postError({msg: err});
         });
     }
 
@@ -166,22 +166,22 @@ $(document).ready(function () {
         messages[0].scrollTop = messages[0].scrollHeight;
     }
 
-    ChatMethods.postError = function (err) {
+    postError = function (err) {
         messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
         autoScroll();
     };
 
-    ChatMethods.postNotif = function (msg) {
+    postNotif = function (msg) {
         messages.append($('<li class="message notif">').text('!! ' + msg.msg));
         autoScroll();
     };
 
-    ChatMethods.postMessage = function (data) {
+    postMessage = function (data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
         autoScroll();
     };
 
-    ChatMethods.postWhisper = function (whisper) {
+    postWhisper = function (whisper) {
         messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name : room.members[whisper.sender].name) + ': ' + whisper.content));
         autoScroll();
     };
@@ -192,7 +192,7 @@ $(document).ready(function () {
             user_id: user_id,
             content: msg
         };
-        ChatMethods.postMessage(data);
+        postMessage(data);
         $.each(Object.keys(connections), function (i, v) {
             connections[v].send(data);
         });
@@ -212,30 +212,30 @@ $(document).ready(function () {
                 break;
             case 'info-response':
                 if (room.members[data.user_id] === undefined) {
-                    ChatMethods.postNotif({msg: data.content.name + ' has joined the chat'});
+                    postNotif({msg: data.content.name + ' has joined the chat'});
                 }
                 room.members[data.user_id] = data.content;
                 addUser(data.content);
                 break;
             case 'message':
-                ChatMethods.postMessage(data);
+                postMessage(data);
                 break;
             case 'whisper':
-                ChatMethods.postWhisper(data);
+                postWhisper(data);
                 break;
             case 'disconnect':
-                ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has left the chat.'});
+                postNotif({msg: room.members[data.user_id].name + ' has left the chat.'});
                 dropUser(data.user_id);
                 break;
             case 'call-request':
-                ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the call.'});
+                postNotif({msg: room.members[data.user_id].name + ' has joined the call.'});
                 if (useVoice && callJoined) {
                     var call = peer.call(data.user_id, window.localStream);
                     addCallStream(call);
                 }
                 break;
             default:
-                ChatMethods.postNotif({msg: JSON.stringify(data)});
+                postNotif({msg: JSON.stringify(data)});
                 break;
         }
     }
@@ -247,11 +247,11 @@ $(document).ready(function () {
             var splitter = msg.split(' ');
             if (splitter.length >= 2) {
                 if (splitter[0].length === 1) {
-                    ChatMethods.postError({msg: 'You must supply a username to whisper to.'});
+                    postError({msg: 'You must supply a username to whisper to.'});
                 } else {
                     var unam = splitter[0].substr(msg.indexOf('@') + 1);
                     if (unam === username) {
-                        ChatMethods.postError({msg: 'You can\'t whisper to yourself'});
+                        postError({msg: 'You can\'t whisper to yourself'});
                     } else {
                         var target = null;
                         $.each(Object.keys(room.members), function (i, v) {
@@ -261,7 +261,7 @@ $(document).ready(function () {
                             }
                         });
                         if (target === null) {
-                            ChatMethods.postError({msg: 'User not found.'});
+                            postError({msg: 'User not found.'});
                         } else {
                             var msg_content = msg.substr(msg.indexOf(splitter[1]));
                             var whisper = {
@@ -270,13 +270,13 @@ $(document).ready(function () {
                                 target: target.id,
                                 sender: user_id
                             };
-                            ChatMethods.postWhisper(whisper);
+                            postWhisper(whisper);
                             connections[target.id].send(whisper);
                         }
                     }
                 }
             } else {
-                ChatMethods.postError({msg: 'You must supply a message'});
+                postError({msg: 'You must supply a message'});
             }
         }
         else {
@@ -293,7 +293,7 @@ $(document).ready(function () {
             call_btn.text(callJoined ? 'Leave Call' : 'Join Call');
             call_btn.toggleClass('muted');
         } else {
-            ChatMethods.postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
+            postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
         }
     }
 
@@ -303,7 +303,7 @@ $(document).ready(function () {
             $('#loading').remove();
             room = JSON.parse(data);
 
-            ChatMethods.postNotif({msg: 'You joined the chat.'});
+            postNotif({msg: 'You joined the chat.'});
 
             $('#room-name').text(room.name);
 
@@ -321,7 +321,7 @@ $(document).ready(function () {
                         window.localStream = stream;
                         step2();
                     }, function () {
-                        ChatMethods.postError({msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https'});
+                        postError({msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https'});
                     });
                 } else {
                     step2();
@@ -353,7 +353,7 @@ $(document).ready(function () {
             });
 
             peer.on('call', function (call) {
-                ChatMethods.postNotif({msg: 'PeerID ' + call.peer + ' joined the Call.'});
+                postNotif({msg: 'PeerID ' + call.peer + ' joined the Call.'});
                 if (useVoice && callJoined) {
                     call.answer(window.localStream);
                     addCallStream(call);
@@ -361,7 +361,7 @@ $(document).ready(function () {
             });
 
             peer.on('disconnect', function () {
-                ChatMethods.postError({msg: 'You have been disconnected from the server.'});
+                postError({msg: 'You have been disconnected from the server.'});
             });
         }
     });
