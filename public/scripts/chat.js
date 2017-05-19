@@ -66,7 +66,7 @@ $(document).ready(function () {
             var user = room.members[v];
             if(callJoined){
                 if(user.id !== user_id){
-                    calls[user.id].close();
+                    calls[v].close();
                 } else {
                     $('#mute-button').remove();
                 }
