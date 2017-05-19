@@ -50,6 +50,11 @@ var test_rooms = {
         id: 'room1',
         name: 'Room 1',
         members: {}
+    },
+    'secondroom':{
+        id:'secondroom',
+        name: 'Second Room',
+        members: {}
     }
 };
 
