@@ -76,7 +76,7 @@ $(document).ready(function () {
                     if (useVoice) {
                         // var call = peer.call(user.id, window.localStream);
                         // addCallStream(call);
-                        user.send({type: 'call-request', user_id: user_id});
+                        connections[v].send({type: 'call-request', user_id: user_id});
                     }
                 } else {
                     if (useVoice) {
