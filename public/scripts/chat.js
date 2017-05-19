@@ -64,16 +64,16 @@ $(document).ready(function () {
     function joinCall() {
         $.each(Object.keys(room.members), function (i, v) {
             var user = room.members[v];
-            if(callJoined){
-                if(user.id !== user_id){
-                    if(calls[v] !== undefined){
+            if (callJoined) {
+                if (user.id !== user_id) {
+                    if (calls[v] !== undefined) {
                         calls[v].close();
                     }
                 } else {
                     $('#mute-button').remove();
                 }
             }
-             else {
+            else {
                 if (user.id !== user_id) {
                     if (useVoice) {
                         connections[v].send({type: 'call-request', user_id: user_id});
@@ -161,22 +161,22 @@ $(document).ready(function () {
         messages[0].scrollTop = messages[0].scrollHeight;
     }
 
-    ChatMethods.postError = function(err) {
+    ChatMethods.postError = function (err) {
         messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
         autoScroll();
     }
 
-    ChatMethods.postNotif = function(msg) {
+    ChatMethods.postNotif = function (msg) {
         messages.append($('<li class="message notif">').text('!! ' + msg.msg));
         autoScroll();
     }
 
-    ChatMethods.postMessage = function(data) {
+    ChatMethods.postMessage = function (data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
         autoScroll();
     }
 
-    ChatMethods.postWhisper = function(whisper) {
+    ChatMethods.postWhisper = function (whisper) {
         messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name : room.members[whisper.sender].name) + ': ' + whisper.content));
         autoScroll();
     }
@@ -206,7 +206,7 @@ $(document).ready(function () {
                 });
                 break;
             case 'info-response':
-                if(room.members[data.user_id]===undefined){
+                if (room.members[data.user_id] === undefined) {
                     ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the chat'});
                 }
                 room.members[data.user_id] = data.content;
@@ -219,13 +219,12 @@ $(document).ready(function () {
                 ChatMethods.postWhisper(data);
                 break;
             case 'disconnect':
-                //console.log(data.user_id + ' requested disconnect');
                 ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has left the chat.'});
                 dropUser(data.user_id);
                 break;
             case 'call-request':
                 ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the call.'});
-                if(useVoice && callJoined){
+                if (useVoice && callJoined) {
                     var call = peer.call(data.user_id, window.localStream);
                     addCallStream(call);
                 }
@@ -283,89 +282,80 @@ $(document).ready(function () {
     }
 
     function step2() {
-        if(useVoice){
+        if (useVoice) {
             joinCall();
             var call_btn = $('#call');
-            call_btn.text(callJoined?'Leave Call':'Join Call');
+            call_btn.text(callJoined ? 'Leave Call' : 'Join Call');
             call_btn.toggleClass('muted');
         } else {
             ChatMethods.postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
         }
     }
 
-    // function step2() {
-        $.ajax({
-            url: window.location.protocol + '/getRoom/' + room_id,
-            success: function (data) {
-                $('#loading').remove();
-                room = JSON.parse(data);
+    $.ajax({
+        url: window.location.protocol + '/getRoom/' + room_id,
+        success: function (data) {
+            $('#loading').remove();
+            room = JSON.parse(data);
 
-                $('#room-name').text(room.name);
+            $('#room-name').text(room.name);
 
-                $('#message-box').on('submit', sendMessage);
+            $('#message-box').on('submit', sendMessage);
 
-                console.log(room);
+            console.log(room);
 
-                var join_button = $('<button id="call">');
-                join_button.text('Join Call');
+            var join_button = $('<button id="call">');
+            join_button.text('Join Call');
 
-                $(join_button).on('click', function () {
-                    if(window.localStream === undefined){
-                        //console.log('getting user media');
-                        navigator.getUserMedia({audio: true, video: false}, function (stream) {
-                            useVoice = true;
-                            window.localStream = stream;
-                            step2();
-                        }, function () {
-                            ChatMethods.postError({msg: 'Something went wrong with your input devices. Aborting call'});
-                        });
-                    } else {
-                        //console.log('user media already exists');
+            $(join_button).on('click', function () {
+                if (window.localStream === undefined) {
+                    navigator.getUserMedia({audio: true, video: false}, function (stream) {
+                        useVoice = true;
+                        window.localStream = stream;
                         step2();
-                    }
-                });
+                    }, function () {
+                        ChatMethods.postError({msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https'});
+                    });
+                } else {
+                    step2();
+                }
+            });
 
-                $('#info').prepend(join_button);
+            $('#info').prepend(join_button);
 
-                addUser(room.members[user_id]);
+            addUser(room.members[user_id]);
 
-                $.each(Object.keys(room.members), function (i, v) {
-                    var mem = room.members[v];
-                    // addUser(mem);
-                    if (mem.id !== user_id) {
-                        //console.log('Attempting connection to ' + mem.id);
-                        var conn = peer.connect(mem.id);
-                        //console.log(peer.connections);
-                        connections[mem.id] = conn;
-                        addDataConnection(conn);
-                    }
-                });
+            $.each(Object.keys(room.members), function (i, v) {
+                var mem = room.members[v];
+                if (mem.id !== user_id) {
+                    var conn = peer.connect(mem.id);
+                    connections[mem.id] = conn;
+                    addDataConnection(conn);
+                }
+            });
 
-                $('#chatbox').show();
+            $('#chatbox').show();
 
-                peer.on('connection', function (conn) {
-                    //console.log('PeerID ' + conn.peer + ' is trying to connect');
-                    //console.log(connections[conn.peer]);
-                    if (connections[conn.peer] === undefined || connections[conn.peer] === null) {
-                        connections[conn.peer] = conn;
-                        addDataConnection(conn);
-                    } else {
-                        console.warn('PeerID ' + conn.peer + ' already connected');
-                    }
-                });
+            peer.on('connection', function (conn) {
+                if (connections[conn.peer] === undefined || connections[conn.peer] === null) {
+                    connections[conn.peer] = conn;
+                    addDataConnection(conn);
+                } else {
+                    console.warn('PeerID ' + conn.peer + ' already connected');
+                }
+            });
 
-                peer.on('call', function (call) {
-                    ChatMethods.postNotif({msg: 'PeerID ' + call.peer + ' joined the Call.'});
-                    if(useVoice && callJoined){
-                        call.answer(window.localStream);
-                        addCallStream(call);
-                    }
-                });
+            peer.on('call', function (call) {
+                ChatMethods.postNotif({msg: 'PeerID ' + call.peer + ' joined the Call.'});
+                if (useVoice && callJoined) {
+                    call.answer(window.localStream);
+                    addCallStream(call);
+                }
+            });
 
-                peer.on('disconnect', function () {
-                    //console.log('You have been disconnected.');
-                });
-            }
-        });
-    // }
+            peer.on('disconnect', function () {
+                ChatMethods.postError({msg: 'You have been disconnected from the server.'});
+            });
+        }
+    });
 });
