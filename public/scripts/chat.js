@@ -77,7 +77,6 @@ $(document).ready(function () {
                 if (user.id !== user_id) {
                     if (useVoice) {
                         var call = peer.call(user.id, window.localStream);
-                        // calls[user.id] = call;
                         addCallStream(call);
                     }
                 } else {
@@ -121,6 +120,7 @@ $(document).ready(function () {
             });
             call.on('close', function () {
                 console.log(call.peer + ' has left voice chat');
+                delete calls[call.peer];
             });
         }
     }
@@ -375,10 +375,11 @@ $(document).ready(function () {
                 peer.on('call', function (call) {
                     if (useVoice && callJoined) {
                         console.log(call.peer + ' is calling');
-                        console.log(navigator.getUserMedia);
+                        // console.log(navigator.getUserMedia);
                         console.log(window.localStream);
                         addCallStream(call);
                     } else {
+                        call.answer();
                         call.close();
                     }
                 });
