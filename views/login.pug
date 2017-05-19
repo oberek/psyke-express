@@ -1,0 +1,13 @@
+extends layout
+block vars
+    - var title = 'Login'
+block content
+    h1 PSYKE
+    h3 A VOIP Chatroom
+    form(method="POST" action="/login")
+        label(for="username") Username
+        input(type='text', name='username')
+        label(for="password") Password
+        input(type='password', name='password')
+
+        button(type='submit') Log In
