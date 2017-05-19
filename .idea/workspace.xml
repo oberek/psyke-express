@@ -39,12 +39,12 @@
           <file leaf-file-name="chat.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-899">
-                  <caret line="92" column="13" lean-forward="false" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="13" />
+                <state relative-caret-position="563">
+                  <caret line="209" column="93" lean-forward="true" selection-start-line="209" selection-start-column="93" selection-end-line="209" selection-end-column="93" />
                   <folding>
                     <element signature="e#774#879#0" expanded="false" />
-                    <element signature="e#7546#9423#0" expanded="false" />
-                    <marker date="1495211649334" expanded="true" signature="10217:12258" ph="..." />
+                    <element signature="e#7554#9431#0" expanded="false" />
+                    <marker date="1495211777735" expanded="true" signature="10225:12266" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -79,7 +79,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>sync</find>
       <find>addDatac</find>
       <find>server</find>
       <find>peer.</find>
@@ -109,6 +108,7 @@
       <find>postMess</find>
       <find>post</find>
       <find>'info-request</find>
+      <find>user.name</find>
     </findStrings>
     <replaceStrings>
       <replace>roomInfo</replace>
@@ -393,12 +393,12 @@
       <workItem from="1495031790846" duration="23525000" />
       <workItem from="1495119661523" duration="2263000" />
       <workItem from="1495130291893" duration="535000" />
-      <workItem from="1495204519520" duration="7142000" />
+      <workItem from="1495204519520" duration="7258000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77772000" />
+    <option name="totallyTimeSpent" value="77888000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -827,12 +827,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-899">
-          <caret line="92" column="13" lean-forward="false" selection-start-line="92" selection-start-column="13" selection-end-line="92" selection-end-column="13" />
+        <state relative-caret-position="563">
+          <caret line="209" column="93" lean-forward="true" selection-start-line="209" selection-start-column="93" selection-end-line="209" selection-end-column="93" />
           <folding>
             <element signature="e#774#879#0" expanded="false" />
-            <element signature="e#7546#9423#0" expanded="false" />
-            <marker date="1495211649334" expanded="true" signature="10217:12258" ph="..." />
+            <element signature="e#7554#9431#0" expanded="false" />
+            <marker date="1495211777735" expanded="true" signature="10225:12266" ph="..." />
           </folding>
         </state>
       </provider>
