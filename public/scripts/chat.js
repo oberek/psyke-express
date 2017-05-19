@@ -106,7 +106,7 @@ $(document).ready(function () {
             console.log('waiting for stream');
             call.on('stream', function (stream) {
                 console.log('stream established');
-                user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
+                user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
 
                 // var stream_controls = $('<div class="stream-controls">');
                 // var muteButton = $('<button id="mute-' + call.peer + '">').append($('<i class="fa fa-volume-off">'));
@@ -214,25 +214,6 @@ $(document).ready(function () {
             connections[v].send(data);
         });
     }
-
-    // var sync = function (room, user_id) {
-    //     const memberCount = Object.keys(room.members).length;
-    //     $.each(Object.keys(room.members), function (i, v) {
-    //         if (v !== user_id) {
-    //             if (Object.keys(room.members).indexOf(v) >= 0) {
-    //                 if (connections[v] === undefined) {
-    //                     dropUser(v);
-    //                 } else {
-    //                     if (!connections[v].open) {
-    //                         dropUser(v);
-    //                     }
-    //                 }
-    //             } else {
-    //                 dropUser(v);
-    //             }
-    //         }
-    //     });
-    // };
 
     function decodeData(data) {
         console.log("Data: " + data);
@@ -394,6 +375,8 @@ $(document).ready(function () {
                 peer.on('call', function (call) {
                     if (useVoice && callJoined) {
                         console.log(call.peer + ' is calling');
+                        console.log(navigator.getUserMedia);
+                        console.log(window.localStream);
                         addCallStream(call);
                     } else {
                         call.close();
