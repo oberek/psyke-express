@@ -103,34 +103,19 @@ $(document).ready(function () {
             var user_li = $('#user-' + call.peer);
             //console.log('waiting for stream');
             call.on('stream', function (stream) {
-                //console.log('stream established');
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
-                // var stream_controls = $('<div class="stream-controls">');
-                // var muteButton = $('<button id="mute-' + call.peer + '">').append($('<i class="fa fa-volume-off">'));
-                // muteButton.on('click', function () {
-                //     //console.log(this.id);
-                //     var audio_ele = $('#audio'+(this.id).substr((this.id).indexOf('-')));
-                //     $(audio_ele).prop('muted', !$(audio_ele).prop('muted'));
-                //     $(this).toggleClass('muted');
-                // });
-                // stream_controls.append(muteButton);
-                // user_li.append(stream_controls);
             });
             call.on('close', function () {
-                //console.log(call.peer + ' has left voice chat');
-                ChatMethods.postNotif({msg: room.members[call.peer].name + ' has left voice chat'});
+                ChatMethods.postNotif({msg: room.members[call.peer].name + ' has left the call'});
                 delete calls[call.peer];
             });
         }
     }
 
     function dropUser(id) {
-        //console.log(id);
         delete room.members[id];
         delete connections[id];
         $('#user-' + id).remove();
-
-
 
         $.ajax({
             url: window.location.protocol + '/updateRoom/' + room_id,
@@ -147,36 +132,25 @@ $(document).ready(function () {
 
     function addConnEventListeners(conn) {
         conn.on('data', function (data) {
-            //console.log(data);
-            //console.log((new Date).getTime());
             decodeData(data);
         });
 
         conn.on('close', function () {
-            //console.log(this.peer + ' has left the chat');
+            ChatMethods.postNotif({msg: room.members[this.peer].name + ' has left the chat'});
             dropUser(this.peer);
         });
 
         conn.on('error', function (err) {
-            //console.log(err);
+            ChatMethods.postError({msg: err});
         });
     }
 
     function addDataConnection(conn) {
-        //console.log((new Date).getTime());
-        //console.log('Adding dataConneciton for ' + conn.peer);
-        //console.log(conn);
         if (conn.open) {
-            //console.log(conn.peer + '\'s connection is already open');
-            //console.log((new Date).getTime());
             addConnEventListeners(conn);
             conn.send({type: 'info-request', user_id: user_id});
         } else {
-            //console.log('Waiting for ' + conn.peer + ' to open connection');
-            // addConnEventListeners(conn);
             conn.on('open', function () {
-                //console.log((new Date).getTime());
-                //console.log(conn.peer + ' has opened');
                 addConnEventListeners(conn);
                 conn.send({type: 'info-request', user_id: user_id});
             });
@@ -220,7 +194,6 @@ $(document).ready(function () {
     }
 
     function decodeData(data) {
-        //console.log("Data: " + data);
         switch (data.type) {
             case 'info-request':
                 connections[data.user_id].send({
@@ -233,9 +206,11 @@ $(document).ready(function () {
                 });
                 break;
             case 'info-response':
+                if(room.members[data.user_id]===undefined){
+                    ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the chat'});
+                }
                 room.members[data.user_id] = data.content;
                 addUser(data.content);
-                ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the chat'});
                 break;
             case 'message':
                 ChatMethods.postMessage(data);
@@ -256,33 +231,27 @@ $(document).ready(function () {
                 }
                 break;
             default:
-                //console.log(data);
+                ChatMethods.postNotif({msg: JSON.stringify(data)});
                 break;
         }
     }
 
     function sendMessage(e) {
         e.preventDefault();
-
         var msg = user_input.val();
-
         if (msg.indexOf('@') === 0) {
             var splitter = msg.split(' ');
-            //console.log(splitter);
             if (splitter.length >= 2) {
                 if (splitter[0].length === 1) {
                     ChatMethods.postError({msg: 'You must supply a username to whisper to.'});
                 } else {
                     var unam = splitter[0].substr(msg.indexOf('@') + 1);
-                    //console.log(unam);
                     if (unam === username) {
                         ChatMethods.postError({msg: 'You can\'t whisper to yourself'});
                     } else {
                         var target = null;
                         $.each(Object.keys(room.members), function (i, v) {
                             var v_name = room.members[v].name;
-                            //console.log(v_name);
-                            //console.log(v_name === unam);
                             if (target === null && v_name === unam) {
                                 target = room.members[v];
                             }
@@ -291,7 +260,6 @@ $(document).ready(function () {
                             ChatMethods.postError({msg: 'User not found.'});
                         } else {
                             var msg_content = msg.substr(msg.indexOf(splitter[1]));
-                            //console.log(msg_content);
                             var whisper = {
                                 type: 'whisper',
                                 content: msg_content,
@@ -317,8 +285,9 @@ $(document).ready(function () {
     function step2() {
         if(useVoice){
             joinCall();
-            $('#call').text(callJoined?'Leave Call':'Join Call');
-            $('#call').toggleClass('muted');
+            var call_btn = $('#call');
+            call_btn.text(callJoined?'Leave Call':'Join Call');
+            call_btn.toggleClass('muted');
         } else {
             ChatMethods.postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
         }
@@ -335,7 +304,7 @@ $(document).ready(function () {
 
                 $('#message-box').on('submit', sendMessage);
 
-                //console.log(room);
+                console.log(room);
 
                 var join_button = $('<button id="call">');
                 join_button.text('Join Call');
