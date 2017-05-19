@@ -43,7 +43,6 @@ $(document).ready(function () {
         });
     }
 
-
     $(document).on('beforeunload', function (e) {
         sendDisconnect();
         console.log('.');
@@ -52,7 +51,6 @@ $(document).ready(function () {
         peer.destroy();
         return null;
     });
-    // (e || window.event).returnValue = null;
 
     $(document).on('unload', function (e) {
         sendDisconnect();
@@ -76,8 +74,9 @@ $(document).ready(function () {
              else {
                 if (user.id !== user_id) {
                     if (useVoice) {
-                        var call = peer.call(user.id, window.localStream);
-                        addCallStream(call);
+                        // var call = peer.call(user.id, window.localStream);
+                        // addCallStream(call);
+                        user.send({type: 'call-request', user_id: user_id});
                     }
                 } else {
                     if (useVoice) {
@@ -242,6 +241,10 @@ $(document).ready(function () {
                 console.log(data.user_id + ' requested disconnect');
                 dropUser(data.user_id);
                 break;
+            case 'call-request':
+                var call = peer.call(data.user_id, window.localStream);
+                addCallStream(call);
+                break;
             default:
                 console.log(data);
                 break;
@@ -304,8 +307,8 @@ $(document).ready(function () {
     function step2() {
         if(useVoice){
             joinCall();
-            $(this).text(callJoined?'Leave Call':'Join Call');
-            $(this).toggleClass('muted');
+            $('#call').text(callJoined?'Leave Call':'Join Call');
+            $('#call').toggleClass('muted');
         } else {
             postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
         }
@@ -373,14 +376,9 @@ $(document).ready(function () {
                 });
 
                 peer.on('call', function (call) {
-                    if (useVoice && callJoined) {
-                        console.log(call.peer + ' is calling');
-                        // console.log(navigator.getUserMedia);
-                        console.log(window.localStream);
+                    if(useVoice && callJoined){
+                        call.answer(window.localStream);
                         addCallStream(call);
-                    } else {
-                        call.answer();
-                        call.close();
                     }
                 });
 
