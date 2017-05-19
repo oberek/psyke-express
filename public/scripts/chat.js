@@ -88,6 +88,8 @@ $(document).ready(function () {
                 }
             }
         });
+        callJoined = !callJoined;
+        console.log(callJoined);
     }
 
     function addUser(user) {
@@ -265,12 +267,64 @@ $(document).ready(function () {
         }
     }
 
+    function sendMessage(e) {
+        e.preventDefault();
+
+        var msg = user_input.val();
+
+        if (msg.indexOf('@') === 0) {
+            var splitter = msg.split(' ');
+            console.log(splitter);
+            if (splitter.length >= 2) {
+                if (splitter[0].length === 1) {
+                    postError({msg: 'You must supply a username to whisper to.'});
+                } else {
+                    var unam = splitter[0].substr(msg.indexOf('@') + 1);
+                    console.log(unam);
+                    if (unam === username) {
+                        postError({msg: 'You can\'t whisper to yourself'});
+                    } else {
+                        var target = null;
+                        $.each(Object.keys(room.members), function (i, v) {
+                            var v_name = room.members[v].name;
+                            console.log(v_name);
+                            console.log(v_name === unam);
+                            if (target === null && v_name === unam) {
+                                target = room.members[v];
+                            }
+                        });
+                        if (target === null) {
+                            postError({msg: 'User not found.'});
+                        } else {
+                            var msg_content = msg.substr(msg.indexOf(splitter[1]));
+                            console.log(msg_content);
+                            var whisper = {
+                                type: 'whisper',
+                                content: msg_content,
+                                target: target.id,
+                                sender: user_id
+                            };
+                            postWhisper(whisper);
+                            connections[target.id].send(whisper);
+                        }
+                    }
+                }
+            } else {
+                postError({msg: 'You must supply a message'});
+            }
+        }
+        else {
+            broadcast(msg);
+        }
+
+        user_input.val('');
+    }
+
     function step2() {
         if(useVoice){
-            $(this).text(callJoined?'Join Call':'Leave Call');
-            $(this).toggleClass('muted');
             joinCall();
-            callJoined = !callJoined;
+            $(this).text(callJoined?'Leave Call':'Join Call');
+            $(this).toggleClass('muted');
         } else {
             postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
         }
@@ -285,68 +339,17 @@ $(document).ready(function () {
 
                 $('#room-name').text(room.name);
 
-                $('#message-box').on('submit', function (e) {
-                    e.preventDefault();
-
-                    var msg = user_input.val();
-
-                    if (msg.indexOf('@') === 0) {
-                        var splitter = msg.split(' ');
-                        console.log(splitter);
-                        if (splitter.length >= 2) {
-                            if (splitter[0].length === 1) {
-                                postError({msg: 'You must supply a username to whisper to.'});
-                            } else {
-                                var unam = splitter[0].substr(msg.indexOf('@') + 1);
-                                console.log(unam);
-                                if (unam === username) {
-                                    postError({msg: 'You can\'t whisper to yourself'});
-                                } else {
-                                    var target = null;
-                                    $.each(Object.keys(room.members), function (i, v) {
-                                        var v_name = room.members[v].name;
-                                        console.log(v_name);
-                                        console.log(v_name === unam);
-                                        if (target === null && v_name === unam) {
-                                            target = room.members[v];
-                                        }
-                                    });
-                                    if (target === null) {
-                                        postError({msg: 'User not found.'});
-                                    } else {
-                                        var msg_content = msg.substr(msg.indexOf(splitter[1]));
-                                        console.log(msg_content);
-                                        var whisper = {
-                                            type: 'whisper',
-                                            content: msg_content,
-                                            target: target.id,
-                                            sender: user_id
-                                        };
-                                        postWhisper(whisper);
-                                        connections[target.id].send(whisper);
-                                    }
-                                }
-                            }
-                        } else {
-                            postError({msg: 'You must supply a message'});
-                        }
-                    }
-                    else {
-                        broadcast(msg);
-                    }
-
-                    user_input.val('');
-                });
+                $('#message-box').on('submit', sendMessage);
 
                 console.log(room);
 
-                var join_button = $('<button id="call">').text('Join Call');
+                var join_button = $('<button id="call">');
+                join_button.text('Join Call');
 
                 $(join_button).on('click', function () {
                     if(window.localStream === undefined){
+                        console.log('getting user media');
                         navigator.getUserMedia({audio: true, video: false}, function (stream) {
-                            // Set your video displays
-                            // $('#my-video').prop('src', URL.createObjectURL(stream));
                             useVoice = true;
                             window.localStream = stream;
                             step2();
@@ -354,6 +357,7 @@ $(document).ready(function () {
                             postError({msg: 'Something went wrong with your input devices. Aborting call'});
                         });
                     } else {
+                        console.log('user media already exists');
                         step2();
                     }
                 });
