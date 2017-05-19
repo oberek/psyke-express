@@ -123,12 +123,13 @@ $(document).ready(function () {
 
         $.ajax({
             url: window.location.protocol + '/updateRoom/' + room_id,
-            type: 'post',
+            type: 'POST',
             data: {
                 room: JSON.stringify(room)
             },
             dataType: 'json',
             success: function (data) {
+                console.log('success');
                 console.log(data);
             }
         });
@@ -168,22 +169,22 @@ $(document).ready(function () {
     ChatMethods.postError = function (err) {
         messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
         autoScroll();
-    }
+    };
 
     ChatMethods.postNotif = function (msg) {
         messages.append($('<li class="message notif">').text('!! ' + msg.msg));
         autoScroll();
-    }
+    };
 
     ChatMethods.postMessage = function (data) {
         messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
         autoScroll();
-    }
+    };
 
     ChatMethods.postWhisper = function (whisper) {
         messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name : room.members[whisper.sender].name) + ': ' + whisper.content));
         autoScroll();
-    }
+    };
 
     function broadcast(msg) {
         var data = {
