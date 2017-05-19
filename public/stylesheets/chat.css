@@ -127,7 +127,7 @@ body {
 .user,
 .user>div.stream-controls{
     text-align: center;
-    background-color: #777777;
+    background-color: #777;
     color: black;
     list-style: none;
     margin-top: 10px;
@@ -138,7 +138,7 @@ body {
 .self{
     border: 3px solid #aa9900;
     border-radius: 3px;
-    background-color: #000;
+    background-color: #777;
 }
 
 button:not(#send-message){
