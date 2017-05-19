@@ -94,6 +94,10 @@ $(document).ready(function () {
         $('#users').append($('<li class="user" id="user-' + user.id + '">').text(user.name));
     }
 
+    function addSelf(user) {
+        $('#users').prepend($('<li class="user self" id="user-' + user.id + '">').text(user.name));
+    }
+
     function addCallStream(call) {
         //console.log('Call');
         //console.log(call);
@@ -325,7 +329,7 @@ $(document).ready(function () {
 
             $('#info').prepend(join_button);
 
-            addUser(room.members[user_id]);
+            addSelf(room.members[user_id]);
 
             $.each(Object.keys(room.members), function (i, v) {
                 var mem = room.members[v];

@@ -135,6 +135,12 @@ body {
     padding: 20px;
 }
 
+.self{
+    border: 3px solid #aa9900;
+    border-radius: 3px;
+    background-color: #000;
+}
+
 button:not(#send-message){
     border-style: solid;
     border-width: .5px;

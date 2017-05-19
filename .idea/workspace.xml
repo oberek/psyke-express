@@ -4,6 +4,7 @@
     <list default="true" id="d8cc829d-df27-4a13-b229-684b966df697" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/chat.js" afterPath="$PROJECT_DIR$/public/scripts/chat.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/stylesheets/chat.css" afterPath="$PROJECT_DIR$/public/stylesheets/chat.css" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -26,25 +27,25 @@
     <splitter split-orientation="horizontal" split-proportion="0.5">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="chat.css" pinned="false" current-in-tab="false">
+          <file leaf-file-name="chat.css" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/public/stylesheets/chat.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="306">
-                  <caret line="87" column="8" lean-forward="true" selection-start-line="87" selection-start-column="8" selection-end-line="87" selection-end-column="8" />
+                <state relative-caret-position="197">
+                  <caret line="139" column="23" lean-forward="false" selection-start-line="139" selection-start-column="23" selection-end-line="139" selection-end-column="23" />
                   <folding />
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="chat.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="chat.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="563">
-                  <caret line="209" column="93" lean-forward="true" selection-start-line="209" selection-start-column="93" selection-end-line="209" selection-end-column="93" />
+                <state relative-caret-position="529">
+                  <caret line="331" column="43" lean-forward="true" selection-start-line="331" selection-start-column="43" selection-end-line="331" selection-end-column="43" />
                   <folding>
                     <element signature="e#774#879#0" expanded="false" />
-                    <element signature="e#7554#9431#0" expanded="false" />
-                    <marker date="1495211777735" expanded="true" signature="10225:12266" ph="..." />
+                    <element signature="e#7690#9567#0" expanded="false" />
+                    <marker date="1495212255538" expanded="true" signature="10361:12402" ph="..." />
                   </folding>
                 </state>
               </provider>
@@ -95,7 +96,6 @@
       <find>&lt;i</find>
       <find>this.to</find>
       <find>mem</find>
-      <find>addUser</find>
       <find>joinedCall</find>
       <find>your audio</find>
       <find>alert</find>
@@ -109,6 +109,7 @@
       <find>post</find>
       <find>'info-request</find>
       <find>user.name</find>
+      <find>addUser</find>
     </findStrings>
     <replaceStrings>
       <replace>roomInfo</replace>
@@ -140,8 +141,8 @@
         <option value="$PROJECT_DIR$/public/scripts/chattest.js" />
         <option value="$PROJECT_DIR$/views/chat.pug" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/public/stylesheets/chat.css" />
         <option value="$PROJECT_DIR$/public/scripts/chat.js" />
+        <option value="$PROJECT_DIR$/public/stylesheets/chat.css" />
       </list>
     </option>
   </component>
@@ -393,12 +394,12 @@
       <workItem from="1495031790846" duration="23525000" />
       <workItem from="1495119661523" duration="2263000" />
       <workItem from="1495130291893" duration="535000" />
-      <workItem from="1495204519520" duration="7258000" />
+      <workItem from="1495204519520" duration="7871000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="77888000" />
+    <option name="totallyTimeSpent" value="78501000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -817,23 +818,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/stylesheets/chat.css">
+    <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="87" column="8" lean-forward="true" selection-start-line="87" selection-start-column="8" selection-end-line="87" selection-end-column="8" />
-          <folding />
+        <state relative-caret-position="529">
+          <caret line="331" column="43" lean-forward="true" selection-start-line="331" selection-start-column="43" selection-end-line="331" selection-end-column="43" />
+          <folding>
+            <element signature="e#774#879#0" expanded="false" />
+            <element signature="e#7690#9567#0" expanded="false" />
+            <marker date="1495212255538" expanded="true" signature="10361:12402" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
+    <entry file="file://$PROJECT_DIR$/public/stylesheets/chat.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="563">
-          <caret line="209" column="93" lean-forward="true" selection-start-line="209" selection-start-column="93" selection-end-line="209" selection-end-column="93" />
-          <folding>
-            <element signature="e#774#879#0" expanded="false" />
-            <element signature="e#7554#9431#0" expanded="false" />
-            <marker date="1495211777735" expanded="true" signature="10225:12266" ph="..." />
-          </folding>
+        <state relative-caret-position="197">
+          <caret line="139" column="23" lean-forward="false" selection-start-line="139" selection-start-column="23" selection-end-line="139" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
