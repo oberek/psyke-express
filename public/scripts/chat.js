@@ -265,6 +265,17 @@ $(document).ready(function () {
         }
     }
 
+    function step2() {
+        if(useVoice){
+            $(this).text(callJoined?'Join Call':'Leave Call');
+            $(this).toggleClass('muted');
+            joinCall();
+            callJoined = !callJoined;
+        } else {
+            postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
+        }
+    }
+
     // function step2() {
         $.ajax({
             url: window.location.protocol + '/getRoom/' + room_id,
@@ -332,29 +343,18 @@ $(document).ready(function () {
                 var join_button = $('<button id="call">').text('Join Call');
 
                 $(join_button).on('click', function () {
-                    navigator.getUserMedia({audio: true, video: false}, function (stream) {
-                        // Set your video displays
-                        // $('#my-video').prop('src', URL.createObjectURL(stream));
-                        useVoice = true;
-                        window.localStream = stream;
-                        // step2();
-                    }, function () {
-                        // if (
-                            alert('Something went wrong with your input devices. Leaving call');
-                        // ) {
-                        //     step2();
-                        // } else {
-                        //     window.location.reload();
-                        // }
-                    });
-
-                    if(useVoice){
-                        $(this).text(callJoined?'Join Call':'Leave Call');
-                        $(this).toggleClass('muted');
-                        joinCall();
-                        callJoined = !callJoined;
+                    if(window.localStream === undefined){
+                        navigator.getUserMedia({audio: true, video: false}, function (stream) {
+                            // Set your video displays
+                            // $('#my-video').prop('src', URL.createObjectURL(stream));
+                            useVoice = true;
+                            window.localStream = stream;
+                            step2();
+                        }, function () {
+                            postError({msg: 'Something went wrong with your input devices. Aborting call'});
+                        });
                     } else {
-                        postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
+                        step2();
                     }
                 });
 

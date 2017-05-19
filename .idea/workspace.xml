@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d8cc829d-df27-4a13-b229-684b966df697" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/chat.js" afterPath="$PROJECT_DIR$/public/scripts/chat.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -35,10 +36,10 @@
           <file leaf-file-name="chat.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="336">
-                  <caret line="354" column="49" lean-forward="false" selection-start-line="354" selection-start-column="49" selection-end-line="354" selection-end-column="49" />
+                <state relative-caret-position="540">
+                  <caret line="275" column="9" lean-forward="false" selection-start-line="275" selection-start-column="9" selection-end-line="275" selection-end-column="9" />
                   <folding>
-                    <element signature="e#14453#14536#0" expanded="false" />
+                    <element signature="e#14344#14427#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -385,12 +386,12 @@
       <workItem from="1495031790846" duration="23525000" />
       <workItem from="1495119661523" duration="2263000" />
       <workItem from="1495130291893" duration="535000" />
-      <workItem from="1495204519520" duration="1929000" />
+      <workItem from="1495204519520" duration="2087000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="72559000" />
+    <option name="totallyTimeSpent" value="72717000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -819,10 +820,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/chat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="336">
-          <caret line="354" column="49" lean-forward="false" selection-start-line="354" selection-start-column="49" selection-end-line="354" selection-end-column="49" />
+        <state relative-caret-position="540">
+          <caret line="275" column="9" lean-forward="false" selection-start-line="275" selection-start-column="9" selection-end-line="275" selection-end-column="9" />
           <folding>
-            <element signature="e#14453#14536#0" expanded="false" />
+            <element signature="e#14344#14427#0" expanded="false" />
           </folding>
         </state>
       </provider>
