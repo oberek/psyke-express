@@ -207,7 +207,7 @@ $(document).ready(function () {
                 break;
             case 'info-response':
                 if (room.members[data.user_id] === undefined) {
-                    ChatMethods.postNotif({msg: room.members[data.user_id].name + ' has joined the chat'});
+                    ChatMethods.postNotif({msg: data.name + ' has joined the chat'});
                 }
                 room.members[data.user_id] = data.content;
                 addUser(data.content);
