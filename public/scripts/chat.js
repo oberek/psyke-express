@@ -343,7 +343,7 @@ $(document).ready(function () {
                     }
                 });
 
-                $('#info').append(join_button);
+                $('#info').prepend(join_button);
 
                 addUser(room.members[user_id]);
 
