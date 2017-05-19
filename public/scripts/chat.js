@@ -118,6 +118,7 @@ $(document).ready(function () {
             });
             call.on('close', function () {
                 //console.log(call.peer + ' has left voice chat');
+                postNotif({msg: call.peer + ' has left voice chat'});
                 delete calls[call.peer];
             });
         }
@@ -188,6 +189,11 @@ $(document).ready(function () {
 
     function postError(err) {
         messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
+        autoScroll();
+    }
+
+    function postNotif(msg) {
+        messages.append($('<li class="message notif">').text('!! ' + msg.msg));
         autoScroll();
     }
 
@@ -377,6 +383,7 @@ $(document).ready(function () {
                 });
 
                 peer.on('call', function (call) {
+                    console.warn('PeerID ' + call.peer + ' joined the Call.');
                     if(useVoice && callJoined){
                         call.answer(window.localStream);
                         addCallStream(call);

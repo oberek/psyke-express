@@ -85,6 +85,9 @@ body {
 .error {
     background: rgba(157, 6, 6, 0.49) !important;
 }
+.notif {
+    background: rgba(157, 123, 0, 0.49) !important;
+}
 
 #message-box {
     flex: 0 1 auto;
