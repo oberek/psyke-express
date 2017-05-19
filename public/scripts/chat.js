@@ -298,6 +298,8 @@ $(document).ready(function () {
             $('#loading').remove();
             room = JSON.parse(data);
 
+            ChatMethods.postNotif({msg: 'You joined the chat.'});
+
             $('#room-name').text(room.name);
 
             $('#message-box').on('submit', sendMessage);
