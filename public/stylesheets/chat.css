@@ -77,16 +77,18 @@ body {
 #messages li:nth-child(odd) {
     background: #333;
 }
-
 .whisper {
     background: rgba(140, 6, 157, 0.49) !important;
 }
-
 .error {
     background: rgba(157, 6, 6, 0.49) !important;
 }
 .notif {
     background: rgba(157, 123, 0, 0.49) !important;
+}
+.message{
+    border-top: .5px solid #222;
+    border-bottom: .5px solid #222;
 }
 
 #message-box {
