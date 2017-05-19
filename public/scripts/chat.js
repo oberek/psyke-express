@@ -1,11 +1,18 @@
 /**
  * Created by tfeue on 5/16/2017.
  */
+/*global $*/
+/*global navigator*/
+/*global Peer*/
+/*global URL*/
+
 var room = null;
 var connections = {};
 var calls = {};
 var useVoice = false;
+var callJoined = false;
 var MuteLocal;
+
 $(document).ready(function () {
 
     MuteLocal = function () {
@@ -13,37 +20,7 @@ $(document).ready(function () {
         $('#mute-button').toggleClass('muted', !window.localStream.getAudioTracks()[0].enabled);
     };
 
-    function VolChangeListener() {
-        console.log(this);
-        console.log(this.id);
-        console.log($(this).val());
-        console.log(typeof $(this).val());
-        var stream_id = "audio-" + (this.id).substr(this.id.indexOf('-') + 1);
-        var newVol = Number.parseFloat($(this).val()) / 100;
-        console.log(newVol);
-        var audio = document.getElementById(stream_id);
-        console.log(audio);
-        console.log(audio.volume);
-        audio.volume = newVol;
-        console.log(audio.volume);
-    }
-
     $('chatbox').hide();
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
-    navigator.getUserMedia({audio: true, video: false}, function (stream) {
-        // Set your video displays
-        // $('#my-video').prop('src', URL.createObjectURL(stream));
-        useVoice = true;
-        window.localStream = stream;
-        step2();
-    }, function () {
-        if (confirm('Something went wrong with your input devices.\nDo you want to continue without audio?')) {
-            step2();
-        } else {
-            window.location.reload();
-        }
-    });
 
     var room_id = $('#room-id').val();
     var user_id = $('#user-id').val();
@@ -86,20 +63,35 @@ $(document).ready(function () {
         return null;
     });
 
-    function addUser(mem) {
-        $('#users').append($('<li class="user" id="user-' + mem.id + '">').text(mem.name));
-        if (mem.id !== user_id) {
-            if (useVoice) {
-                var call = peer.call(mem.id, window.localStream);
-                // calls[mem.id] = call;
-                addCallStream(call);
+    function joinCall() {
+        $.each(Object.keys(room.members), function (i, v) {
+            var user = room.members[v];
+            if(callJoined){
+                if(user.id !== user_id){
+                    calls[user.id].close();
+                } else {
+                    $('#mute-button').remove();
+                }
             }
-        } else {
-            if (useVoice) {
-                var muteButton = $('<button id="mute-button" onclick="MuteLocal();">').append($('<i class="fa fa-microphone-slash">'));
-                $('#user-' + mem.id).append(muteButton);
+             else {
+                if (user.id !== user_id) {
+                    if (useVoice) {
+                        var call = peer.call(user.id, window.localStream);
+                        // calls[user.id] = call;
+                        addCallStream(call);
+                    }
+                } else {
+                    if (useVoice) {
+                        var muteButton = $('<button id="mute-button" onclick="MuteLocal();">').append($('<i class="fa fa-microphone-slash">'));
+                        $('#user-' + user.id).append(muteButton);
+                    }
+                }
             }
-        }
+        });
+    }
+
+    function addUser(user) {
+        $('#users').append($('<li class="user" id="user-' + user.id + '">').text(user.name));
     }
 
     function addCallStream(call) {
@@ -113,23 +105,17 @@ $(document).ready(function () {
             call.on('stream', function (stream) {
                 console.log('stream established');
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay=""></audio>'));
-                var stream_controls = $('<div class="stream-controls">');
 
-
-                var muteButton = $('<button id="mute-' + call.peer + '">').append($('<i class="fa fa-volume-off">'));
-                muteButton.on('click', function () {
-                    console.log(this.id);
-                    var audio_ele = $('#audio'+(this.id).substr((this.id).indexOf('-')));
-                    $(audio_ele).prop('muted', !$(audio_ele).prop('muted'));
-                    $(this).toggleClass('muted');
-                });
-                stream_controls.append(muteButton);
-
-                // var vol_input = $('<input class="vol-control" id="vol-'+call.peer+'" type="range"/>');
-                // vol_input.val(100);
-                // vol_input.on('change', VolChangeListener);
-                // stream_controls.append(vol_input);
-                user_li.append(stream_controls);
+                // var stream_controls = $('<div class="stream-controls">');
+                // var muteButton = $('<button id="mute-' + call.peer + '">').append($('<i class="fa fa-volume-off">'));
+                // muteButton.on('click', function () {
+                //     console.log(this.id);
+                //     var audio_ele = $('#audio'+(this.id).substr((this.id).indexOf('-')));
+                //     $(audio_ele).prop('muted', !$(audio_ele).prop('muted'));
+                //     $(this).toggleClass('muted');
+                // });
+                // stream_controls.append(muteButton);
+                // user_li.append(stream_controls);
             });
             call.on('close', function () {
                 console.log(call.peer + ' has left voice chat');
@@ -142,6 +128,8 @@ $(document).ready(function () {
         delete room.members[id];
         delete connections[id];
         $('#user-' + id).remove();
+
+
 
         $.ajax({
             url: window.location.protocol + '/updateRoom/' + room_id,
@@ -225,24 +213,24 @@ $(document).ready(function () {
         });
     }
 
-    var sync = function (room, user_id) {
-        const memberCount = Object.keys(room.members).length;
-        $.each(Object.keys(room.members), function (i, v) {
-            if (v !== user_id) {
-                if (Object.keys(room.members).indexOf(v) >= 0) {
-                    if (connections[v] === undefined) {
-                        dropUser(v);
-                    } else {
-                        if (!connections[v].open) {
-                            dropUser(v);
-                        }
-                    }
-                } else {
-                    dropUser(v);
-                }
-            }
-        });
-    };
+    // var sync = function (room, user_id) {
+    //     const memberCount = Object.keys(room.members).length;
+    //     $.each(Object.keys(room.members), function (i, v) {
+    //         if (v !== user_id) {
+    //             if (Object.keys(room.members).indexOf(v) >= 0) {
+    //                 if (connections[v] === undefined) {
+    //                     dropUser(v);
+    //                 } else {
+    //                     if (!connections[v].open) {
+    //                         dropUser(v);
+    //                     }
+    //                 }
+    //             } else {
+    //                 dropUser(v);
+    //             }
+    //         }
+    //     });
+    // };
 
     function decodeData(data) {
         console.log("Data: " + data);
@@ -277,7 +265,7 @@ $(document).ready(function () {
         }
     }
 
-    function step2() {
+    // function step2() {
         $.ajax({
             url: window.location.protocol + '/getRoom/' + room_id,
             success: function (data) {
@@ -341,6 +329,20 @@ $(document).ready(function () {
 
                 console.log(room);
 
+                var join_button = $('<button id="call">').text('Join Call');
+
+                $(join_button).on('click', function () {
+                    if(useVoice){
+                        $(this).text(callJoined?'Join Call':'Leave Call');
+                        $(this).toggleClass('muted');
+                        joinCall();
+                    } else {
+                        postError({msg: 'Your Audio Devices are disabled. Cancelling call join.'})
+                    }
+                });
+
+                $('#info').append(join_button);
+
                 addUser(room.members[user_id]);
 
                 $.each(Object.keys(room.members), function (i, v) {
@@ -369,7 +371,7 @@ $(document).ready(function () {
                 });
 
                 peer.on('call', function (call) {
-                    if (useVoice) {
+                    if (useVoice && callJoined) {
                         console.log(call.peer + ' is calling');
                         addCallStream(call);
                     } else {
@@ -382,5 +384,5 @@ $(document).ready(function () {
                 });
             }
         });
-    }
+    // }
 });
