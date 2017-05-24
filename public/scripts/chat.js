@@ -36,7 +36,7 @@ $(document).ready(function () {
     });
 
     function sendDisconnect() {
-        $.each(Object.keys(room.members), function (i, v) {
+        $.each(Object.keys(room.online_members), function (i, v) {
             if (v !== user_id) {
                 v.send({type: 'disconnect', user_id: user_id});
             }
@@ -62,8 +62,8 @@ $(document).ready(function () {
     });
 
     function joinCall() {
-        $.each(Object.keys(room.members), function (i, v) {
-            var user = room.members[v];
+        $.each(Object.keys(room.online_members), function (i, v) {
+            var user = room.online_members[v];
             if (callJoined) {
                 if (user.id !== user_id) {
                     if (calls[v] !== undefined) {
@@ -99,8 +99,6 @@ $(document).ready(function () {
     }
 
     function addCallStream(call) {
-        //console.log('Call');
-        //console.log(call);
         call.answer(window.localStream);
         if (calls[call.peer] === undefined) {
             calls[call.peer] = call;
@@ -110,14 +108,14 @@ $(document).ready(function () {
                 user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
             });
             call.on('close', function () {
-                postNotif({msg: room.members[call.peer].name + ' has left the call'});
+                postNotif({msg: room.online_members[call.peer].name + ' has left the call'});
                 delete calls[call.peer];
             });
         }
     }
 
     function dropUser(id) {
-        delete room.members[id];
+        delete room.online_members[id];
         delete connections[id];
         $('#user-' + id).remove();
 
@@ -141,7 +139,7 @@ $(document).ready(function () {
         });
 
         conn.on('close', function () {
-            postNotif({msg: room.members[this.peer].name + ' has left the chat'});
+            postNotif({msg: room.online_members[this.peer].name + ' has left the chat'});
             dropUser(this.peer);
         });
 
@@ -177,12 +175,12 @@ $(document).ready(function () {
     };
 
     postMessage = function (data) {
-        messages.append($('<li class="message">').text(room.members[data.user_id].name + ': ' + data.content));
+        messages.append($('<li class="message">').text(room.online_members[data.user_id].name + ': ' + data.content));
         autoScroll();
     };
 
     postWhisper = function (whisper) {
-        messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.members[whisper.target].name : room.members[whisper.sender].name) + ': ' + whisper.content));
+        messages.append($('<li class="message whisper">').text(((whisper.sender === user_id) ? 'To' : 'From') + ' ' + ((whisper.sender === user_id) ? room.online_members[whisper.target].name : room.online_members[whisper.sender].name) + ': ' + whisper.content));
         autoScroll();
     };
 
@@ -211,10 +209,10 @@ $(document).ready(function () {
                 });
                 break;
             case 'info-response':
-                if (room.members[data.user_id] === undefined) {
+                if (room.online_members[data.user_id] === undefined) {
                     postNotif({msg: data.content.name + ' has joined the chat'});
                 }
-                room.members[data.user_id] = data.content;
+                room.online_members[data.user_id] = data.content;
                 addUser(data.content);
                 break;
             case 'message':
@@ -224,11 +222,11 @@ $(document).ready(function () {
                 postWhisper(data);
                 break;
             case 'disconnect':
-                postNotif({msg: room.members[data.user_id].name + ' has left the chat.'});
+                postNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
                 dropUser(data.user_id);
                 break;
             case 'call-request':
-                postNotif({msg: room.members[data.user_id].name + ' has joined the call.'});
+                postNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
                 if (useVoice && callJoined) {
                     var call = peer.call(data.user_id, window.localStream);
                     addCallStream(call);
@@ -254,10 +252,10 @@ $(document).ready(function () {
                         postError({msg: 'You can\'t whisper to yourself'});
                     } else {
                         var target = null;
-                        $.each(Object.keys(room.members), function (i, v) {
-                            var v_name = room.members[v].name;
+                        $.each(Object.keys(room.online_members), function (i, v) {
+                            var v_name = room.online_members[v].name;
                             if (target === null && v_name === unam) {
-                                target = room.members[v];
+                                target = room.online_members[v];
                             }
                         });
                         if (target === null) {
@@ -330,10 +328,10 @@ $(document).ready(function () {
 
             $('#info').prepend(join_button);
 
-            addSelf(room.members[user_id]);
+            addSelf(room.online_members[user_id]);
 
-            $.each(Object.keys(room.members), function (i, v) {
-                var mem = room.members[v];
+            $.each(Object.keys(room.online_members), function (i, v) {
+                var mem = room.online_members[v];
                 if (mem.id !== user_id) {
                     var conn = peer.connect(mem.id);
                     connections[mem.id] = conn;

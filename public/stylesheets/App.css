@@ -1,0 +1,126 @@
+html, body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+}
+
+#root{
+    width:100%;
+    height:100%;
+    /*border: 3px solid #060;*/
+    /*box-sizing: border-box;*/
+}
+
+#app-container{
+    display: flex;
+    flex-flow: column;
+    margin: 0;
+    padding: 0;
+    width:100%;
+    height:100%;
+    background-color: #990;
+}
+
+.header{
+    padding: 10px;
+    width: 100%;
+    background-color: #00B7FF;
+    flex: 0 1 auto;
+}
+
+.content {
+    flex:1 1 auto;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+}
+
+#room-rack{
+    height: 100%;
+    text-align: center;
+    flex: 0 1 10%;
+    min-width: 175px;
+    background-color: #333;
+    color: #eeeeee;
+    border-right: 1px solid #777;
+}
+
+#room-list{
+    list-style: none;
+    margin:0;
+    padding: 0;
+}
+
+.room{
+    list-style: none;
+    padding: 5px;
+    border-width: 1px;
+    border-radius: 3px;
+    border-style: solid;
+    margin: 3px auto;
+}
+
+.room:not(.current){
+    background-color: #636363;
+    border-color: black;
+}
+
+.room.current{
+    background-color: #00B7FF;
+    border-color: #00659a;
+    color: black;
+}
+
+#chat-container{
+    height: 100%;
+    flex:1 1 auto;
+    display: flex;
+    flex-flow: row;
+}
+
+#user-rack{
+    flex: 0 1 10%;
+    /*flex-basis: 100%;*/
+    min-width:175px;
+    height: 100%;
+    background-color: #333;
+    color: #eeeeee;
+    border-left: 1px solid #777;
+    text-align: center;
+}
+
+#user-rack>button{
+    text-align: center;
+    background-color: #636363;
+    border-radius: 3px;
+    border: 1px solid #eeeeee;
+}
+
+#current-users{
+    list-style: none;
+    padding: 0;
+}
+
+#current-users .user{
+    list-style: none;
+    margin: 0 auto;
+    /*padding: 0;*/
+}
+
+#chat{
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    background-color: #333333;
+    color: #eeeeee;
+}
+
+h1, h3 {
+    text-align: center;
+}
+.hidden {
+    display: none;
+}
+

@@ -1,0 +1,15 @@
+html
+    head
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title= title
+        script(src="https://code.jquery.com/jquery-3.2.1.js", integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=", crossorigin="anonymous")
+        //script(src="http://cdn.peerjs.com/0.3/peer.min.js")
+        script(src='/scripts/peer.min.js')
+        link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css", rel="stylesheet", integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN", crossorigin="anonymous")
+        link(type='text/css', rel='stylesheet', href='/stylesheets/classes.css')
+        link(type='text/css', rel='stylesheet', href='/stylesheets/chat.css')
+    body
+        div#room-list-container
+            ul#room-list
+                each room in user.rooms
+                    //li=

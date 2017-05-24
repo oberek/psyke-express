@@ -1,0 +1,23 @@
+html
+    head
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        script(src="https://code.jquery.com/jquery-3.2.1.js", integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=", crossorigin="anonymous")
+        link(type='text/css', rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
+        script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js')
+        title= title
+    body
+        form(action="/join_multichat", method="post")
+            div.formgroup
+                label(for="user_id") UserID
+                input#user_id.form-control(name="user_id", readonly="", value=user.user_id)
+            div.formgroup
+                label(for="username") Username
+                input#username.form-control(type="text", name="username" required="" value=user.username)
+            div.formgroup
+                label(for="password") Password
+                input#password.form-control(type="password", name="password", value=user.password)
+            div.formgroup
+                input(type="submit")
+        ul#rooms
+            each rm in user.rooms
+                li=rm
