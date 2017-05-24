@@ -13,7 +13,7 @@ var db = require('./routes/db');
 
 var app = express();
 
-var PORT = normalizePort(process.env.port || '3000');
+var PORT = normalizePort(process.env.port || '8080');
 
 app.set('port', PORT);
 
