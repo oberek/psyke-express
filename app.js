@@ -175,7 +175,8 @@ app.post('/getRoom', function (req, res) {
 });
 
 app.post('/log/', function (req, res) {
-    console.log('/log')
+    console.log('/log');
+    console.log('room_id: ',req.body.room_id);
 });
 
 /* put all the app.get app.post and app.use above this line */
@@ -327,13 +328,8 @@ server.on('disconnect', function (id) {
     console.log('Someone disconnected');
 });
 
-//server.listen(PORT);
-
-//console.log('listening on: ' + process.env.IP + ':' + process.env.PORT);
 console.log('listening on: localhost:' + PORT);
 server.listen(PORT);
-
-
 
 function normalizePort(val) {
     var port = parseInt(val, 10);
@@ -350,4 +346,3 @@ function normalizePort(val) {
 
     return false;
 }
-
