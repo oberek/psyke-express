@@ -197,39 +197,8 @@ class Example extends React.Component {
 
 class Psyke extends React.Component {
     state = {current_room: null, rooms: []};
-    // componentWillReceiveProps(newProps){
-    //     console.log(newProps.peer);
-    // //     this.setState({user: newProps.user, current_room: newProps.current_room, rooms: null});
-    // //     console.log('receive new props');
-    // //     console.log(newProps);
-    // //
-    // //     fetch('/getRoomsForUser/' + newProps.user.id).then((res) => res.json()).then((r) => {
-    // //         let rms = [];
-    // //         $.each(r, (i, v) => {
-    // //             rms.push(v);
-    // //             console.log(v);
-    // //         });
-    // //         this.setState({
-    // //             user: newProps.user,
-    // //             current_room: rms[0].room_id,
-    // //             rooms: rms
-    // //         });
-    // //         console.log(this.state.rooms);
-    // //         this.forceUpdate();
-    // //     });
-    // }
-    componentDidMount() {
-        // fetch('/getRoomsForUser/' + this.props.user.id).then((res) => res.json()).then((r) => {
-        //     let rms = [];
-        //     $.each(r, (i, v) => {
-        //         rms.push(v);
-        //     });
-        //     this.setState({
-        //         current_room: rms[0].room_id,
-        //         rooms: rms
-        //     });
-        // });
 
+    componentDidMount() {
         let user = this.props.user;
         let that = this;
         $.ajax({
@@ -649,6 +618,11 @@ class ChatContainer extends React.Component {
                             }
                         })}
                     </ul>
+                    <form action="">
+                        <input type="text" required={true} autoComplete="off" placeholder="Enter Message here, or @USERNAME to whisper someone"/>
+                        <input type="file" accept="image/*|audio/*|video/*"/>
+                        <button id="send-message" onClick={console.log('send-message onClick')}>Send</button>
+                    </form>
                 </div>
                 <div id="user-rack">
                     <button id="call" className={(this.state.room.inCall) ? "muted" : ""}

@@ -177,9 +177,17 @@ app.post('/getRoom', function (req, res) {
 app.post('/log/', function (req, res) {
     console.log('/log');
     console.log('room_id: ',req.body.room_id);
+    console.log('obj: ',req.body.obj);
+
+    //for testing porpoises
+    res.sendStatus(200);
 });
 
 /* put all the app.get app.post and app.use above this line */
+
+app.use('/offline_development', function (req, res) {
+    res.sendFile(path.join(__dirname, 'public/offline.html'));
+});
 
 app.use('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/psyke.html'));
