@@ -124,3 +124,63 @@ h1, h3 {
     display: none;
 }
 
+#messages {
+    flex: 1 1 auto;
+    border: 3px solid #999;
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    background-color: #222;
+}
+
+#messages li {
+    padding: 5px 10px;
+    color: #DDD;
+    background: #222;
+}
+
+#messages li:nth-child(odd) {
+    background: #333;
+}
+.whisper {
+    background: rgba(140, 6, 157, 0.49) !important;
+}
+.error {
+    background: rgba(157, 6, 6, 0.49) !important;
+}
+.notif {
+    background: rgba(157, 123, 0, 0.49) !important;
+}
+.message{
+    border-bottom: .5px solid #222;
+}
+
+#message-box {
+    flex: 0 1 auto;
+    background: #000;
+    padding: 3px;
+    width: 100%;
+    color: black;
+}
+
+#message-box #user-input {
+    border: 0;
+    padding: 10px;
+    width: 90%;
+    margin-right: .5%;
+}
+
+#message-box button {
+    width: 9%;
+    color: black;
+    background: rgb(130, 224, 255);
+    border: none;
+    padding: 10px;
+}
+
+
+.hidden{
+    display: none;
+}

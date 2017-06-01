@@ -371,139 +371,6 @@ class MuteButton extends React.Component {
 class ChatContainer extends React.Component {
     state = {room: {users: {}, log: [], inCall: false, streams: []}};
 
-    decodeData(data) {
-        let that = this;
-        console.log(data);
-        switch (data.type) {
-            case 'info-request':
-                cons[data.user_id].send({
-                    type: 'info-response',
-                    user: {
-                        id: that.props.user.id,
-                        username: that.props.user.username
-                    }
-                });
-                break;
-            case 'info-response':
-                if (this.state.room.users[data.user.id] === undefined) {
-                    // postNotif({msg: data.content.name + ' has joined the chat'});
-                    console.log('user info added');
-                    let room = that.state.room;
-                    room.inCall = false;
-                    room.users[data.user.id] = data.user;
-                    that.setState({room: room});
-                    // that.forceUpdate();
-                }
-                // room.online_members[data.user_id] = data.content;
-                // addUser(data.content);
-                break;
-            case 'message':
-                // postMessage(data);
-                that.state.room.log.push(data);
-                break;
-            case 'whisper':
-                // postWhisper(data);
-                that.state.room.log.push(data);
-                that.forceUpdate();
-                break;
-            case 'disconnect':
-                // postNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
-                // dropUser(data.user_id);
-                break;
-            case 'call-request':
-                // postNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
-                if (useVoice && that.state.room.inCall) {
-                    let call = peer.call(data.user_id, window.localStream);
-                    that.addCallStream(call);
-                }
-                break;
-            default:
-                // postNotif({msg: JSON.stringify(data)});
-                break;
-        }
-    }
-
-    addCallStream(call) {
-        let that = this;
-        call.answer(window.localStream);
-        if (calls[call.peer] === undefined) {
-            calls[call.peer] = call;
-            // var user_li = $('#user-' + call.peer);
-            //console.log('waiting for stream');
-            call.on('stream', function (stream) {
-                // user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
-                // $('#user-'+call.peer).append(<audio id={'stream-'+call.peer} autoPlay={true} src={URL.createObjectURL(stream)}>User Stream</audio>);
-                let str = {
-                    id: call.peer,
-                    stream: URL.createObjectURL(stream)
-                };
-                that.state.room.streams.push(str);
-                that.setState(stream);
-                // that.forceUpdate();
-            });
-            call.on('close', function () {
-                $('#stream-' + call.peer).remove();
-                // postNotif({msg: room.online_members[call.peer].name + ' has left the call'});
-                delete calls[call.peer];
-            });
-        }
-    }
-
-    addConnEventListeners(conn) {
-        let that = this;
-        conn.on('data', function (data) {
-            that.decodeData(data);
-        });
-
-        conn.on('close', function () {
-            // postNotif({msg: room.online_members[this.peer].name + ' has left the chat'});
-            // dropUser(this.peer);
-            console.log(conn.peer, 'has disconnected');
-            var new_state = Object.assign({}, that.state);
-            delete new_state.room.users[conn.peer];
-            that.setState(new_state);
-        });
-
-        conn.on('error', function (err) {
-            // postError({msg: err});
-            console.log(err);
-        });
-    }
-
-    addDataConnection(conn) {
-        cons[conn.peer] = conn;
-        let that = this;
-        if (conn.open) {
-            that.addConnEventListeners(conn);
-            conn.send({type: 'info-request', user_id: peer.id});
-        } else {
-            conn.on('open', function () {
-                that.addConnEventListeners(conn);
-                conn.send({type: 'info-request', user_id: peer.id});
-            });
-        }
-    }
-
-    peerSetup(p) {
-        let that = this;
-        if (p instanceof Peer) {
-            p.on('connection', function (conn) {
-                console.log('Peer with id (' + conn.peer + ') has connected to you');
-                that.addDataConnection(conn);
-                conn.send({type: 'info-request', user_id: p.id});
-            });
-
-            p.on('call', function (call) {
-                if (that.state.room.inCall) {
-                    that.addCallStream(call);
-                } else {
-                    call.answer(null);
-                    call.close();
-                }
-            });
-        }
-    }
-
     componentDidMount() {
         console.log(this.props);
         this.peerSetup(this.props.peer);
@@ -533,7 +400,7 @@ class ChatContainer extends React.Component {
                 console.log('Success');
                 console.log(data);
                 console.log(JSON.parse(data));
-                var r = JSON.parse(data);
+                let r = JSON.parse(data);
                 console.log('connected local user to the room with id ' + nextProps.current_room);
                 r.users = {};
                 r.streams = [];
@@ -544,7 +411,9 @@ class ChatContainer extends React.Component {
                 $.each(r.online_members, function (i, peer_id) {
                     console.log(peer_id, peer.id);
                     if (peer_id !== nextProps.peer.id) {
-                        that.addDataConnection(peer.connect(peer_id));
+                        let conn = peer.connect(peer_id);
+                        console.log(conn);
+                        that.addDataConnection(conn);
                     } else {
                         console.log('add self to users list');
                     }
@@ -552,6 +421,142 @@ class ChatContainer extends React.Component {
 
             }
         });
+    }
+
+    decodeData(data) {
+        let that = this;
+        console.log(data);
+        switch (data.type) {
+            case 'info-request':
+                cons[data.user_id].send({
+                    type: 'info-response',
+                    user: {
+                        id: that.props.user.id,
+                        username: that.props.user.username
+                    }
+                });
+                break;
+            case 'info-response':
+                if (this.state.room.users[data.user.id] === undefined) {
+                     that.postNewNotif({msg: data.content.name + ' has joined the chat'});
+                    console.log('user info added');
+                    let room = that.state.room;
+                    room.inCall = false;
+                    room.users[data.user.id] = data.user;
+                    that.setState({room: room});
+                    // that.forceUpdate();
+                }
+                // room.online_members[data.user_id] = data.content;
+                // addUser(data.content);
+                break;
+            case 'message':
+                 that.postNewMessage(data);
+                that.state.room.log.push(data);
+                break;
+            case 'whisper':
+                 that.postNewWhisper(data);
+                that.state.room.log.push(data);
+                that.forceUpdate();
+                break;
+            case 'disconnect':
+                 that.postNewNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
+                // dropUser(data.user_id);
+                break;
+            case 'call-request':
+                 that.postNewNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
+                if (useVoice && that.state.room.inCall) {
+                    let call = peer.call(data.user_id, window.localStream);
+                    that.addCallStream(call);
+                }
+                break;
+            default:
+                 that.postNewNotif({msg: JSON.stringify(data)});
+                break;
+        }
+    }
+
+    addCallStream(call) {
+        let that = this;
+        call.answer(window.localStream);
+        if (calls[call.peer] === undefined) {
+            calls[call.peer] = call;
+            // let user_li = $('#user-' + call.peer);
+            //console.log('waiting for stream');
+            call.on('stream', function (stream) {
+                // user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
+                // $('#user-'+call.peer).append(<audio id={'stream-'+call.peer} autoPlay={true} src={URL.createObjectURL(stream)}>User Stream</audio>);
+                let str = {
+                    id: call.peer,
+                    stream: URL.createObjectURL(stream)
+                };
+                that.state.room.streams.push(str);
+                that.setState(stream);
+                // that.forceUpdate();
+            });
+            call.on('close', function () {
+                $('#stream-' + call.peer).remove();
+                 that.postNewNotif({msg: room.online_members[call.peer].name + ' has left the call'});
+                delete calls[call.peer];
+            });
+        }
+    }
+
+    addConnEventListeners(conn) {
+        let that = this;
+        conn.on('data', function (data) {
+            that.decodeData(data);
+        });
+
+        conn.on('close', function () {
+             that.postNewNotif({msg: room.online_members[this.peer].name + ' has left the chat'});
+            // dropUser(this.peer);
+            console.log(conn.peer, 'has disconnected');
+            let new_state = Object.assign({}, that.state);
+            delete new_state.room.users[conn.peer];
+            that.setState(new_state);
+        });
+
+        conn.on('error', function (err) {
+             that.postNewError({msg: err});
+            console.log(err);
+        });
+    }
+
+    addDataConnection(conn) {
+        let that = this;
+        cons[conn.peer] = conn;
+        if (conn.open) {
+            that.addConnEventListeners(conn);
+            conn.send({type: 'info-request', user_id: peer.id});
+        } else {
+            console.log('waiting for conn to open');
+            conn.on('open', function () {
+                console.log('conn has opened');
+                that.addConnEventListeners(conn);
+                conn.send({type: 'info-request', user_id: peer.id});
+            });
+        }
+    }
+
+    peerSetup(p) {
+        let that = this;
+        if (p instanceof Peer) {
+            p.on('connection', function (conn) {
+                console.log(conn);
+                console.log('Peer with id (' + conn.peer + ') has connected to you');
+                that.addDataConnection(conn);
+                conn.send({type: 'info-request', user_id: p.id});
+            });
+
+            p.on('call', function (call) {
+                if (that.state.room.inCall) {
+                    that.addCallStream(call);
+                } else {
+                    call.answer(null);
+                    call.close();
+                }
+            });
+        }
     }
 
     joinCall() {
@@ -593,6 +598,102 @@ class ChatContainer extends React.Component {
         }
     }
 
+    autoScroll() {
+        let messages = $('#messages');
+        messages[0].scrollTop = messages[0].scrollHeight;
+    }
+
+    postNewError(err) {
+        let messages = $('#messages');
+        messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
+        this.autoScroll();
+    };
+
+    postNewNotif(msg) {
+        let messages = $('#messages');
+        messages.append($('<li class="message notif">').text('!! ' + msg.msg));
+        this.autoScroll();
+    };
+
+    postNewMessage(data) {
+        let messages = $('#messages');
+        console.log(this);
+        messages.append($('<li class="message">').text(this.state.room.users[data.user_id].username + ': ' + data.content));
+        this.autoScroll();
+    };
+
+    postNewWhisper(whisper) {
+        let messages = $('#messages');
+        messages.append($('<li class="message whisper">').text(((whisper.sender === this.props.peer.id) ? 'To' : 'From') + ' ' + ((whisper.sender === this.props.peer.id) ? this.state.room.users[whisper.target].username : this.state.room.users[whisper.sender].username) + ': ' + whisper.content));
+        this.autoScroll();
+    };
+
+    broadcast(msg) {
+        let that = this;
+        // console.log(this);
+        let data = {
+            type: 'message',
+            user_id: this.props.peer.id,
+            content: msg
+        };
+        that.postNewMessage(data);
+        $.each(Object.keys(cons), function (i, v) {
+            cons[v].send(data);
+        });
+    }
+
+    sendMessage(e) {
+        e.preventDefault();
+
+        let user_input = $('#user-input');
+
+        let room = this.state.room;
+        let that = this;
+        
+        let msg = user_input.val();
+        if (msg.indexOf('@') === 0) {
+            let splitter = msg.split(' ');
+            if (splitter.length >= 2) {
+                if (splitter[0].length === 1) {
+                    postError({msg: 'You must supply a username to whisper to.'});
+                } else {
+                    let unam = splitter[0].substr(msg.indexOf('@') + 1);
+                    if (unam === room.users[that.props.peer.id].username) {
+                        postError({msg: 'You can\'t whisper to yourself'});
+                    } else {
+                        let target = null;
+                        $.each(Object.keys(room.users), function (i, v) {
+                            let v_name = room.users[v].username;
+                            if (target === null && v_name === unam) {
+                                target = room.users[v];
+                            }
+                        });
+                        if (target === null) {
+                            postError({msg: 'User not found.'});
+                        } else {
+                            let msg_content = msg.substr(msg.indexOf(splitter[1]));
+                            let whisper = {
+                                type: 'whisper',
+                                content: msg_content,
+                                target: target.id,
+                                sender: user_id
+                            };
+                            postWhisper(whisper);
+                            connections[target.id].send(whisper);
+                        }
+                    }
+                }
+            } else {
+                postError({msg: 'You must supply a message'});
+            }
+        }
+        else {
+            this.broadcast(msg);
+        }
+
+        user_input.val('');
+    }
+
     render() {
         return (
             <div id="chat-container">
@@ -618,9 +719,9 @@ class ChatContainer extends React.Component {
                             }
                         })}
                     </ul>
-                    <form action="">
-                        <input type="text" required={true} autoComplete="off" placeholder="Enter Message here, or @USERNAME to whisper someone"/>
-                        <input type="file" accept="image/*|audio/*|video/*"/>
+                    <form id="message-box" onSubmit={this.sendMessage.bind(this)}>
+                        <input id="user-input" type="text" required={true} autoComplete="off" placeholder="Enter Message here, or @USERNAME to whisper someone"/>
+                        <input type="file" className="hidden" accept="image/*|audio/*|video/*"/>
                         <button id="send-message" onClick={console.log('send-message onClick')}>Send</button>
                     </form>
                 </div>
