@@ -178,6 +178,7 @@ app.post('/connect', function (req, res) {
 
     if (db.rooms[room_id] !== undefined && db.users[user_id] !== undefined) {
         var user = db.users[user_id];
+        console.log(user);
         if (user.rooms.includes(room_id)) {
             var i;
             for (i = 0; i < user.rooms.length; i++) {
