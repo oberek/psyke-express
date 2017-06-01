@@ -179,14 +179,14 @@ app.post('/connect', function (req, res) {
     if (db.rooms[room_id] !== undefined && db.users[user_id] !== undefined) {
         var user = db.users[user_id];
         console.log(user);
-        if (user.rooms.includes(room_id)) {
+        if (user.rooms.indexOf(room_id) != -1) {
             var i;
             for (i = 0; i < user.rooms.length; i++) {
                 var t_room = db.rooms[user.rooms[i]];
                 console.log(t_room.room_id);
-                if (t_room.room_id === room_id && !t_room.online_members.includes(user_id)) {
+                if (t_room.room_id === room_id && !t_room.online_members.indexOf(user_id) != -1) {
                     t_room.online_members.push(user_id);
-                } else if (t_room.online_members.includes(user_id)) {
+                } else if (t_room.online_members.indexOf(user_id) != -1) {
                     console.log(t_room.online_members);
                     t_room.online_members.splice(t_room.online_members.indexOf(user_id), 1);
                     console.log(t_room.online_members);
@@ -217,7 +217,7 @@ app.post('/disconnect', function (req, res) {
         var i;
         for (i = 0; i < user.rooms.length; i++) {
             var t_room = db.rooms[user.rooms[i]];
-            if (t_room.online_members.includes(user_id)) {
+            if (t_room.online_members.indexOf(user_id) != -1) {
                 t_room.online_members.splice(t_room.online_members.indexOf(user_id), 1);
             }
         }
