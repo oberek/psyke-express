@@ -16,7 +16,7 @@ let URL=window.URL || window.webkitURL;
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 const server_connection={
     host: window.location.hostname,
-    port: window.location.port,
+    port: window.location.port || '8080',
     path: '/peer'
 };
 
