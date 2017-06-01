@@ -5,6 +5,7 @@
 /*global Peer*/
 /*global React*/
 /*global ReactDOM*/
+/*global navigator*/
 
 let peer;
 let cons={};
@@ -12,7 +13,7 @@ let calls={};
 let useVoice=false;
 // let inCall=false;
 let URL=window.URL || window.webkitURL;
-
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 const server_connection={
     host: window.location.hostname,
     port: window.location.port,
@@ -591,16 +592,23 @@ class ChatContainer extends React.Component {
                 // that.forceUpdate();
                 break;
             case 'disconnect':
-                that.postNewData({msg: room.online_members[data.user_id].name + ' has left the chat.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                that.postNewData({msg: that.state.room.users[data.user_id].username + ' has left the chat.', type: 'notif', timestamp: (new Date()).toUTCString()});
                 // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
                 // dropUser(data.user_id);
                 break;
             case 'call-request':
-                that.postNewData({msg: room.online_members[data.user_id].name + ' has joined the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                that.postNewData({msg: that.state.room.users[data.user_id].username + ' has joined the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
                 // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
                 if (useVoice && that.state.room.inCall) {
                     let call = peer.call(data.user_id, window.localStream);
                     that.addCallStream(call);
+                }
+                break;
+            case 'hangup':
+                that.postNewData({msg: that.state.room.users[data.user.id].username + ' has left the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                if(calls[data.user.id] !== undefined){
+                    calls[data.user.id].close();
+                    delete calls[data.user.id];
                 }
                 break;
             default:
@@ -629,7 +637,10 @@ class ChatContainer extends React.Component {
             });
             call.on('close', function () {
                 $('#stream-' + call.peer).remove();
-                that.postNewData({msg: room.online_members[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
+                console.log('something');
+                // if(that.state.room.inCall){
+                    // that.postNewData({msg: that.state.room.users[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
+                // }
                 // that.postNewNotif({msg: room.online_members[call.peer].username + ' has left the call'});
                 delete calls[call.peer];
             });
@@ -700,11 +711,14 @@ class ChatContainer extends React.Component {
         let that = this;
 
         function step2() {
+            console.log('step2');
             if (useVoice) {
                 $.each(Object.values(cons), function (i, conn) {
                     console.log(conn);
                     if (that.state.room.inCall) {
                         //disconnect from the call
+                        cons[conn.peer].send({type: 'hangup', user: that.state.room.users[that.props.peer.id]})
+                        delete calls[conn.peer];
                     } else {
                         //request the other peer to call me
                         conn.send({type: 'call-request', user_id: that.props.peer.id});
@@ -719,12 +733,15 @@ class ChatContainer extends React.Component {
             // that.forceUpdate();
         }
 
+        console.log(navigator);
+
         if (window.localStream === undefined) {
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
                 useVoice = true;
                 window.localStream = stream;
                 step2();
             }, function () {
+                console.log(window.localStream);
                 that.postNewData(
                     {
                         type: 'error',
@@ -738,7 +755,7 @@ class ChatContainer extends React.Component {
                 //         timestamp: (new Date()).toUTCString()
                 //     });
                 // console.log()
-                alert('shit happened');
+                console.error('shit happened');
             });
         } else {
             console.log('window.localStream already initialized');
@@ -876,7 +893,7 @@ class ChatContainer extends React.Component {
                                 case 'notif':
                                     return <Notification key={msg.timestamp} message={msg.msg}/>;
                                     break;
-                                case 'err':
+                                case 'error':
                                     return <ErrorMsg key={msg.timestamp} message={msg.msg}/>;
                                     break;
                             }

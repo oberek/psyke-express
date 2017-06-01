@@ -40,7 +40,7 @@ var db = {
         'ZdEaOWTamXcTUJa3': {
             id: 'ZdEaOWTamXcTUJa3',
             username: 'admin',
-            rooms: ['room-1', 'second-room'],
+            rooms: ['public', 'room-1', 'second-room'],
             password: 'password'
         }
     }
