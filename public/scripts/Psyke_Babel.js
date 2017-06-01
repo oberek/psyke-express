@@ -367,38 +367,22 @@ class Psyke extends React.Component {
     }
 
     render() {
-        return ( <div id="app-container">
-                <div className="header text-center"> { /*<h1>Psyke!</h1>*/ } <h3> Welcome, {
-                    this.props.user.username
-                }! </h3> <button className="btn btn-danger center-btn"
-                                 onClick={
-                                     this.props.logout
-                                 }> Logout </button> </div> <div className="content">
-                <RoomRack key={
-                    'RoomRack' + this.props.user.id
-                }
-                          current_room={
-                              this.state.current_room
-                          }
-                          rooms={
-                              this.state.rooms
-                          }
-                          updateCurrentRoom={
-                              this.updateCurrentRoom.bind(this)
-                          }
-                /> <ChatContainer key={
-                'ChatContainer' + this.props.user.id
-            }
-                                  peer={
-                                      this.props.peer
-                                  }
-                                  user={
-                                      this.props.user
-                                  }
-                                  current_room={
-                                      this.state.current_room
-                                  }
-            /> </div> </div>
+        return (
+            <div id="app-container">
+                <div className="header text-center"> { /*<h1>Psyke!</h1>*/ } <h3> Welcome, {this.props.user.username}! </h3>
+                    <button className="btn btn-danger center-btn" onClick={ this.props.logout }> Logout </button>
+                </div>
+                <div className="content">
+                    <RoomRack key={ 'RoomRack' + this.props.user.id }
+                              current_room={ this.state.current_room }
+                              rooms={ this.state.rooms }
+                              updateCurrentRoom={ this.updateCurrentRoom.bind(this) }/>
+                    <ChatContainer key={'ChatContainer' + this.props.user.id }
+                                   peer={this.props.peer}
+                                   user={this.props.user}
+                                   current_room={this.state.current_room} />
+                </div>
+            </div>
         );
     }
 }
@@ -451,34 +435,31 @@ class RoomRack extends React.Component {
 
 class Notification extends React.Component {
     render() {
-        return ( <li className="message notif"> !!{
-            this.props.message
-        } </li>);
+        return ( <li className="message notif"> <strong>!!</strong> { this.props.message } </li> );
     }
 }
 
 class ErrorMsg extends React.Component {
     render() {
-        return ( <li className="message error"> Error: {
-            this.props.message
-        } </li>);
+        return ( <li className="message error"> Error: { this.props.message } </li>);
     }
 }
 
 class Whisper extends React.Component {
     render() {
-        return ( <li className="message whisper"> {
-            ((this.props.sender === this.props.peer.id) ? "To " + this.props.room.users[this.props.target] : "From " + this.props.room.users[this.props.sender])
-        } {
-            this.props.message
-        } </li>);
+        return (
+            <li className="message whisper">
+                {((this.props.sender.id === peer.id) ?
+                    "To " + this.props.target.username :
+                    "From " + this.props.sender.username)}: {this.props.message}
+            </li>);
     }
 }
 
 class Message extends React.Component {
     render() {
         return ( <li className="message"> {
-            this.props.room.users[this.props.sender].username
+            this.props.sender.username
         }: {
             this.props.message
         } </li>);
@@ -510,36 +491,13 @@ class Message extends React.Component {
 //     }
 // }
 
-class MuteButton extends React.Component {
-    state={
-        muted: false
-    };
-
-    MuteLocal() {
-        let that=this;
-        window.localStream.getAudioTracks()[0].enabled=!window.localStream.getAudioTracks()[0].enabled;
-        that.state.muted=!window.localStream.getAudioTracks()[0].enabled;
-        that.setState(that.state);
-    }
-
-    render() {
-        return ( <button onClick={
-                this.MuteLocal
-            }
-                         className={
-                             this.state.muted ? 'muted' : ''
-                         }>
-                <i className="fa fa-microphone-slash"> </i> </button>
-        );
-    }
-}
-
 class ChatContainer extends React.Component {
-    state = {room: {users: {}, log: [], inCall: false, streams: []}};
+    state = {room: {users: {}, log: [{type:"notif", msg: "Welcome to the chat!", timestamp: (new Date()).toUTCString()}], inCall: false, streams: []}};
 
     componentDidMount() {
         console.log(this.props);
         this.peerSetup(this.props.peer);
+        console.log(typeof this.state.room.log);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -571,7 +529,9 @@ class ChatContainer extends React.Component {
                 r.users = {};
                 r.streams = [];
                 r.users[nextProps.user.id] = nextProps.user;
-                that.setState({room: r});
+                r.log.unshift(that.state.room.log[0]);
+                that.state.room = r;
+                that.setState(that.state);
                 console.log(r);
 
                 $.each(r.online_members, function (i, peer_id) {
@@ -599,12 +559,16 @@ class ChatContainer extends React.Component {
                     user: {
                         id: that.props.user.id,
                         username: that.props.user.username
-                    }
+                    },
+                    timestamp: (new Date()).toUTCString()
                 });
                 break;
             case 'info-response':
                 if (this.state.room.users[data.user.id] === undefined) {
-                    that.postNewNotif({msg: data.content.name + ' has joined the chat'});
+                    if(this.state.room.online_members.indexOf(data.user.id) === -1){
+                        that.postNewData({msg: data.user.username + ' has joined the chat', type: 'notif', timestamp: (new Date()).toUTCString()});
+                    }
+                    // that.postNewNotif({msg: data.user.username + ' has joined the chat'});
                     console.log('user info added');
                     let room = that.state.room;
                     room.inCall = false;
@@ -616,27 +580,31 @@ class ChatContainer extends React.Component {
                 // addUser(data.content);
                 break;
             case 'message':
-                that.postNewMessage(data);
-                that.state.room.log.push(data);
-                break;
+            // that.postNewData(data);
+            // // that.postNewMessage(data);
+            // that.state.room.log.push(data);
+            // break;
             case 'whisper':
-                that.postNewWhisper(data);
-                that.state.room.log.push(data);
-                that.forceUpdate();
+                that.postNewData(data);
+                // // that.postNewWhisper(data);
+                // that.state.room.log.push(data);
+                // that.forceUpdate();
                 break;
             case 'disconnect':
-                that.postNewNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
+                that.postNewData({msg: room.online_members[data.user_id].name + ' has left the chat.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
                 // dropUser(data.user_id);
                 break;
             case 'call-request':
-                that.postNewNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
+                that.postNewData({msg: room.online_members[data.user_id].name + ' has joined the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
                 if (useVoice && that.state.room.inCall) {
                     let call = peer.call(data.user_id, window.localStream);
                     that.addCallStream(call);
                 }
                 break;
             default:
-                that.postNewNotif({msg: JSON.stringify(data)});
+                that.postNewData({msg: JSON.stringify(data), type: 'err', timestamp: (new Date()).toUTCString()});
                 break;
         }
     }
@@ -661,7 +629,8 @@ class ChatContainer extends React.Component {
             });
             call.on('close', function () {
                 $('#stream-' + call.peer).remove();
-                that.postNewNotif({msg: room.online_members[call.peer].name + ' has left the call'});
+                that.postNewData({msg: room.online_members[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
+                // that.postNewNotif({msg: room.online_members[call.peer].username + ' has left the call'});
                 delete calls[call.peer];
             });
         }
@@ -674,7 +643,8 @@ class ChatContainer extends React.Component {
         });
 
         conn.on('close', function () {
-            that.postNewNotif({msg: room.online_members[this.peer].name + ' has left the chat'});
+            that.postNewData({msg: that.state.room.users[conn.peer].username + ' has left the chat', type: 'notif', timestamp: (new Date()).toUTCString()});
+            // that.postNewNotif({msg: that.state.room.users[this.peer].username + ' has left the chat'});
             // dropUser(this.peer);
             console.log(conn.peer, 'has disconnected');
             let new_state = Object.assign({}, that.state);
@@ -683,7 +653,8 @@ class ChatContainer extends React.Component {
         });
 
         conn.on('error', function (err) {
-            that.postNewError({msg: err});
+            that.postNewData({msg: err, type: 'err', timestamp: (new Date()).toUTCString()});
+            // that.postNewError({msg: err});
             console.log(err);
         });
     }
@@ -754,7 +725,18 @@ class ChatContainer extends React.Component {
                 window.localStream = stream;
                 step2();
             }, function () {
-                // this.postError({msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https'});
+                that.postNewData(
+                    {
+                        type: 'error',
+                        msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https',
+                        timestamp: (new Date()).toUTCString()
+                    });
+                // that.postNewError(
+                //     {
+                //         type: 'error',
+                //         msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https',
+                //         timestamp: (new Date()).toUTCString()
+                //     });
                 // console.log()
                 alert('shit happened');
             });
@@ -769,28 +751,36 @@ class ChatContainer extends React.Component {
         messages[0].scrollTop = messages[0].scrollHeight;
     }
 
+    postNewData(data){
+        this.state.room.log.push(data);
+        this.setState(this.state);
+    }
+
     postNewError(err) {
-        let messages = $('#messages');
-        messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
+        // let messages = $('#messages');
+        // messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
+        this.state.room.log.push(err);
         this.autoScroll();
     };
 
     postNewNotif(msg) {
-        let messages = $('#messages');
-        messages.append($('<li class="message notif">').text('!! ' + msg.msg));
+        // let messages = $('#messages');
+        // messages.append($('<li class="message notif">').text('!! ' + msg.msg));
+        this.state.room.log += msg;
         this.autoScroll();
     };
 
     postNewMessage(data) {
-        let messages = $('#messages');
-        console.log(this);
-        messages.append($('<li class="message">').text(this.state.room.users[data.user_id].username + ': ' + data.content));
+        // let messages = $('#messages');
+        // console.log(this);
+        // messages.append($('<li class="message">').text(this.state.room.users[data.user_id].username + ': ' + data.content));
+        this.state.room.log += data;
         this.autoScroll();
     };
 
     postNewWhisper(whisper) {
-        let messages = $('#messages');
-        messages.append($('<li class="message whisper">').text(((whisper.sender === this.props.peer.id) ? 'To' : 'From') + ' ' + ((whisper.sender === this.props.peer.id) ? this.state.room.users[whisper.target].username : this.state.room.users[whisper.sender].username) + ': ' + whisper.content));
+        // let messages = $('#messages');
+        // messages.append($('<li class="message whisper">').text(((whisper.sender === this.props.peer.id) ? 'To' : 'From') + ' ' + ((whisper.sender === this.props.peer.id) ? this.state.room.users[whisper.target].username : this.state.room.users[whisper.sender].username) + ': ' + whisper.content));
         this.autoScroll();
     };
 
@@ -799,10 +789,12 @@ class ChatContainer extends React.Component {
         // console.log(this);
         let data = {
             type: 'message',
-            user_id: this.props.peer.id,
-            content: msg
+            sender: this.state.room.users[this.props.peer.id],
+            msg: msg,
+            timestamp: (new Date()).toUTCString()
         };
-        that.postNewMessage(data);
+        // that.postNewMessage(data);
+        that.postNewData(data);
         $.each(Object.keys(cons), function (i, v) {
             cons[v].send(data);
         });
@@ -821,11 +813,13 @@ class ChatContainer extends React.Component {
             let splitter = msg.split(' ');
             if (splitter.length >= 2) {
                 if (splitter[0].length === 1) {
-                    postError({msg: 'You must supply a username to whisper to.'});
+                    that.postNewData({msg: 'You must supply a username to whisper to.', type: 'error', timestamp: (new Date()).toUTCString()});
+                    // that.postNewError({msg: 'You must supply a username to whisper to.'});
                 } else {
                     let unam = splitter[0].substr(msg.indexOf('@') + 1);
                     if (unam === room.users[that.props.peer.id].username) {
-                        postError({msg: 'You can\'t whisper to yourself'});
+                        that.postNewData({msg: 'You can\'t whisper to yourself', type: 'error', timestamp: (new Date()).toUTCString()});
+                        // that.postNewError({msg: 'You can\'t whisper to yourself', type: 'error'});
                     } else {
                         let target = null;
                         $.each(Object.keys(room.users), function (i, v) {
@@ -835,22 +829,26 @@ class ChatContainer extends React.Component {
                             }
                         });
                         if (target === null) {
-                            postError({msg: 'User not found.'});
+                            that.postNewData({msg: 'User not found.', timestamp: (new Date()).toUTCString()});
+                            // that.postNewError({msg: 'User not found.'});
                         } else {
                             let msg_content = msg.substr(msg.indexOf(splitter[1]));
                             let whisper = {
                                 type: 'whisper',
-                                content: msg_content,
-                                target: target.id,
-                                sender: user_id
+                                msg: msg_content,
+                                target: that.state.room.users[target.id],
+                                sender: that.state.room.users[that.props.peer.id],
+                                timestamp: (new Date()).toUTCString()
                             };
-                            postWhisper(whisper);
-                            connections[target.id].send(whisper);
+                            // that.postNewWhisper(whisper);
+                            that.postNewData(whisper);
+                            cons[target.id].send(whisper);
                         }
                     }
                 }
             } else {
-                postError({msg: 'You must supply a message'});
+                that.postNewData({msg: 'You must supply a message', type: 'error'});
+                // that.postNewError({msg: 'You must supply a message'});
             }
         }
         else {
@@ -866,20 +864,19 @@ class ChatContainer extends React.Component {
                 <div id="chat">
                     {/*<h3>Chatlog for {this.state.room.room_name}</h3>*/}
                     <ul id="messages">
-                        {this.state.room.log.map((msg) => {
+                        {console.log(this.state.room.log)}
+                        {(this.state.room.log).map((msg) => {
                             switch (msg.type) {
-                                case 'msg':
-                                    return <Message key={msg.timestamp} room={this.state.room} sender={msg.sender}
-                                                    message={msg.msg}/>;
+                                case 'message':
+                                    return <Message key={msg.timestamp} room={this.state.room} sender={msg.sender} message={msg.msg}/>;
                                     break;
                                 case 'whisper':
-                                    return <Whisper key={msg.timestamp} room={this.state.room} sender={msg.sender}
-                                                    target={msg.target} message={msg.msg}/>;
+                                    return <Whisper key={msg.timestamp} room={this.state.room} sender={msg.sender} target={msg.target} message={msg.msg}/>;
                                     break;
                                 case 'notif':
                                     return <Notification key={msg.timestamp} message={msg.msg}/>;
                                     break;
-                                case 'error':
+                                case 'err':
                                     return <ErrorMsg key={msg.timestamp} message={msg.msg}/>;
                                     break;
                             }
@@ -916,6 +913,30 @@ class ChatContainer extends React.Component {
                     </ul>
                 </div>
             </div>
+        );
+    }
+}
+
+class MuteButton extends React.Component {
+    state={
+        muted: false
+    };
+
+    MuteLocal() {
+        let that=this;
+        window.localStream.getAudioTracks()[0].enabled=!window.localStream.getAudioTracks()[0].enabled;
+        that.state.muted=!window.localStream.getAudioTracks()[0].enabled;
+        that.setState(that.state);
+    }
+
+    render() {
+        return ( <button onClick={
+                this.MuteLocal
+            }
+                         className={
+                             this.state.muted ? 'muted' : ''
+                         }>
+                <i className="fa fa-microphone-slash"> </i> </button>
         );
     }
 }

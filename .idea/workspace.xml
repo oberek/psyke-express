@@ -49,10 +49,27 @@
           <file leaf-file-name="Psyke_Babel.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="172">
-                  <caret line="920" column="1" lean-forward="false" selection-start-line="920" selection-start-column="1" selection-end-line="920" selection-end-column="1" />
+                <state relative-caret-position="348">
+                  <caret line="740" column="39" lean-forward="true" selection-start-line="740" selection-start-column="39" selection-end-line="740" selection-end-column="39" />
                   <folding>
-                    <element signature="n#ChatContainer#0" expanded="false" />
+                    <element signature="n#Example#0" expanded="false" />
+                    <element signature="n#Psyke#0" expanded="false" />
+                    <element signature="n#RoomRack#0" expanded="false" />
+                    <element signature="e#15525#15565#0" expanded="false" />
+                    <element signature="n#!!block;n#componentDidMount#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#componentWillReceiveProps#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#decodeData#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#addCallStream#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#addConnEventListeners#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#addDataConnection#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#peerSetup#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#autoScroll#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#postNewData#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#postNewError#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#postNewNotif#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#postNewMessage#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#!!block;n#postNewWhisper#0;n#ChatContainer#0" expanded="false" />
+                    <element signature="n#MuteButton#0" expanded="false" />
                   </folding>
                 </state>
               </provider>
@@ -193,16 +210,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ChatMethods.post</find>
-      <find>members</find>
-      <find>online</find>
-      <find>username</find>
-      <find>/join</find>
-      <find>user1</find>
-      <find>room.members</find>
-      <find>var</find>
-      <find>server.listen</find>
-      <find>server</find>
       <find>peer =</find>
       <find>app.use('/</find>
       <find>joi</find>
@@ -223,6 +230,16 @@
       <find>postNewMessage(</find>
       <find>sendMess</find>
       <find>peer.connect</find>
+      <find>postError</find>
+      <find>cons</find>
+      <find>postNewNotif</find>
+      <find>that.postNew</find>
+      <find>type: 'message'</find>
+      <find>room.log</find>
+      <find>content:</find>
+      <find>sender:</find>
+      <find>sender:</find>
+      <find>alert('</find>
     </findStrings>
     <replaceStrings>
       <replace>roomInfo</replace>
@@ -243,6 +260,8 @@
       <replace>that.postNew</replace>
       <replace>.users</replace>
       <replace>.username</replace>
+      <replace>that.postNewError</replace>
+      <replace>type: 'msg'</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -306,10 +325,9 @@
     <handled-path value="$PROJECT_DIR$/node_modules" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-8" />
-    <option name="y" value="-8" />
+    <option name="x" value="-7" />
     <option name="width" value="1932" />
-    <option name="height" value="1056" />
+    <option name="height" value="1047" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -579,7 +597,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="112653000" />
+    <option name="totallyTimeSpent" value="116376000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -591,7 +609,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1932" height="1056" extended-state="0" />
+    <frame x="-7" y="0" width="1932" height="1047" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1092925" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -601,7 +619,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.40043762" sideWeight="0.49455184" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="npm" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.38894907" sideWeight="0.49876976" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.392779" sideWeight="0.49876976" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
@@ -631,7 +649,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="13" />
+      <option name="time" value="14" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1182,10 +1200,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="172">
-          <caret line="920" column="1" lean-forward="false" selection-start-line="920" selection-start-column="1" selection-end-line="920" selection-end-column="1" />
+        <state relative-caret-position="348">
+          <caret line="740" column="39" lean-forward="true" selection-start-line="740" selection-start-column="39" selection-end-line="740" selection-end-column="39" />
           <folding>
-            <element signature="n#ChatContainer#0" expanded="false" />
+            <element signature="n#Example#0" expanded="false" />
+            <element signature="n#Psyke#0" expanded="false" />
+            <element signature="n#RoomRack#0" expanded="false" />
+            <element signature="e#15525#15565#0" expanded="false" />
+            <element signature="n#!!block;n#componentDidMount#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#componentWillReceiveProps#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#decodeData#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#addCallStream#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#addConnEventListeners#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#addDataConnection#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#peerSetup#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#autoScroll#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#postNewData#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#postNewError#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#postNewNotif#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#postNewMessage#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#!!block;n#postNewWhisper#0;n#ChatContainer#0" expanded="false" />
+            <element signature="n#MuteButton#0" expanded="false" />
           </folding>
         </state>
       </provider>
