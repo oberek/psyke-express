@@ -1,0 +1,13 @@
+extends layout
+block vars
+    - var title = 'Register'
+block content
+    h1 PSYKE
+    h3 A VOIP Chatroom
+    form(method="POST" action="/register")
+        label(for="username") Username
+        input(type='text', name='username')
+        label(for="password") Password
+        input(type='password', name='password')
+
+        button(type='submit') Register New User

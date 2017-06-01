@@ -13,7 +13,7 @@ var db = require('./routes/db');
 
 var app = express();
 
-var PORT = normalizePort(process.env.port || '8080');
+var PORT = normalizePort(process.env.port || '9090');
 
 app.set('port', PORT);
 
@@ -92,6 +92,84 @@ app.post('/login', function (req, res) {
     if(!user){
         res.sendStatus(503);
     }
+});
+
+function User(username, password, id){
+    return {
+        username: username,
+        password: password,
+        id: id,
+        rooms: ['public']
+    }
+}
+
+app.post('/register', function (req, res) {
+
+    function makeID() {
+        var text = '';
+        /*preventing line length from going above 80*/
+        var lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        var uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        var numbers = '0123456789';
+
+        var possible = uppercase + lowercase + numbers;
+        for (var i = 0; i < 16; i++) {
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+        }
+
+        return text;
+    }
+    // console.log('reached /login!');
+    // var users = Object.keys(db.users);
+    // var i;
+    // var user = false;
+    // for (i = 0; i < users.length && !user; i++) {
+    //     if (!user) {
+    //         alert("You already have an account!!");
+    //         //res.redirect("/login");
+    //     }
+    // }
+    // if(!user){
+    //     res.render('register')
+    // }
+
+    var username = req.body.username;
+    var password = req.body.password;
+
+    console.log(username+"::"+password);
+
+    var userFound = false;
+    var i;
+    var user_ids = Object.keys(db.users);
+    for(i = 0; i < user_ids.length && !userFound; i++){
+        if(db.users[user_ids[i]].username === username){
+            userFound = true;
+        }
+    }
+
+    if (userFound) {
+        res.sendStatus(503);
+    } else {
+        var id = makeID();
+
+        while (db.users[id] !== undefined) {
+            id = makeID();
+        }
+
+        db.users[id] = User(username, password, id);
+
+        var out = Object.assign({}, db.users[id]);
+        delete out.password;
+
+        res.send(JSON.stringify({result: out}));
+    }
+
+
+
+    // db.users[id] =
+
+    /*Create random id*/
+    /**/
 });
 
 app.post('/connect', function (req, res) {

@@ -1,24 +1,24 @@
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost/data');
-var psykeSchemea = mongoose.Schema;
+var psykeSchema = mongoose.Schema;
 var mdb = mongoose.connection;
 mdb.on('error', console.error.bind(console, 'connection error:'));
 mdb.once('open', function (callback) {
 });
 
-var UserSchema = new psykeSchemea({
+var UserSchema = new psykeSchema({
     userID: int,
     userName: string,
     password: string
 });
 
-var RoomSchema = new psykeSchemea({
+var RoomSchema = new psykeSchema({
     roomID: int,
     roomName: string
 });
 
-var MembershipSchema = new psykeSchemea({
+var MembershipSchema = new psykeSchema({
     roomID: RoomSchema.roomID,
     userID: UserSchema.userID
 });

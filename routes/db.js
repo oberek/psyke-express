@@ -5,6 +5,12 @@ var express = require('express');
 
 var db = {
     rooms: {
+        'public':{
+            room_id: 'public',
+            room_name: 'Public Room',
+            online_members: [],
+            log: []
+        },
         'room-1': {
             room_id: 'room-1',
             room_name: 'Room 1',
