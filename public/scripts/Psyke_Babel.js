@@ -673,6 +673,7 @@ class ChatContainer extends React.Component {
 
     addDataConnection(conn) {
         let that = this;
+        console.log(conn);
         cons[conn.peer] = conn;
         if (conn.open) {
             that.addConnEventListeners(conn);
