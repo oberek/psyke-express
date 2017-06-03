@@ -116,8 +116,8 @@ class Login extends React.Component {
                     console.log('Success');
                     console.log(data);
                     let d=JSON.parse(data);
-                    setCookie('user', JSON.stringify(d.result), 15 * 60);
-                    that.props.login(MODE.PSYKE, d.result);
+                    setCookie('user', JSON.stringify(d), 15 * 60);
+                    that.props.login(MODE.PSYKE, d);
                 },
                 error(err) {
                     error_container.text("Status: " + err.status + " \nStatus Code: " + err.statusCode);
@@ -156,18 +156,22 @@ class Login extends React.Component {
         );
     }
 
+    componentDidMount(){
+        $('#login-form').validator();
+    }
+
     render() {
         return (
             <div className="container">
                 <h1>Login</h1>
                 <span id="login-error" className="hidden"> errors go here </span>
-                <form onSubmit={this.attemptLogin.bind(this)}>
+                <form id="login-form" data-toggle="validator" onSubmit={this.attemptLogin.bind(this)}>
                     <div className="form-group">
                         <label htmlFor="username"> Username: </label>
-                        <input id="login_username" className="form-control" name="username" type="text" placeholder="Username" required="" />
+                        <input id="login_username" className="form-control" name="username" type="text" placeholder="Username" required />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password"> Password: </label> <input id="login_password" className="form-control" name="password" type="password" placeholder="Password" required="" />
+                        <label htmlFor="password"> Password: </label> <input id="login_password" className="form-control" name="password" type="password" placeholder="Password" required />
                     </div>
                     <input className="btn btn-success" type="submit" value="Submit" onClick={ this.attemptLogin.bind(this) } />
                 </form>
@@ -216,8 +220,8 @@ class Register extends React.Component {
                     console.log(data);
                     let d=JSON.parse(data);
                     console.log(d);
-                    setCookie('user', JSON.stringify(d.result), 15 * 60);
-                    that.props.register(MODE.PSYKE, d.result);
+                    setCookie('user', JSON.stringify(d), 15 * 60);
+                    that.props.register(MODE.PSYKE, d);
                 },
                 error(err) {
                     console.log('err');
@@ -254,22 +258,63 @@ class Register extends React.Component {
         );
     }
 
+    componentDidMount(){
+        $('#register-form').validator();
+    }
+
     render() {
         return (
             <div className="container">
                 <h1>Register</h1>
                 <span id="register-error" className="hidden"> errors go here </span>
-                <form onSubmit={this.attemptRegister.bind(this)}>
+                {/*<form id="register-form" data-toggle="validator" role="form" onSubmit={this.attemptRegister.bind(this)}>*/}
+                    {/*<div className="form-group">*/}
+                        {/*<label htmlFor="username" className="control-label"> Username: </label>*/}
+                        {/*<input id="register_username" className="form-control" name="username" type="text" placeholder="Username" required />*/}
+                    {/*</div>*/}
+                    {/*<div className="form-group">*/}
+                        {/*/!*<div className="form-inline">*!/*/}
+                            {/*<div className="form-group">*/}
+                                {/*<label className="control-label" htmlFor="register_password">Password</label>*/}
+                                {/*<input type="password" data-minlength="6" className="form-control" id="register_password" placeholder="Password" required />*/}
+                                    {/*<div className="help-block">Minimum of 6 characters</div>*/}
+                            {/*</div>*/}
+                            {/*<div className="form-group">*/}
+                                {/*<label className="control-label" htmlFor="RegisterPasswordConfirm">Confirm Password:</label>*/}
+                                {/*<input type="password" className="form-control" id="RegisterPasswordConfirm" data-match="register_password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />*/}
+                                    {/*<div className="help-block with-errors">*/}
+                                    {/*</div>*/}
+                            {/*</div>*/}
+                        {/*/!*</div>*!/*/}
+                    {/*</div>*/}
+                    {/*<input className="btn btn-success" type="submit" value="Submit" onSubmit={ this.attemptRegister.bind(this) } />*/}
+                {/*</form>*/}
+
+                <form id="register-form" data-toggle="validator" role="form" onSubmit={ this.attemptRegister.bind(this) } >
                     <div className="form-group">
-                        <label htmlFor="username"> Username: </label>
-                        <input id="register_username" className="form-control" name="username" type="text" placeholder="Username" required="" />
+                        <label htmlFor="register_username" className="control-label">Username</label>
+                        <input type="text" className="form-control" id="register_username" placeholder="Username" required />
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password"> Password: </label>
-                        <input id="register_password" className="form-control" name="password" type="password" placeholder="Password" required="" />
+                        <label htmlFor="register_password" className="control-label">Password</label>
+                        <div className="form-inline row">
+                            <div className="form-group col-sm-6">
+                                <input type="password" data-minlength="6" className="form-control" id="register_password" placeholder="Password" required />
+                                <div className="help-block">Minimum of 6 characters</div>
+                            </div>
+                            <div className="form-group col-sm-6">
+                                <input type="password" className="form-control" id="inputPasswordConfirm" data-match="#register_password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />
+                                <div className="help-block with-errors">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <input className="btn btn-success" type="submit" value="Submit" onClick={ this.attemptRegister.bind(this) } />
+                    <div className="form-group">
+                        {/*<button type="submit" className="btn btn-primary">Submit</button>*/}
+                        <input className="btn btn-success" type="submit" value="Submit" />
+                    </div>
                 </form>
+
                 <button className="btn btn-primary" onClick={this.loginOnClickHandler()}> Login </button>
             </div>
         );
@@ -299,7 +344,7 @@ class Example extends React.Component {
                 <h1> Users </h1> {
                 this.state.users.map(user =>
                     <div key={
-                        user.id
+                        user._id
                     }> Username: {
                         user.username
                     } <br />
@@ -333,7 +378,7 @@ class Psyke extends React.Component {
             url: '/getUserRooms',
             contentType: 'application/json',
             data: JSON.stringify({
-                user_id: user.id
+                user_id: user._id
             }),
             success(data) {
                 console.log('Success');
@@ -375,11 +420,11 @@ class Psyke extends React.Component {
                     <button className="btn btn-danger center-btn" onClick={ this.props.logout }> Logout </button>
                 </div>
                 <div className="content">
-                    <RoomRack key={ 'RoomRack' + this.props.user.id }
+                    <RoomRack key={ 'RoomRack' + this.props.user._id }
                               current_room={ this.state.current_room }
                               rooms={ this.state.rooms }
                               updateCurrentRoom={ this.updateCurrentRoom.bind(this) }/>
-                    <ChatContainer key={'ChatContainer' + this.props.user.id }
+                    <ChatContainer key={'ChatContainer' + this.props.user._id }
                                    peer={this.props.peer}
                                    user={this.props.user}
                                    current_room={this.state.current_room} />
@@ -451,7 +496,7 @@ class Whisper extends React.Component {
     render() {
         return (
             <li className="message whisper">
-                {((this.props.sender.id === peer.id) ?
+                {((this.props.sender._id === peer.id) ?
                     "To " + this.props.target.username :
                     "From " + this.props.sender.username)}: {this.props.message}
             </li>);
@@ -471,7 +516,7 @@ class Message extends React.Component {
 // class UserLi extends React.Component{
 //     render(){
 //         if(this.props.inCall){
-//             if(this.props.localUser===this.props.user.id){
+//             if(this.props.localUser===this.props.user._id){
 //                 //it's the local user... add the mute button
 //             } else {
 //                 return(
@@ -520,7 +565,7 @@ class ChatContainer extends React.Component {
             contentType: 'application/json',
             data: JSON.stringify({
                 room_id: nextProps.current_room,
-                user_id: nextProps.user.id
+                user_id: nextProps.user._id
             }),
             success(data) {
                 console.log('Success');
@@ -530,7 +575,7 @@ class ChatContainer extends React.Component {
                 console.log('connected local user to the room with id ' + nextProps.current_room);
                 r.users = {};
                 r.streams = [];
-                r.users[nextProps.user.id] = nextProps.user;
+                r.users[nextProps.user._id] = nextProps.user;
                 r.log.unshift(that.state.room.log[0]);
                 that.state.room = r;
                 that.setState(that.state);
@@ -559,22 +604,22 @@ class ChatContainer extends React.Component {
                 cons[data.user_id].send({
                     type: 'info-response',
                     user: {
-                        id: that.props.user.id,
+                        id: that.props.user._id,
                         username: that.props.user.username
                     },
                     timestamp: (new Date()).toUTCString()
                 });
                 break;
             case 'info-response':
-                if (this.state.room.users[data.user.id] === undefined) {
-                    if(this.state.room.online_members.indexOf(data.user.id) === -1){
+                if (this.state.room.users[data.user._id] === undefined) {
+                    if(this.state.room.online_members.indexOf(data.user._id) === -1){
                         that.postNewData({msg: data.user.username + ' has joined the chat', type: 'notif', timestamp: (new Date()).toUTCString()});
                     }
                     // that.postNewNotif({msg: data.user.username + ' has joined the chat'});
                     console.log('user info added');
                     let room = that.state.room;
                     room.inCall = false;
-                    room.users[data.user.id] = data.user;
+                    room.users[data.user._id] = data.user;
                     that.setState({room: room});
                     // that.forceUpdate();
                 }
@@ -606,10 +651,10 @@ class ChatContainer extends React.Component {
                 }
                 break;
             case 'hangup':
-                that.postNewData({msg: that.state.room.users[data.user.id].username + ' has left the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
-                if(calls[data.user.id] !== undefined){
-                    calls[data.user.id].close();
-                    delete calls[data.user.id];
+                that.postNewData({msg: that.state.room.users[data.user._id].username + ' has left the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                if(calls[data.user._id] !== undefined){
+                    calls[data.user._id].close();
+                    delete calls[data.user._id];
                 }
                 break;
             default:
@@ -695,7 +740,7 @@ class ChatContainer extends React.Component {
                 console.log(conn);
                 console.log('Peer with id (' + conn.peer + ') has connected to you');
                 that.addDataConnection(conn);
-                conn.send({type: 'info-request', user_id: p.id});
+                conn.send({type: 'info-request', user_id: p._id});
             });
 
             p.on('call', function (call) {
@@ -855,13 +900,13 @@ class ChatContainer extends React.Component {
                             let whisper = {
                                 type: 'whisper',
                                 msg: msg_content,
-                                target: that.state.room.users[target.id],
+                                target: that.state.room.users[target._id],
                                 sender: that.state.room.users[that.props.peer.id],
                                 timestamp: (new Date()).toUTCString()
                             };
                             // that.postNewWhisper(whisper);
                             that.postNewData(whisper);
-                            cons[target.id].send(whisper);
+                            cons[target._id].send(whisper);
                         }
                     }
                 }
@@ -915,9 +960,9 @@ class ChatContainer extends React.Component {
                         {Object.values(this.state.room.users).map((user) => {
                             return (
                                 //localUser={this.props.peer.id} inCall={this.state.room.inCall} user={user}
-                                <li key={user.id} id={"user-" + user.id} className="user">
+                                <li key={user._id} id={"user-" + user._id} className="user">
                                     {user.username}
-                                    {this.state.room.inCall ? peer.id === user.id ? <MuteButton /> : '' : ''}
+                                    {this.state.room.inCall ? peer.id === user._id ? <MuteButton /> : '' : ''}
                                 </li>
                             );
                         })}
@@ -925,7 +970,7 @@ class ChatContainer extends React.Component {
                     <ul className="streams">
                         {(this.state.room.streams).map((str) => {
                             return (
-                                <audio key={str.id} id={"stream-" + str.id} src={str.stream} autoPlay={true}>
+                                <audio key={str._id} id={"stream-" + str._id} src={str.stream} autoPlay={true}>
                                     Stream</audio>
                             );
                         })}
@@ -970,9 +1015,10 @@ class App extends React.Component {
     componentDidMount() {
         let cookie_data=getCookie('user');
         if (cookie_data) {
+            console.log(cookie_data);
             let user=JSON.parse(cookie_data);
             // this.setState({mode: MODE.PSYKE, user: user});
-            peer=new Peer(user.id, server_connection);
+            peer=new Peer(user._id, server_connection);
             this.setState({
                 mode: MODE.PSYKE,
                 user: user,
@@ -997,7 +1043,7 @@ class App extends React.Component {
             url: '/disconnect',
             contentType: 'application/json',
             data: JSON.stringify({
-                user_id: this.state.user.id
+                user_id: this.state.user._id
             }),
             success(data) {
                 that.setState({
@@ -1017,7 +1063,7 @@ class App extends React.Component {
     }
 
     login(mode, user) {
-        peer=new Peer(user.id, server_connection);
+        peer=new Peer(user._id, server_connection);
         this.setState({
             mode: mode,
             user: user,
@@ -1026,7 +1072,8 @@ class App extends React.Component {
     }
 
     register(mode, user) {
-        peer=new Peer(user.id, server_connection);
+        console.log(user);
+        peer=new Peer(user._id, server_connection);
         this.setState({
             mode: mode,
             user: user,
@@ -1044,7 +1091,7 @@ class App extends React.Component {
             case MODE.LOGIN:
                 return <Login newUser={this.newUser.bind(this)} login={this.login.bind(this)} swapMode={this.swapMode.bind(this)} />;
             case MODE.PSYKE:
-                return <Psyke key={this.state.user.id} logout={this.logout.bind(this)} user={this.state.user} peer={this.state.peer} />;
+                return <Psyke key={this.state.user._id} logout={this.logout.bind(this)} user={this.state.user} peer={this.state.peer} />;
             case MODE.PSYKE_DEBUG:
                 return <Example /> ;
             case MODE.REGISTER:
