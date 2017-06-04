@@ -211,7 +211,27 @@ app.post('/connect', function (req, res) {
 app.post('/disconnect', function (req, res) {
     console.log('/disconnect/');
     var user_id = req.body.user_id;
-    db.User.findOne({_id: user_id}).exec();
+    db.User.findOne({_id: user_id}).exec(function(err, usr){
+        if(err) throw err;
+
+        var user = usr.toJSON();
+
+        for(var i = 0; i > user.rooms.length; i++){
+            (function(){
+                var room_id = user.rooms[i];
+                db.Room.findOne({_id: room_id}).exec(function(err, rm){
+                    if(err) throw err;
+                    var room = rm.toJSON();
+
+                    if(room.online_members.indexOf(user._id) !== -1){
+                        room.online_members.splice(room.online_members.indexOf(user._id), 1);
+                    }
+                });
+            })();
+        }
+
+        res.sendStatus(200);
+    });
     // var user_id = req.body.user_id;
     // var user = db.users[user_id];
     // if (user !== undefined) {
