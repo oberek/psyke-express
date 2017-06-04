@@ -93,20 +93,7 @@ app.post('/login', function (req, res) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user);
                 delete response.password;
-                // for(var i = 0; i < response.rooms.length; i++){
-                //     (function () {
-                //         var u_id = response.rooms[i];
-                //         db.User.findOne({_id: u_id}).exec(function(err, u2){
-                //             if(err) throw err;
-                //             var temp = u2.toJSON();
-                //             var usr = {
-                //                 _id: temp._id,
-                //                 username: temp.username
-                //             };
-                //             response.users[usr._id] = usr;
-                //         });
-                //     })();
-                // }
+                response._id = user._id;
                 res.send(JSON.stringify(response));
             } else {
                 res.sendStatus(503);
@@ -116,34 +103,6 @@ app.post('/login', function (req, res) {
         }
 
     });
-
-    // console.log(JSON.stringify(user));
-
-    //res.sendStatus(403);
-
-
-    // db.User.findOne({username: req.body.username}).exec(function(err, user){
-    //     if(err) console.error.bind(console, "MongoDB Error:");
-    //
-
-    // });
-
-    // var users = Object.keys(db.users);
-    // var i;
-    // var user = false;
-    // for (i = 0; i < users.length && !user; i++) {
-    //     if (!user) {
-    //         var t_user = db.users[users[i]];
-    //         if (t_user.username === req.body.username && t_user.password === req.body.password) {
-    //             user = Object.assign({}, t_user);
-    //             delete user.password;
-    //             res.send(JSON.stringify({result: user}));
-    //         }
-    //     }
-    // }
-    // if(!user){
-    //     res.sendStatus(503);
-    // }
 });
 //
 // function User(username, password, id){
@@ -163,7 +122,8 @@ app.post('/login', function (req, res) {
 app.post('/connect', function (req, res) {
     var room_id = req.body.room_id;
     var user_id = req.body.user_id;
-    console.log("::",room_id);
+    console.log("uid::",user_id);
+    console.log("rid::",room_id);
 
     db.User.findOne({_id: user_id}).exec(function (err, u) {
         if (err) throw err;
@@ -171,27 +131,58 @@ app.post('/connect', function (req, res) {
         for (var i = 0; i < user.rooms.length; i++) {
             (function () {
                 var r_id = user.rooms[i]._id;
-                db.Room.findOne({_id: r_id}).exec(function (err, rm) {
+                db.Room.findOne({_id: r_id}).exec(function (err, room) {
                     if (err) throw err;
 
-                    var room = rm.toJSON();
+
+                    // console.log(rm);
+                    // var room = rm.toJSON();
+                    console.log(room);
 
                     if (room) {
-                        console.log(room._id, room_id);
-                        if (room._id.equals(room_id) && room.online_members.indexOf(user._id) === -1) {
+                        console.log(room._id.toString(), typeof room._id.toString());
+                        console.log(room_id, typeof room_id);
+
+                        console.log(room._id.toString()===room_id);
+                        if (room._id.toString()===room_id && room.online_members.indexOf(user._id) === -1) {
                             room.online_members.push(user._id);
+                            // db.Room.update(
+                            //     {_id: room_id},
+                            //     {$push: { online_members: user_id}}
+                            // );
                             console.log('1');
-                        } else if (!room._id.equals(room_id) && room.online_members.indexOf(user._id) !== -1) {
+                        } else if (room._id.toString() !== room_id && room.online_members.indexOf(user._id) !== -1) {
                             console.log('2');
                             room.online_members.splice(room.online_members.indexOf(user._id), 1);
+                            // db.Room.update(
+                            //     {_id: room_id, online_members: user_id},
+                            //     {$set: {"grades.$": null}}
+                            // );
+                        } else if(room._id.toString()===room_id && room_id && room.online_members.indexOf(user._id) !== -1){
+                            console.log('user is already in this room');
                         } else {
                             console.log("user wasn't in this room");
                         }
-                        rm.save(room, function (err, doc) {
-                            if(err) throw err;
-                            console.log(room);
-                            console.log(doc);
-                        });
+
+                        room.markModified('propChanged');
+
+
+                        // db.Room.findById(room._id, function(err, doc){
+                        //     if(err) throw err;
+                        //     doc.online_members = room.online_members;
+                        //     doc.save();
+                        // });
+                        //
+                        // db.Room.findOne({_id: room._id}).exec(function (err, r) {
+                        //     if(err) throw err;
+                        //     console.log(r.toJSON());
+                        // });
+                        // // rm.
+                        // room.save(function (err, doc) {
+                        //     if(err) throw err;
+                        //     console.log(room);
+                        //     console.log(doc);
+                        // });
                     } else {
                         throw err;
                     }

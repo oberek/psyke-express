@@ -611,6 +611,7 @@ class ChatContainer extends React.Component {
                 console.log('connected local user to the room with id ' + nextProps.current_room);
                 r.users = {};
                 r.streams = [];
+                console.log(nextProps.user._id);
                 r.users[nextProps.user._id] = nextProps.user;
                 r.log.unshift(that.state.room.log[0]);
                 that.state.room = r;
@@ -640,7 +641,7 @@ class ChatContainer extends React.Component {
                 cons[data.user_id].send({
                     type: 'info-response',
                     user: {
-                        id: that.props.user._id,
+                        _id: that.props.user._id,
                         username: that.props.user.username
                     },
                     timestamp: (new Date()).toUTCString()
@@ -656,11 +657,12 @@ class ChatContainer extends React.Component {
                         });
                     }
                     // that.postNewNotif({msg: data.user.username + ' has joined the chat'});
-                    console.log('user info added');
                     let room = that.state.room;
-                    room.inCall = false;
+                    // room.inCall = false;
+                    console.log(data.user);
                     room.users[data.user._id] = data.user;
                     that.setState({room: room});
+                    console.log('user info added');
                     // that.forceUpdate();
                 }
                 // room.online_members[data.user_id] = data.content;
@@ -752,6 +754,9 @@ class ChatContainer extends React.Component {
         });
 
         conn.on('close', function () {
+            console.log(that.state.room);
+            console.log(that.state.room.users);
+            console.log(that.state.room.users[conn.peer]);
             that.postNewData({
                 msg: that.state.room.users[conn.peer].username + ' has left the chat',
                 type: 'notif',
