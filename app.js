@@ -205,48 +205,12 @@ app.post('/connect', function (req, res) {
 
        res.send(JSON.stringify(room))
     });
-    // db.Room.findOne({_id: room_id}).exec(function (err, rm) {
-    //     if (err) throw err;
-    //     var room = rm.toJSON();
-    //     res.send(JSON.stringify(room));
-    // });
-
-    // if (db.rooms[room_id] !== undefined && db.users[user_id] !== undefined) {
-    //     var user = db.users[user_id];
-    //     console.log(user);
-    //     if (user.rooms.indexOf(room_id) != -1) {
-    //         var i;
-    //         for (i = 0; i < user.rooms.length; i++) {
-    //             var t_room = db.rooms[user.rooms[i]];
-    //             console.log(t_room.room_id);
-    //             if (t_room.room_id === room_id && !t_room.online_members.indexOf(user_id) != -1) {
-    //                 t_room.online_members.push(user_id);
-    //             } else if (t_room.online_members.indexOf(user_id) != -1) {
-    //                 console.log(t_room.online_members);
-    //                 t_room.online_members.splice(t_room.online_members.indexOf(user_id), 1);
-    //                 console.log(t_room.online_members);
-    //             } else {
-    //                 console.log('user wasn\'t in this room');
-    //                 console.log(t_room.online_members);
-    //             }
-    //         }
-    //     } else {
-    //         console.log('1st err');
-    //         res.sendStatus(503);
-    //     }
-    // } else {
-    //     console.log('2nd err');
-    //     res.sendStatus(503);
-    // }
-    //
-    // var room = db.rooms[room_id];
-    //
-    // res.send(JSON.stringify(room));
-    // res.sendStatus(403);
 });
 
 app.post('/disconnect', function (req, res) {
-    // console.log('/disconnect/');
+    console.log('/disconnect/');
+    var user_id = req.body.user_id;
+    db.User.findOne({_id: user_id}).exec();
     // var user_id = req.body.user_id;
     // var user = db.users[user_id];
     // if (user !== undefined) {
@@ -259,7 +223,7 @@ app.post('/disconnect', function (req, res) {
     //     }
     // }
     // res.sendStatus(200);
-    res.sendStatus(500);
+    // res.sendStatus(500);
 });
 
 app.post('/getRoom', function (req, res) {
