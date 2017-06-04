@@ -210,13 +210,17 @@ app.post('/disconnect', function (req, res) {
         for(var i = 0; i > user.rooms.length; i++){
             (function(){
                 var room_id = user.rooms[i];
-                db.Room.findOne({_id: room_id}).exec(function(err, rm){
+                db.Room.findOne({_id: room_id}).exec(function(err, oorm){
                     if(err) throw err;
-                    var room = rm.toJSON();
+                    // var room = rm.toJSON();
 
                     if(room.online_members.indexOf(user._id) !== -1){
                         room.online_members.splice(room.online_members.indexOf(user._id), 1);
+                        room.markModified('propChanged');
                     }
+                });
+                db.Room.findOne({_id: room._id}).exec(function(err, rm){
+                    console.log(rm);
                 });
             })();
         }
