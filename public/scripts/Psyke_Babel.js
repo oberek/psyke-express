@@ -8,27 +8,27 @@
 /*global navigator*/
 
 let peer;
-let cons={};
-let calls={};
-let useVoice=false;
+let cons = {};
+let calls = {};
+let useVoice = false;
 // let inCall=false;
-let URL=window.URL || window.webkitURL;
+let URL = window.URL || window.webkitURL;
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-const server_connection={
+const server_connection = {
     host: window.location.hostname,
     // port: window.location.port || '8080',
     port: window.location.port,
     path: '/peer'
 };
 
-const MODE={
+const MODE = {
     LOGIN: 1,
     REGISTER: 3,
     PSYKE: 200,
     PSYKE_DEBUG: 396
 };
 
-window.onbeforeunload=function () {
+window.onbeforeunload = function () {
     if (!peer.disconnected) {
         console.log('something');
 
@@ -51,23 +51,23 @@ window.onbeforeunload=function () {
     }
 };
 
-navigator.getUserMedia=navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
 function setCookie(cookie_name, cookie_value, exipration_seconds) {
-    let d=new Date();
+    let d = new Date();
     d.setTime(d.getTime() + (exipration_seconds * 1000));
-    let expires="expires=" + d.toUTCString();
-    document.cookie=cookie_name + "=" + cookie_value + ";" + expires + ";path=/";
+    let expires = "expires=" + d.toUTCString();
+    document.cookie = cookie_name + "=" + cookie_value + ";" + expires + ";path=/";
 }
 
 function getCookie(cookie_name) {
-    let name=cookie_name + "=";
-    let decodedCookie=decodeURIComponent(document.cookie);
-    let ca=decodedCookie.split(';');
-    for (let i=0; i <ca.length; i++) {
-        let c=ca[i];
+    let name = cookie_name + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
         while (c.charAt(0) === ' ') {
-            c=c.substring(1);
+            c = c.substring(1);
         }
         if (c.indexOf(name) === 0) {
             return c.substring(name.length, c.length);
@@ -77,7 +77,7 @@ function getCookie(cookie_name) {
 }
 
 function delete_cookie(name) {
-    document.cookie=name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 class Login extends React.Component {
@@ -88,7 +88,6 @@ class Login extends React.Component {
     //    }
 
 
-
     attemptLogin(e) {
         // let component=this;
         // console.log(component);
@@ -96,10 +95,10 @@ class Login extends React.Component {
 
         console.log('Attempting login...');
         // console.log(this);
-        let that=this;
-        let error_container=$('#login-error');
-        let z_username=$('#login_username').val().toString();
-        let z_password=$('#login_password').val().toString();
+        let that = this;
+        let error_container = $('#login-error');
+        let z_username = $('#login_username').val().toString();
+        let z_password = $('#login_password').val().toString();
         if (z_username === "" || z_password === "") {
             error_container.toggleClass('hidden', false);
             error_container.text('You need to provide a username and password');
@@ -115,7 +114,7 @@ class Login extends React.Component {
                 success(data) {
                     console.log('Success');
                     console.log(data);
-                    let d=JSON.parse(data);
+                    let d = JSON.parse(data);
                     setCookie('user', JSON.stringify(d), 15 * 60);
                     that.props.login(MODE.PSYKE, d);
                 },
@@ -147,16 +146,16 @@ class Login extends React.Component {
         }
     }
 
-    registerOnClickHandler(){
+    registerOnClickHandler() {
         let that = this;
-        return(
+        return (
             function () {
                 that.props.swapMode(MODE.REGISTER);
             }
         );
     }
 
-    componentDidMount(){
+    componentDidMount() {
         $('#login-form').validator();
     }
 
@@ -168,15 +167,20 @@ class Login extends React.Component {
                 <form id="login-form" data-toggle="validator" onSubmit={this.attemptLogin.bind(this)}>
                     <div className="form-group">
                         <label htmlFor="username"> Username: </label>
-                        <input id="login_username" className="form-control" name="username" type="text" placeholder="Username" required />
+                        <input id="login_username" className="form-control" name="username" type="text"
+                               placeholder="Username" required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password"> Password: </label> <input id="login_password" className="form-control" name="password" type="password" placeholder="Password" required />
+                        <label htmlFor="password"> Password: </label> <input id="login_password"
+                                                                             className="form-control" name="password"
+                                                                             type="password" placeholder="Password"
+                                                                             required/>
                     </div>
-                    <input className="btn btn-success" type="submit" value="Submit" onClick={ this.attemptLogin.bind(this) } />
+                    <input className="btn btn-success" type="submit" value="Submit"
+                           onClick={ this.attemptLogin.bind(this) }/>
                 </form>
                 {/*<p> Don 't have an account? <a onClick={this.registerOnClickHandler()} >Register</a> for a new one</p> */}
-                <button className="btn btn-primary" onClick={this.registerOnClickHandler()}> Register </button>
+                <button className="btn btn-primary" onClick={this.registerOnClickHandler()}> Register</button>
 
             </div>
         );
@@ -185,8 +189,8 @@ class Login extends React.Component {
 class Register extends React.Component {
     constructor(props) {
         super(props);
-        let that=this;
-        this.state={
+        let that = this;
+        this.state = {
             that: that
         };
     }
@@ -198,11 +202,11 @@ class Register extends React.Component {
 
         console.log('Attempting register...');
         // console.log(this);
-        let that=this;
-        let error_container=$('#register-error');
-        let z_username=$('#register_username').val().toString();
-        let z_password=$('#register_password').val().toString();
-        console.log(z_username+"::"+z_password);
+        let that = this;
+        let error_container = $('#register-error');
+        let z_username = $('#register_username').val().toString();
+        let z_password = $('#register_password').val().toString();
+        console.log(z_username + "::" + z_password);
         if (z_username === "" || z_password === "") {
             error_container.toggleClass('hidden', false);
             error_container.text('You need to provide a username and password');
@@ -218,7 +222,7 @@ class Register extends React.Component {
                 success(data) {
                     console.log('Success');
                     console.log(data);
-                    let d=JSON.parse(data);
+                    let d = JSON.parse(data);
                     console.log(d);
                     setCookie('user', JSON.stringify(d), 15 * 60);
                     that.props.register(MODE.PSYKE, d);
@@ -249,16 +253,16 @@ class Register extends React.Component {
         }
     }
 
-    loginOnClickHandler(){
+    loginOnClickHandler() {
         let that = this;
-        return(
+        return (
             function () {
                 that.props.swapMode(MODE.LOGIN);
             }
         );
     }
 
-    componentDidMount(){
+    componentDidMount() {
         $('#register-form').validator();
     }
 
@@ -268,42 +272,47 @@ class Register extends React.Component {
                 <h1>Register</h1>
                 <span id="register-error" className="hidden"> errors go here </span>
                 {/*<form id="register-form" data-toggle="validator" role="form" onSubmit={this.attemptRegister.bind(this)}>*/}
-                    {/*<div className="form-group">*/}
-                        {/*<label htmlFor="username" className="control-label"> Username: </label>*/}
-                        {/*<input id="register_username" className="form-control" name="username" type="text" placeholder="Username" required />*/}
-                    {/*</div>*/}
-                    {/*<div className="form-group">*/}
-                        {/*/!*<div className="form-inline">*!/*/}
-                            {/*<div className="form-group">*/}
-                                {/*<label className="control-label" htmlFor="register_password">Password</label>*/}
-                                {/*<input type="password" data-minlength="6" className="form-control" id="register_password" placeholder="Password" required />*/}
-                                    {/*<div className="help-block">Minimum of 6 characters</div>*/}
-                            {/*</div>*/}
-                            {/*<div className="form-group">*/}
-                                {/*<label className="control-label" htmlFor="RegisterPasswordConfirm">Confirm Password:</label>*/}
-                                {/*<input type="password" className="form-control" id="RegisterPasswordConfirm" data-match="register_password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />*/}
-                                    {/*<div className="help-block with-errors">*/}
-                                    {/*</div>*/}
-                            {/*</div>*/}
-                        {/*/!*</div>*!/*/}
-                    {/*</div>*/}
-                    {/*<input className="btn btn-success" type="submit" value="Submit" onSubmit={ this.attemptRegister.bind(this) } />*/}
+                {/*<div className="form-group">*/}
+                {/*<label htmlFor="username" className="control-label"> Username: </label>*/}
+                {/*<input id="register_username" className="form-control" name="username" type="text" placeholder="Username" required />*/}
+                {/*</div>*/}
+                {/*<div className="form-group">*/}
+                {/*/!*<div className="form-inline">*!/*/}
+                {/*<div className="form-group">*/}
+                {/*<label className="control-label" htmlFor="register_password">Password</label>*/}
+                {/*<input type="password" data-minlength="6" className="form-control" id="register_password" placeholder="Password" required />*/}
+                {/*<div className="help-block">Minimum of 6 characters</div>*/}
+                {/*</div>*/}
+                {/*<div className="form-group">*/}
+                {/*<label className="control-label" htmlFor="RegisterPasswordConfirm">Confirm Password:</label>*/}
+                {/*<input type="password" className="form-control" id="RegisterPasswordConfirm" data-match="register_password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />*/}
+                {/*<div className="help-block with-errors">*/}
+                {/*</div>*/}
+                {/*</div>*/}
+                {/*/!*</div>*!/*/}
+                {/*</div>*/}
+                {/*<input className="btn btn-success" type="submit" value="Submit" onSubmit={ this.attemptRegister.bind(this) } />*/}
                 {/*</form>*/}
 
-                <form id="register-form" data-toggle="validator" role="form" onSubmit={ this.attemptRegister.bind(this) } >
+                <form id="register-form" data-toggle="validator" role="form"
+                      onSubmit={ this.attemptRegister.bind(this) }>
                     <div className="form-group">
                         <label htmlFor="register_username" className="control-label">Username</label>
-                        <input type="text" className="form-control" id="register_username" placeholder="Username" required />
+                        <input type="text" className="form-control" id="register_username" placeholder="Username"
+                               required/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="register_password" className="control-label">Password</label>
                         <div className="form-inline row">
                             <div className="form-group col-sm-6">
-                                <input type="password" data-minlength="6" className="form-control" id="register_password" placeholder="Password" required />
+                                <input type="password" data-minlength="6" className="form-control"
+                                       id="register_password" placeholder="Password" required/>
                                 <div className="help-block">Minimum of 6 characters</div>
                             </div>
                             <div className="form-group col-sm-6">
-                                <input type="password" className="form-control" id="inputPasswordConfirm" data-match="#register_password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />
+                                <input type="password" className="form-control" id="inputPasswordConfirm"
+                                       data-match="#register_password" data-match-error="Whoops, these don't match"
+                                       placeholder="Confirm" required/>
                                 <div className="help-block with-errors">
                                 </div>
                             </div>
@@ -311,18 +320,18 @@ class Register extends React.Component {
                     </div>
                     <div className="form-group">
                         {/*<button type="submit" className="btn btn-primary">Submit</button>*/}
-                        <input className="btn btn-success" type="submit" value="Submit" />
+                        <input className="btn btn-success" type="submit" value="Submit"/>
                     </div>
                 </form>
 
-                <button className="btn btn-primary" onClick={this.loginOnClickHandler()}> Login </button>
+                <button className="btn btn-primary" onClick={this.loginOnClickHandler()}> Login</button>
             </div>
         );
     };
 }
 
 class Example extends React.Component {
-    state={
+    state = {
         users: [],
         rooms: {}
     };
@@ -350,14 +359,15 @@ class Example extends React.Component {
                     } <br />
                         Rooms:
                         <ul className="rooms"> {
-                            user.rooms.map(room_id => {
+                            user.rooms.map(_id => {
                                 return ( <li key={
-                                    room_id
+                                    _id
                                 }> {
-                                    this.state.rooms[room_id].room_name
+                                    this.state.rooms[_id].room_name
                                 } </li>);
                             })
-                        } </ul> </div>
+                        } </ul>
+                    </div>
                 )
             } </div>
         );
@@ -365,49 +375,63 @@ class Example extends React.Component {
 }
 
 class Psyke extends React.Component {
-    state={
+    state = {
         current_room: null,
         rooms: []
     };
 
     componentDidMount() {
-        let user=this.props.user;
-        let that=this;
-        $.ajax({
-            type: 'POST',
-            url: '/getUserRooms',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                user_id: user._id
-            }),
-            success(data) {
-                console.log('Success');
-                console.log(data);
-                let r=JSON.parse(data);
+        let user = this.props.user;
+        let that = this;
+        console.log(JSON.stringify(user));
+        console.log(user);
+        console.log(user.rooms);
+        // that.setState({
+        //     current_room: user.rooms[0]._id,
+        //     rooms: user.rooms
+        // });
 
-                let rms=[];
-                $.each(r, (i, v) => {
-                    rms.push(v);
-                });
-                that.setState({
-                    current_room: rms[0].room_id,
-                    rooms: rms
-                });
+        that.state.current_room = user.rooms[0]._id;
+        that.state.rooms = user.rooms;
+        console.log(that.state.rooms);
 
-                // let d=JSON.parse(data);
-                // setCookie('user', JSON.stringify(d.result), 15 * 60);
-                // that.props.login(MODE.PSYKE, d.result);
-            },
-            error(err) {
-                console.log('err');
-                console.log(err);
-            }
-        });
+        that.setState(that.state);
+
+        // $.ajax({
+        //     type: 'POST',
+        //     url: '/getUserRooms',
+        //     contentType: 'application/json',
+        //     data: JSON.stringify({
+        //         user_id: user._id
+        //     }),
+        //     success(data) {
+        //         console.log('Success');
+        //         console.log(data);
+        //         let r=JSON.parse(data);
+        //
+        //         let rms=[];
+        //         $.each(r, (i, v) => {
+        //             rms.push(v);
+        //         });
+        //         that.setState({
+        //             current_room: rms[0]._id,
+        //             rooms: rms
+        //         });
+        //
+        //         // let d=JSON.parse(data);
+        //         // setCookie('user', JSON.stringify(d.result), 15 * 60);
+        //         // that.props.login(MODE.PSYKE, d.result);
+        //     },
+        //     error(err) {
+        //         console.log('err');
+        //         console.log(err);
+        //     }
+        // });
     }
 
-    updateCurrentRoom(room_id) {
+    updateCurrentRoom(_id) {
         this.setState({
-            current_room: room_id,
+            current_room: _id,
             rooms: this.state.rooms
         });
         console.log('should update chat container props');
@@ -416,8 +440,9 @@ class Psyke extends React.Component {
     render() {
         return (
             <div id="app-container">
-                <div className="header text-center"> { /*<h1>Psyke!</h1>*/ } <h3> Welcome, {this.props.user.username}! </h3>
-                    <button className="btn btn-danger center-btn" onClick={ this.props.logout }> Logout </button>
+                <div className="header text-center"> { /*<h1>Psyke!</h1>*/ } <h3>
+                    Welcome, {this.props.user.username}! </h3>
+                    <button className="btn btn-danger center-btn" onClick={ this.props.logout }> Logout</button>
                 </div>
                 <div className="content">
                     <RoomRack key={ 'RoomRack' + this.props.user._id }
@@ -427,7 +452,7 @@ class Psyke extends React.Component {
                     <ChatContainer key={'ChatContainer' + this.props.user._id }
                                    peer={this.props.peer}
                                    user={this.props.user}
-                                   current_room={this.state.current_room} />
+                                   current_room={this.state.current_room}/>
                 </div>
             </div>
         );
@@ -435,18 +460,18 @@ class Psyke extends React.Component {
 }
 
 class RoomRack extends React.Component {
-    state={
+    state = {
         current_room: null,
         rooms: []
     };
 
-    updateCurrentRoom(room_id) {
-        console.log(room_id);
+    updateCurrentRoom(_id) {
+        console.log(_id);
         this.setState({
-            current_room: room_id,
+            current_room: _id,
             rooms: this.state.rooms
         });
-        this.props.updateCurrentRoom(room_id);
+        this.props.updateCurrentRoom(_id);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -458,31 +483,35 @@ class RoomRack extends React.Component {
 
     render() {
         return ( <div id="room-rack">
-                <h4> Room Rack </h4> { /*eventually turn the list into a list of new components, but a list of names is good for now*/ } <ul id="room-list"> {
-                this.state.rooms.map((room) => {
-                    return ( <li key={
-                        room.room_id
-                    }>
-                        <button id={
-                            room.room_id
-                        }
-                                className={
-                                    (this.state.current_room === room.room_id ? "current " : "") + "room btn"
-                                }
-                                onClick={
-                                    () => this.updateCurrentRoom(room.room_id)
-                                }> {
-                            room.room_name
-                        } </button> </li>);
-                })
-            } </ul> </div>
+                <h4> Room
+                    Rack </h4> { /*eventually turn the list into a list of new components, but a list of names is good for now*/ }
+                <ul id="room-list"> {
+                    this.state.rooms.map((room) => {
+                        return ( <li key={
+                            room._id
+                        }>
+                            <button id={
+                                room._id
+                            }
+                                    className={
+                                        (this.state.current_room === room._id ? "current " : "") + "room btn"
+                                    }
+                                    onClick={
+                                        () => this.updateCurrentRoom(room._id)
+                                    }> {
+                                room.room_name
+                            } </button>
+                        </li>);
+                    })
+                } </ul>
+            </div>
         );
     }
 }
 
 class Notification extends React.Component {
     render() {
-        return ( <li className="message notif"> <strong>!!</strong> { this.props.message } </li> );
+        return ( <li className="message notif"><strong>!!</strong> { this.props.message } </li> );
     }
 }
 
@@ -539,7 +568,14 @@ class Message extends React.Component {
 // }
 
 class ChatContainer extends React.Component {
-    state = {room: {users: {}, log: [{type:"notif", msg: "Welcome to the chat!", timestamp: (new Date()).toUTCString()}], inCall: false, streams: []}};
+    state = {
+        room: {
+            users: {},
+            log: [{type: "notif", msg: "Welcome to the chat!", timestamp: (new Date()).toUTCString()}],
+            inCall: false,
+            streams: []
+        }
+    };
 
     componentDidMount() {
         console.log(this.props);
@@ -612,8 +648,12 @@ class ChatContainer extends React.Component {
                 break;
             case 'info-response':
                 if (this.state.room.users[data.user._id] === undefined) {
-                    if(this.state.room.online_members.indexOf(data.user._id) === -1){
-                        that.postNewData({msg: data.user.username + ' has joined the chat', type: 'notif', timestamp: (new Date()).toUTCString()});
+                    if (this.state.room.online_members.indexOf(data.user._id) === -1) {
+                        that.postNewData({
+                            msg: data.user.username + ' has joined the chat',
+                            type: 'notif',
+                            timestamp: (new Date()).toUTCString()
+                        });
                     }
                     // that.postNewNotif({msg: data.user.username + ' has joined the chat'});
                     console.log('user info added');
@@ -638,12 +678,20 @@ class ChatContainer extends React.Component {
                 // that.forceUpdate();
                 break;
             case 'disconnect':
-                that.postNewData({msg: that.state.room.users[data.user_id].username + ' has left the chat.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                that.postNewData({
+                    msg: that.state.room.users[data.user_id].username + ' has left the chat.',
+                    type: 'notif',
+                    timestamp: (new Date()).toUTCString()
+                });
                 // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
                 // dropUser(data.user_id);
                 break;
             case 'call-request':
-                that.postNewData({msg: that.state.room.users[data.user_id].username + ' has joined the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
+                that.postNewData({
+                    msg: that.state.room.users[data.user_id].username + ' has joined the call.',
+                    type: 'notif',
+                    timestamp: (new Date()).toUTCString()
+                });
                 // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
                 if (useVoice && that.state.room.inCall) {
                     let call = peer.call(data.user_id, window.localStream);
@@ -651,8 +699,12 @@ class ChatContainer extends React.Component {
                 }
                 break;
             case 'hangup':
-                that.postNewData({msg: that.state.room.users[data.user._id].username + ' has left the call.', type: 'notif', timestamp: (new Date()).toUTCString()});
-                if(calls[data.user._id] !== undefined){
+                that.postNewData({
+                    msg: that.state.room.users[data.user._id].username + ' has left the call.',
+                    type: 'notif',
+                    timestamp: (new Date()).toUTCString()
+                });
+                if (calls[data.user._id] !== undefined) {
                     calls[data.user._id].close();
                     delete calls[data.user._id];
                 }
@@ -685,7 +737,7 @@ class ChatContainer extends React.Component {
                 $('#stream-' + call.peer).remove();
                 console.log('something');
                 // if(that.state.room.inCall){
-                    // that.postNewData({msg: that.state.room.users[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
+                // that.postNewData({msg: that.state.room.users[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
                 // }
                 // that.postNewNotif({msg: room.online_members[call.peer].username + ' has left the call'});
                 delete calls[call.peer];
@@ -700,7 +752,11 @@ class ChatContainer extends React.Component {
         });
 
         conn.on('close', function () {
-            that.postNewData({msg: that.state.room.users[conn.peer].username + ' has left the chat', type: 'notif', timestamp: (new Date()).toUTCString()});
+            that.postNewData({
+                msg: that.state.room.users[conn.peer].username + ' has left the chat',
+                type: 'notif',
+                timestamp: (new Date()).toUTCString()
+            });
             // that.postNewNotif({msg: that.state.room.users[this.peer].username + ' has left the chat'});
             // dropUser(this.peer);
             console.log(conn.peer, 'has disconnected');
@@ -815,7 +871,7 @@ class ChatContainer extends React.Component {
         messages[0].scrollTop = messages[0].scrollHeight;
     }
 
-    postNewData(data){
+    postNewData(data) {
         this.state.room.log.push(data);
         this.setState(this.state);
     }
@@ -851,11 +907,14 @@ class ChatContainer extends React.Component {
     broadcast(msg) {
         let that = this;
         // console.log(this);
+        console.log(this.state);
+        console.log(this.state.room);
+        console.log(this.state.room.users);
         let data = {
             type: 'message',
             sender: this.state.room.users[this.props.peer.id],
             msg: msg,
-            timestamp: (new Date()).toUTCString()
+            timestamp: (new Date().getTime()).toString()
         };
         // that.postNewMessage(data);
         that.postNewData(data);
@@ -877,12 +936,20 @@ class ChatContainer extends React.Component {
             let splitter = msg.split(' ');
             if (splitter.length >= 2) {
                 if (splitter[0].length === 1) {
-                    that.postNewData({msg: 'You must supply a username to whisper to.', type: 'error', timestamp: (new Date()).toUTCString()});
+                    that.postNewData({
+                        msg: 'You must supply a username to whisper to.',
+                        type: 'error',
+                        timestamp: (new Date()).toUTCString()
+                    });
                     // that.postNewError({msg: 'You must supply a username to whisper to.'});
                 } else {
                     let unam = splitter[0].substr(msg.indexOf('@') + 1);
                     if (unam === room.users[that.props.peer.id].username) {
-                        that.postNewData({msg: 'You can\'t whisper to yourself', type: 'error', timestamp: (new Date()).toUTCString()});
+                        that.postNewData({
+                            msg: 'You can\'t whisper to yourself',
+                            type: 'error',
+                            timestamp: (new Date()).toUTCString()
+                        });
                         // that.postNewError({msg: 'You can\'t whisper to yourself', type: 'error'});
                     } else {
                         let target = null;
@@ -932,10 +999,12 @@ class ChatContainer extends React.Component {
                         {(this.state.room.log).map((msg) => {
                             switch (msg.type) {
                                 case 'message':
-                                    return <Message key={msg.timestamp} room={this.state.room} sender={msg.sender} message={msg.msg}/>;
+                                    return <Message key={msg.timestamp} room={this.state.room} sender={msg.sender}
+                                                    message={msg.msg}/>;
                                     break;
                                 case 'whisper':
-                                    return <Whisper key={msg.timestamp} room={this.state.room} sender={msg.sender} target={msg.target} message={msg.msg}/>;
+                                    return <Whisper key={msg.timestamp} room={this.state.room} sender={msg.sender}
+                                                    target={msg.target} message={msg.msg}/>;
                                     break;
                                 case 'notif':
                                     return <Notification key={msg.timestamp} message={msg.msg}/>;
@@ -947,7 +1016,8 @@ class ChatContainer extends React.Component {
                         })}
                     </ul>
                     <form id="message-box" onSubmit={this.sendMessage.bind(this)}>
-                        <input id="user-input" type="text" required={true} autoComplete="off" placeholder="Enter Message here, or @USERNAME to whisper someone"/>
+                        <input id="user-input" type="text" required={true} autoComplete="off"
+                               placeholder="Enter Message here, or @USERNAME to whisper someone"/>
                         <input type="file" className="hidden" accept="image/*|audio/*|video/*"/>
                         <button id="send-message" onClick={console.log('send-message onClick')}>Send</button>
                     </form>
@@ -982,14 +1052,14 @@ class ChatContainer extends React.Component {
 }
 
 class MuteButton extends React.Component {
-    state={
+    state = {
         muted: false
     };
 
     MuteLocal() {
-        let that=this;
-        window.localStream.getAudioTracks()[0].enabled=!window.localStream.getAudioTracks()[0].enabled;
-        that.state.muted=!window.localStream.getAudioTracks()[0].enabled;
+        let that = this;
+        window.localStream.getAudioTracks()[0].enabled = !window.localStream.getAudioTracks()[0].enabled;
+        that.state.muted = !window.localStream.getAudioTracks()[0].enabled;
         that.setState(that.state);
     }
 
@@ -1000,25 +1070,25 @@ class MuteButton extends React.Component {
                          className={
                              this.state.muted ? 'muted' : ''
                          }>
-                <i className="fa fa-microphone-slash"> </i> </button>
+                <i className="fa fa-microphone-slash"> </i></button>
         );
     }
 }
 
 class App extends React.Component {
-    state={
+    state = {
         mode: MODE.LOGIN,
         user: null,
         peer: null
     };
 
     componentDidMount() {
-        let cookie_data=getCookie('user');
+        let cookie_data = getCookie('user');
         if (cookie_data) {
             console.log(cookie_data);
-            let user=JSON.parse(cookie_data);
+            let user = JSON.parse(cookie_data);
             // this.setState({mode: MODE.PSYKE, user: user});
-            peer=new Peer(user._id, server_connection);
+            peer = new Peer(user._id, server_connection);
             this.setState({
                 mode: MODE.PSYKE,
                 user: user,
@@ -1036,7 +1106,7 @@ class App extends React.Component {
 
     logout() {
         delete_cookie('user');
-        let that=this;
+        let that = this;
 
         $.ajax({
             type: 'post',
@@ -1063,7 +1133,7 @@ class App extends React.Component {
     }
 
     login(mode, user) {
-        peer=new Peer(user._id, server_connection);
+        peer = new Peer(user._id, server_connection);
         this.setState({
             mode: mode,
             user: user,
@@ -1073,7 +1143,7 @@ class App extends React.Component {
 
     register(mode, user) {
         console.log(user);
-        peer=new Peer(user._id, server_connection);
+        peer = new Peer(user._id, server_connection);
         this.setState({
             mode: mode,
             user: user,
@@ -1081,7 +1151,7 @@ class App extends React.Component {
         });
     }
 
-    swapMode(mode){
+    swapMode(mode) {
         this.state.mode = mode;
         this.setState(this.state);
     }
@@ -1089,15 +1159,17 @@ class App extends React.Component {
     rendererMode() {
         switch (this.state.mode) {
             case MODE.LOGIN:
-                return <Login newUser={this.newUser.bind(this)} login={this.login.bind(this)} swapMode={this.swapMode.bind(this)} />;
+                return <Login newUser={this.newUser.bind(this)} login={this.login.bind(this)}
+                              swapMode={this.swapMode.bind(this)}/>;
             case MODE.PSYKE:
-                return <Psyke key={this.state.user._id} logout={this.logout.bind(this)} user={this.state.user} peer={this.state.peer} />;
+                return <Psyke key={this.state.user._id} logout={this.logout.bind(this)} user={this.state.user}
+                              peer={this.state.peer}/>;
             case MODE.PSYKE_DEBUG:
-                return <Example /> ;
+                return <Example />;
             case MODE.REGISTER:
                 return <Register register={this.register.bind(this)} swapMode={this.swapMode.bind(this)}/>;
             default:
-                return <Example /> ;
+                return <Example />;
         }
     }
 
@@ -1108,4 +1180,4 @@ class App extends React.Component {
     }
 }
 
-ReactDOM.render( <App /> , document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('root'));

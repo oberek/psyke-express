@@ -18,84 +18,90 @@ var Schema = mongoose.Schema;
 
 
 var RoomSchema = Schema({
-    room_id: String,
-    room_name: String,
+    // room_id: String,
+    room_name: {type: String, required: true, unique: true},
     online_members: [String],
-    log: []
+    log: [{
+        type: String,
+        msg: String,
+        sender: String
+    }]
 });
 
 var UserSchema = Schema({
-    id: String,
-    username: String,
-    password: String,
+    username: {type: String, required: true, unique: true},
+    password: {type: String, required: true},
     rooms: []
 });
 
 var Room = mongoose.model('Room', RoomSchema);
 var User = mongoose.model('User', UserSchema);
 
-// var dummy_data = {
-//     rooms: {
-//         'public': {
-//             room_id: 'public',
-//             room_name: 'Public Room',
-//             online_members: [],
-//             log: []
-//         },
-//         'room-1': {
-//             room_id: 'room-1',
-//             room_name: 'Room 1',
-//             online_members: [],
-//             log: []
-//         },
-//         'second-room': {
-//             room_id: 'second-room',
-//             room_name: 'Second Room',
-//             online_members: [],
-//             log: []
-//         }
-//     },
-//     users: {
-//         'h3mJptTkQnYBNJf6': {
-//             id: 'h3mJptTkQnYBNJf6',
-//             username: "samsepi0l",
-//             rooms: ['room-1', 'second-room'],
-//             password: 'mr.r0b0t'
-//         },
-//         'vM3RP9huAdiitHyV': {
-//             id: 'vM3RP9huAdiitHyV',
-//             username: "D0loresH4ze",
-//             rooms: ['room-1'],
-//             password: 's0m3th1ng_cl3v3r'
-//         },
-//         'ZdEaOWTamXcTUJa3': {
-//             id: 'ZdEaOWTamXcTUJa3',
-//             username: 'admin',
-//             rooms: ['public', 'room-1', 'second-room'],
-//             password: 'password'
-//         }
-//     }
-// };
-//
-// (function () {
-//     var i;
-//     for (i = 0; i < Object.keys(dummy_data.users).length; i++) {
-//         var room = dummy_data.rooms[Object.keys(dummy_data.rooms)[i]];
-//         var room_inst = new Room(room);
-//         room_inst.save(function (err) {
-//             if (err) console.error.bind(console, 'MongoDB save error:');
-//         });
-//         //        console.log(room, room_inst);
-//     }
-//     for (i = 0; i < Object.keys(dummy_data.users).length; i++) {
-//         var user = dummy_data.users[Object.keys(dummy_data.users)[i]];
-//         var user_inst = new User(user);
-//         user_inst.save(function (err) {
-//             if (err) console.error.bind(console, 'MongoDB save error:');
-//         });
-//         //        console.log(user, user_inst);
-//     }
-// })();
+var dummy_data = {
+    rooms: [
+        {
+            room_name: 'Public Room',
+            online_members: [],
+            log: []
+        },
+        {
+            room_name: 'Room 1',
+            online_members: [],
+            log: []
+        },
+        {
+            room_name: 'Second Room',
+            online_members: [],
+            log: []
+        }
+    ]
+    // ,
+    // users: [
+    //     {
+    //         username: "samsepi0l",
+    //         rooms: ['room-1', 'second-room'],
+    //         password: 'mr.r0b0t'
+    //     },
+    //     {
+    //         username: "D0loresH4ze",
+    //         rooms: ['room-1'],
+    //         password: 's0m3th1ng_cl3v3r'
+    //     },
+    //     {
+    //         username: 'admin',
+    //         rooms: ['public', 'room-1', 'second-room'],
+    //         password: 'password'
+    //     }
+    // ]
+};
+
+(function () {
+    for (var i = 0; i < dummy_data.rooms.length; i++) {
+        (function(){
+            var room = dummy_data.rooms[i];
+            Room.findOne({room_name: room.room_name}).exec(function(err, roomFound){
+                if(err) throw err;
+                if(roomFound){
+                    console.log("Room already exists");
+                } else {
+                    var room_inst = new Room(room);
+                    room_inst.save(function (err) {
+                        if (err) throw err;
+                        console.log('Saved a room');
+                    });
+                }
+            });
+        })();
+    }
+    // for (i = 0; i < Object.keys(dummy_data.users).length; i++) {
+    //     var user = dummy_data.users[Object.keys(dummy_data.users)[i]];
+    //     var user_inst = new User(user);
+    //     user_inst.save(function (err) {
+    //         if (err) console.error.bind(console, 'MongoDB save error:');
+    //     });
+    //     //        console.log(user, user_inst);
+    // }
+})();
 //module.exports = db;
 module.exports = {
     User: User,

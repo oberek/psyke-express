@@ -75,19 +75,58 @@ var options = {
 /************************************/
 
 app.post('/login', function (req, res) {
-    // console.log('reached /login!');
+    console.log('reached /login!');
 
-    db.User.findOne({username: req.body.username}).exec(function(err, user){
-        if(err) console.error.bind(console, "MongoDB Error:");
 
-        if(user !== null){
-            if(user.password === req.body.password){
-                res.send(JSON.stringify(user));
+    db.User.findOne({username: req.body.username}).exec(function (err, u) {
+        if (err) throw err;
+
+        var user = u.toJSON();
+
+        if (user !== null) {
+            console.log('user found');
+            console.log(user);
+            console.log(user.password);
+            console.log(req.body.password);
+            if (user.password === req.body.password) {
+                console.log('passwords match!');
+                var response = Object.assign({}, user);
+                delete response.password;
+                response.users = {};
+                for(var i = 0; i < response.online_members.length; i++){
+                    (function () {
+                        var u_id = response.online_members[i];
+                        db.User.findOne({_id: u_id}).exec(function(err, u2){
+                            if(err) throw err;
+                            var temp = u2.toJSON();
+                            var usr = {
+                                _id: temp._id,
+                                username: temp.username
+                            };
+                            response.users[usr._id] = usr;
+                        });
+                    })();
+                }
+                res.send(JSON.stringify(response));
+            } else {
+                res.sendStatus(503);
             }
         } else {
             res.sendStatus(403);
         }
+
     });
+
+    // console.log(JSON.stringify(user));
+
+    //res.sendStatus(403);
+
+
+    // db.User.findOne({username: req.body.username}).exec(function(err, user){
+    //     if(err) console.error.bind(console, "MongoDB Error:");
+    //
+
+    // });
 
     // var users = Object.keys(db.users);
     // var i;
@@ -115,101 +154,63 @@ app.post('/login', function (req, res) {
 //         rooms: ['public']
 //     }
 // }
-
-app.post('/register', function (req, res) {
-    var username = req.body.username;
-    var password = req.body.password;
-
-
-    db.User.findOne({username: username}).exec(function(err, userFound){
-        if(err) console.error.bind(console, "MongoDB error");
-
-        if(userFound){
-            res.sendStatus(403);
-        } else {
-            var new_user = new db.User({
-                username: username,
-                password: password,
-                rooms: ['public']
-            });
-            new_user.save(function(err){
-                if(err) console.error.bind(console, "MongoDB Save Error: ");
-                console.log("User Registered!");
-                // console.log(this === new_user);
-                // res.sendStatus(503);
-                res.send(JSON.stringify(new_user));
-            });
-        }
-    });
-
-    // function makeID() {
-    //     var text = '';
-    //     /*preventing line length from going above 80*/
-    //     var lowercase = 'abcdefghijklmnopqrstuvwxyz';
-    //     var uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    //     var numbers = '0123456789';
-    //
-    //     var possible = uppercase + lowercase + numbers;
-    //     for (var i = 0; i < 16; i++) {
-    //         text += possible.charAt(Math.floor(Math.random() * possible.length));
-    //     }
-    //
-    //     return text;
-    // }
-    // // console.log('reached /login!');
-    // // var users = Object.keys(db.users);
-    // // var i;
-    // // var user = false;
-    // // for (i = 0; i < users.length && !user; i++) {
-    // //     if (!user) {
-    // //         alert("You already have an account!!");
-    // //         //res.redirect("/login");
-    // //     }
-    // // }
-    // // if(!user){
-    // //     res.render('register')
-    // // }
-    //
-    //
-    // console.log(username+"::"+password);
-    //
-    // var userFound = false;
-    // var i;
-    // var user_ids = Object.keys(db.users);
-    // for(i = 0; i < user_ids.length && !userFound; i++){
-    //     if(db.users[user_ids[i]].username === username){
-    //         userFound = true;
-    //     }
-    // }
-    //
-    // if (userFound) {
-    //     res.sendStatus(503);
-    // } else {
-    //     var id = makeID();
-    //
-    //     while (db.users[id] !== undefined) {
-    //         id = makeID();
-    //     }
-    //
-    //     db.users[id] = User(username, password, id);
-    //
-    //     var out = Object.assign({}, db.users[id]);
-    //     delete out.password;
-    //
-    //     res.send(JSON.stringify({result: out}));
-    // }
-    // db.users[id] =
-
-
-
-
-    /*Create random id*/
-    /**/
-});
+//
+// app.post('/getUserRooms', function(req, res){
+//     var user_id = req.body.user_id;
+//     db.User.fin
+// });
 
 app.post('/connect', function (req, res) {
     var room_id = req.body.room_id;
     var user_id = req.body.user_id;
+    console.log("::",room_id);
+
+    db.User.findOne({_id: user_id}).exec(function (err, u) {
+        if (err) throw err;
+        var user = u.toJSON();
+        for (var i = 0; i < user.rooms.length; i++) {
+            (function () {
+                var r_id = user.rooms[i]._id;
+                db.Room.findOne({_id: r_id}).exec(function (err, rm) {
+                    if (err) throw err;
+
+                    var room = rm.toJSON();
+
+                    if (room) {
+                        console.log(room._id, room_id);
+                        if (room._id.equals(room_id) && room.online_members.indexOf(user._id) === -1) {
+                            room.online_members.push(user._id);
+                            console.log('1');
+                        } else if (!room._id.equals(room_id) && room.online_members.indexOf(user._id) !== -1) {
+                            console.log('2');
+                            room.online_members.splice(room.online_members.indexOf(user._id), 1);
+                        } else {
+                            console.log("user wasn't in this room");
+                        }
+                        rm.save(room, function (err, doc) {
+                            if(err) throw err;
+                            console.log(room);
+                            console.log(doc);
+                        });
+                    } else {
+                        throw err;
+                    }
+                });
+            })();
+        }
+    });
+
+    db.Room.findOne({_id: room_id}).exec(function (err, rm) {
+       if(err) throw err;
+       var room = rm.toJSON();
+
+       res.send(JSON.stringify(room));
+    });
+    // db.Room.findOne({_id: room_id}).exec(function (err, rm) {
+    //     if (err) throw err;
+    //     var room = rm.toJSON();
+    //     res.send(JSON.stringify(room));
+    // });
 
     // if (db.rooms[room_id] !== undefined && db.users[user_id] !== undefined) {
     //     var user = db.users[user_id];
@@ -242,6 +243,7 @@ app.post('/connect', function (req, res) {
     // var room = db.rooms[room_id];
     //
     // res.send(JSON.stringify(room));
+    // res.sendStatus(403);
 });
 
 app.post('/disconnect', function (req, res) {
@@ -258,20 +260,7 @@ app.post('/disconnect', function (req, res) {
     //     }
     // }
     // res.sendStatus(200);
-});
-
-app.post('/getUserRooms', function (req, res) {
-    // var room_ids = db.users[req.body.user_id].rooms;
-    // var rooms = [];
-    // var i;
-    // console.log('Getting rooms');
-    // for (i = 0; i < room_ids.length; ++i) {
-    //     var rm = Object.assign({}, db.rooms[room_ids[i]]);
-    //     delete rm.log;
-    //     rooms.push(rm);
-    // }
-    // // console.log(rooms);
-    // res.send(JSON.stringify(rooms));
+    res.sendStatus(500);
 });
 
 app.post('/getRoom', function (req, res) {
@@ -284,21 +273,55 @@ app.post('/getRoom', function (req, res) {
     //     delete t_user.password;
     //     room.users[user_id] = t_user;
     // }
+    //
+    // res.send(JSON.stringify(room));
+    res.sendStatus(500);
+});
 
-    db.Room.findOne({room_id: req.body.room_id}).exec(function(err, room){
-        if(err) console.error.bind(console, "MongoDB Error: ");
-        if(room){
-            res.send(JSON.stringify(room));
+app.post('/register', function (req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+    db.User.find({username: username}).exec(function (err, usersFound) {
+        if (err) console.error.bind(console, "MongoDB error");
+
+        if (usersFound.length > 0) {
+            res.sendStatus(403);
         } else {
-            res.sendStatus(404);
+            db.Room.findOne({room_name: 'Public Room'}).exec(function (err, rm) {
+                room = rm.toJSON();
+                if (err) console.error.bind(console, "MongoDB Error: ");
+                if (room) {
+                    var new_user = new db.User({
+                        username: username,
+                        password: password,
+                        rooms: []
+                    });
+                    new_user.rooms.push(room);
+                    new_user.save(function (err) {
+                        if (err) console.error.bind(console, "MongoDB Save Error: ");
+                        console.log("User Registered!");
+                        // console.log(this === new_user);
+                        // res.sendStatus(503);
+                        db.User.findOne({username: username}).exec(function (err, user) {
+                            if (err) console.error.bind(console, "MongoDB Error: ");
+                            var response = Object.assign({}, user._doc);
+                            delete response.password;
+                            res.send(JSON.stringify(response));
+                        });
+                    });
+                } else {
+                    res.sendStatus(404);
+                }
+            });
         }
     });
+    console.log('');
 });
 
 app.post('/log/', function (req, res) {
     console.log('/log');
-    console.log('room_id: ',req.body.room_id);
-    console.log('obj: ',req.body.obj);
+    console.log('room_id: ', req.body.room_id);
+    console.log('obj: ', req.body.obj);
 
     //for testing porpoises
     res.sendStatus(200);
