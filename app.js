@@ -92,21 +92,20 @@ app.post('/login', function (req, res) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user);
                 delete response.password;
-                response.users = {};
-                for(var i = 0; i < response.online_members.length; i++){
-                    (function () {
-                        var u_id = response.online_members[i];
-                        db.User.findOne({_id: u_id}).exec(function(err, u2){
-                            if(err) throw err;
-                            var temp = u2.toJSON();
-                            var usr = {
-                                _id: temp._id,
-                                username: temp.username
-                            };
-                            response.users[usr._id] = usr;
-                        });
-                    })();
-                }
+                // for(var i = 0; i < response.rooms.length; i++){
+                //     (function () {
+                //         var u_id = response.rooms[i];
+                //         db.User.findOne({_id: u_id}).exec(function(err, u2){
+                //             if(err) throw err;
+                //             var temp = u2.toJSON();
+                //             var usr = {
+                //                 _id: temp._id,
+                //                 username: temp.username
+                //             };
+                //             response.users[usr._id] = usr;
+                //         });
+                //     })();
+                // }
                 res.send(JSON.stringify(response));
             } else {
                 res.sendStatus(503);
@@ -204,7 +203,7 @@ app.post('/connect', function (req, res) {
        if(err) throw err;
        var room = rm.toJSON();
 
-       res.send(JSON.stringify(room));
+       res.send(JSON.stringify(room))
     });
     // db.Room.findOne({_id: room_id}).exec(function (err, rm) {
     //     if (err) throw err;
