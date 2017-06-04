@@ -58,19 +58,19 @@ var dummy_data = {
     ]
     ,
     users: [
-        {
-            username: "samsepi0l",
-            rooms: ['room-1', 'second-room'],
-            password: 'mr.r0b0t'
-        },
-        {
-            username: "D0loresH4ze",
-            rooms: ['room-1'],
-            password: 's0m3th1ng_cl3v3r'
-        },
+        // {
+        //     username: "samsepi0l",
+        //     rooms: [],
+        //     password: 'mr.r0b0t'
+        // },
+        // {
+        //     username: "D0loresH4ze",
+        //     rooms: [],
+        //     password: 's0m3th1ng_cl3v3r'
+        // },
         {
             username: 'admin',
-            rooms: ['public', 'room-1', 'second-room'],
+            rooms: [],
             password: 'password'
         }
     ]
@@ -78,11 +78,11 @@ var dummy_data = {
 
 (function () {
     for (var i = 0; i < dummy_data.rooms.length; i++) {
-        (function(){
+        (function () {
             var room = dummy_data.rooms[i];
-            Room.findOne({room_name: room.room_name}).exec(function(err, roomFound){
-                if(err) throw err;
-                if(roomFound){
+            Room.findOne({room_name: room.room_name}).exec(function (err, roomFound) {
+                if (err) throw err;
+                if (roomFound) {
                     console.log("Room already exists");
                 } else {
                     var room_inst = new Room(room);
@@ -98,17 +98,22 @@ var dummy_data = {
         var user = dummy_data.users[i];
 
         User.findOne({username: user.username}).exec(function (err, usr) {
-           if(err) throw err;
+            if (err) throw err;
 
-           if(usr){
-               console.log("User already exists");
-           } else{
-               var user_inst = new User(user);
-               user_inst.save(function (err) {
-                   if (err) console.error.bind(console, 'MongoDB save error:');
-                   console.log("Added user");
-               });
-           }
+            if (usr) {
+                console.log("User already exists");
+            } else {
+                var user_inst = new User(user);
+                Rooms.findOne({room_name: 'Public Room'}).exec(function (err, rm) {
+                    if (err) throw err;
+                    var room = rm.toJSON();
+                    user_inst.rooms.push(room);
+                    user_inst.save(function (err) {
+                        if (err) console.error.bind(console, 'MongoDB save error:');
+                        console.log("Added user");
+                    });
+                });
+            }
         });
         //        console.log(user, user_inst);
     }
