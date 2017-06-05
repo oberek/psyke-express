@@ -30,6 +30,12 @@ const MODE = {
     PSYKE_DEBUG: 396
 };
 
+function inputValidator(evt){
+    console.log(evt.target);
+    let tar = evt.target;
+    tar.value = tar.value.replace(/\W+/g, "");
+}
+
 window.onbeforeunload = function () {
     if (!peer.disconnected) {
         console.log('something');
@@ -273,35 +279,11 @@ class Register extends React.Component {
             <div className="container">
                 <h1>Register</h1>
                 <span id="register-error" className="hidden"> errors go here </span>
-                {/*<form id="register-form" data-toggle="validator" role="form" onSubmit={this.attemptRegister.bind(this)}>*/}
-                {/*<div className="form-group">*/}
-                {/*<label htmlFor="username" className="control-label"> Username: </label>*/}
-                {/*<input id="register_username" className="form-control" name="username" type="text" placeholder="Username" required />*/}
-                {/*</div>*/}
-                {/*<div className="form-group">*/}
-                {/*/!*<div className="form-inline">*!/*/}
-                {/*<div className="form-group">*/}
-                {/*<label className="control-label" htmlFor="register_password">Password</label>*/}
-                {/*<input type="password" data-minlength="6" className="form-control" id="register_password" placeholder="Password" required />*/}
-                {/*<div className="help-block">Minimum of 6 characters</div>*/}
-                {/*</div>*/}
-                {/*<div className="form-group">*/}
-                {/*<label className="control-label" htmlFor="RegisterPasswordConfirm">Confirm Password:</label>*/}
-                {/*<input type="password" className="form-control" id="RegisterPasswordConfirm" data-match="register_password" data-match-error="Whoops, these don't match" placeholder="Confirm" required />*/}
-                {/*<div className="help-block with-errors">*/}
-                {/*</div>*/}
-                {/*</div>*/}
-                {/*/!*</div>*!/*/}
-                {/*</div>*/}
-                {/*<input className="btn btn-success" type="submit" value="Submit" onSubmit={ this.attemptRegister.bind(this) } />*/}
-                {/*</form>*/}
-
                 <form id="register-form" data-toggle="validator" role="form"
                       onSubmit={ this.attemptRegister.bind(this) }>
                     <div className="form-group">
                         <label htmlFor="register_username" className="control-label">Username</label>
-                        <input type="text" className="form-control" id="register_username" placeholder="Username"
-                               required/>
+                        <input type="text" className="form-control" id="register_username" placeholder="Username" onChange={inputValidator} required/>
                     </div>
                     <div className="form-group">
                         <label htmlFor="register_password" className="control-label">Password</label>
