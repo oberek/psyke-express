@@ -11,9 +11,11 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var db = require('./routes/db');
 
+var CryptoJS = require("crypto-js");
+var secret = 'brad has nine toes';
 var app = express();
 
-var PORT = normalizePort(process.env.port || '8080');
+var PORT = normalizePort(process.env.port || '9090');
 
 app.set('port', PORT);
 
@@ -87,7 +89,7 @@ app.post('/login', function (req, res) {
             console.log(user);
             console.log(user.password);
             console.log(req.body.password);
-            if (user.password === req.body.password) {
+            if (user.password === CryptoJS.AES.encrypt(req.body.password, secret)) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user);
                 delete response.password;
@@ -271,7 +273,7 @@ app.post('/getRoom', function (req, res) {
 
 app.post('/register', function (req, res) {
     var username = req.body.username;
-    var password = req.body.password;
+    var password = CryptoJS.AES.encrypt(req.body.password, secret);
     db.User.find({username: username}).exec(function (err, usersFound) {
         if (err) console.error.bind(console, "MongoDB error");
 

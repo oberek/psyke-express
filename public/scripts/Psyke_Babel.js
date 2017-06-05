@@ -11,6 +11,8 @@ let peer;
 let cons = {};
 let calls = {};
 let useVoice = false;
+
+
 // let inCall=false;
 let URL = window.URL || window.webkitURL;
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -53,9 +55,9 @@ window.onbeforeunload = function () {
 
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
-function setCookie(cookie_name, cookie_value, exipration_seconds) {
+function setCookie(cookie_name, cookie_value, expiration_seconds) {
     let d = new Date();
-    d.setTime(d.getTime() + (exipration_seconds * 1000));
+    d.setTime(d.getTime() + ( expiration_seconds * 1000));
     let expires = "expires=" + d.toUTCString();
     document.cookie = cookie_name + "=" + cookie_value + ";" + expires + ";path=/";
 }
@@ -109,7 +111,7 @@ class Login extends React.Component {
                 contentType: 'application/json',
                 data: JSON.stringify({
                     username: z_username,
-                    password: z_password
+                    password:z_password
                 }),
                 success(data) {
                     console.log('Success');
