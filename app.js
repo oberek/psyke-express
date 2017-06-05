@@ -15,7 +15,7 @@ var CryptoJS = require("crypto-js");
 var secret = 'brad has nine toes';
 var app = express();
 
-var PORT = normalizePort(process.env.port || '9090');
+var PORT = normalizePort(process.env.port || '8080');
 
 app.set('port', PORT);
 
