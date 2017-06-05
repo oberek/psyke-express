@@ -79,10 +79,8 @@ app.post('/login', function (req, res) {
     console.log('reached /login!');
 
 
-    db.User.findOne({username: req.body.username}).exec(function (err, u) {
+    db.User.findOne({username: req.body.username}).exec(function (err, user) {
         if (err) throw err;
-
-        var user = u.toJSON();
 
         if (user !== null) {
             console.log('user found');
