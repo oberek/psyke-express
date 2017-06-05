@@ -125,9 +125,9 @@ app.post('/connect', function (req, res) {
     console.log("uid::",user_id);
     console.log("rid::",room_id);
 
-    db.User.findOne({_id: user_id}).exec(function (err, u) {
+    db.User.findOne({_id: user_id}).exec(function (err, user) {
         if (err) throw err;
-        var user = u.toJSON();
+        // var user = u.toJSON();
         for (var i = 0; i < user.rooms.length; i++) {
             (function () {
                 var r_id = user.rooms[i]._id;
@@ -146,6 +146,12 @@ app.post('/connect', function (req, res) {
                         console.log(room._id.toString()===room_id);
                         if (room._id.toString()===room_id && room.online_members.indexOf(user._id) === -1) {
                             room.online_members.push(user._id);
+                            room.markModified('propChanged');
+
+                            room.save(function (err) {
+                                if(err) throw err;
+                                console.log('saved');
+                            });
                             // db.Room.update(
                             //     {_id: room_id},
                             //     {$push: { online_members: user_id}}
@@ -154,6 +160,12 @@ app.post('/connect', function (req, res) {
                         } else if (room._id.toString() !== room_id && room.online_members.indexOf(user._id) !== -1) {
                             console.log('2');
                             room.online_members.splice(room.online_members.indexOf(user._id), 1);
+                            room.markModified('propChanged');
+
+                            room.save(function (err) {
+                                if(err) throw err;
+                                console.log('saved');
+                            });
                             // db.Room.update(
                             //     {_id: room_id, online_members: user_id},
                             //     {$set: {"grades.$": null}}
@@ -163,8 +175,6 @@ app.post('/connect', function (req, res) {
                         } else {
                             console.log("user wasn't in this room");
                         }
-
-                        room.markModified('propChanged');
 
 
                         // db.Room.findById(room._id, function(err, doc){
@@ -184,7 +194,8 @@ app.post('/connect', function (req, res) {
                         //     console.log(doc);
                         // });
                     } else {
-                        throw err;
+                        console.log('Shit hit the fan');
+                        // throw err;
                     }
                 });
             })();
@@ -195,7 +206,7 @@ app.post('/connect', function (req, res) {
        if(err) throw err;
        var room = rm.toJSON();
 
-       res.send(JSON.stringify(room))
+       res.send(JSON.stringify(room));
     });
 });
 
@@ -306,6 +317,44 @@ app.post('/log/', function (req, res) {
     res.sendStatus(200);
 });
 
+app.post('/newRoom', function(req, res){
+    var room_name = req.body.room_name;
+    var user_id = req.body.user_id;
+
+    db.Room.findOne({room_name: room_name}).exec(function (err, room) {
+        if(err) throw err;
+
+        if(room){
+            console.log("Room already exists");
+            res.sendStatus(403);
+        } else {
+            var newRoom = new db.Room({
+                room_name: room_name,
+                log: [],
+                online_members: []
+            });
+            newRoom.save(function (err) {
+                if (err) throw err;
+                console.log('Saved a room');
+            });
+
+            console.log('330: ',newRoom);
+
+            db.User.findOne({_id: user_id}).exec(function (err, user) {
+                if(err) throw err;
+                user.rooms.push(newRoom);
+                user.markModified('propChanged');
+
+                user.save(function (err) {
+                    if(err) throw err;
+                    console.log('new room saved to user');
+                });
+
+                res.send(JSON.stringify(newRoom));
+            });
+        }
+    });
+});
 /* put all the app.get app.post and app.use above this line */
 
 app.use('/offline_development', function (req, res) {

@@ -380,6 +380,11 @@ class Psyke extends React.Component {
         rooms: []
     };
 
+    addNewRoom(room){
+        this.state.rooms.push(room);
+        this.setState(this.state);
+    }
+
     componentDidMount() {
         let user = this.props.user;
         let that = this;
@@ -448,6 +453,8 @@ class Psyke extends React.Component {
                     <RoomRack key={ 'RoomRack' + this.props.user._id }
                               current_room={ this.state.current_room }
                               rooms={ this.state.rooms }
+                              user_id={this.props.user._id}
+                              addNewRoom={ this.addNewRoom.bind(this) }
                               updateCurrentRoom={ this.updateCurrentRoom.bind(this) }/>
                     <ChatContainer key={'ChatContainer' + this.props.user._id }
                                    peer={this.props.peer}
@@ -481,8 +488,52 @@ class RoomRack extends React.Component {
         });
     }
 
+
+    componentDidMount() {
+        $('#new-room-form').validator();
+    }
+
+    newRoom(e){
+        let that = this;
+        console.log(that.state);
+        console.log(that.props);
+        console.log(that.props.user_id);
+        let newRoomInput = $('#new-room-input');
+        e.preventDefault();
+        let room_name = newRoomInput.val();
+        if(room_name.length > 3){
+            // console.log(room_name);
+            $.ajax({
+                url: '/newRoom',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    room_name: room_name,
+                    user_id: that.props.user_id
+                }),
+                success(data){
+                    console.log('Successfully created a new room!');
+                    console.log(data);
+
+                    let room = JSON.parse(data);
+
+                    that.props.addNewRoom(room);
+                },
+                error(err){
+                    console.log(err);
+                }
+            });
+
+            newRoomInput.val('');
+            $('#newRoomModal').modal('toggle');
+        } else {
+            console.err('do something');
+        }
+    }
+
     render() {
-        return ( <div id="room-rack">
+        return (
+            <div id="room-rack">
                 <h4> Room
                     Rack </h4> { /*eventually turn the list into a list of new components, but a list of names is good for now*/ }
                 <ul id="room-list"> {
@@ -504,6 +555,36 @@ class RoomRack extends React.Component {
                         </li>);
                     })
                 } </ul>
+                <div className="wrapper">
+                </div>
+                <div id="newRoomBtn" className="text-center">
+                    <button type="button" className="btn btn-info btn-lg text-center" data-toggle="modal" data-target="#newRoomModal">+</button>
+                </div>
+
+                {/*<!-- Modal -->*/}
+                <div className="modal fade" id="newRoomModal" role="dialog">
+                    <div className="modal-dialog">
+                        {/*<!-- Modal content-->*/}
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close" data-dismiss="modal">&times;</button>
+                                <h4 className="modal-title">Create a Room</h4>
+                            </div>
+                            <div className="modal-body">
+                                <form id="new-room-form" role="form" data-toggle="validator" onSubmit={this.newRoom.bind(this)}>
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="new-room-input">Enter a name for your Room here:</label>
+                                        <input id="new-room-input" className="form-control" type="text" required placeholder="Room Name"/>
+                                    </div>
+                                    <button type="submit" className="btn btn-success">Submit</button>
+                                </form>
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         );
     }
