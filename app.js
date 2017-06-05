@@ -86,9 +86,9 @@ app.post('/login', function (req, res) {
 
         if (user !== null) {
             console.log('user found');
-            console.log(user);
+            // console.log(user);
             console.log(user.password);
-            console.log(req.body.password);
+            console.log(CryptoJS.AES.encrypt(req.body.password, secret));
             if (user.password === CryptoJS.AES.encrypt(req.body.password, secret)) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user.toJSON());

@@ -105,7 +105,7 @@ var dummy_data = {
                 console.log("User already exists");
             } else {
                 var user_inst = new User(user);
-                Rooms.findOne({room_name: 'Public Room'}).exec(function (err, rm) {
+                Room.findOne({room_name: 'Public Room'}).exec(function (err, rm) {
                     if (err) throw err;
                     var room = rm.toJSON();
                     user_inst.rooms.push(room);
