@@ -92,11 +92,14 @@ app.post('/login', function (req, res) {
                 var response = Object.assign({}, user);
                 delete response.password;
                 response._id = user._id;
+                console.log(response);
                 res.send(JSON.stringify(response));
             } else {
+                console.log('invalid password');
                 res.sendStatus(503);
             }
         } else {
+            console.log('user not found');
             res.sendStatus(403);
         }
 
