@@ -1059,8 +1059,11 @@ class ChatContainer extends React.Component {
     }
 
     postNewData(data) {
-        let that = this;
+        // let that = this;
         console.log(data);
+        this.state.room.log.push(data);
+        this.autoScroll();
+        this.setState(this.state);
 
         // let obj = Object.assign({}, data);
         // console.log(obj);
@@ -1080,9 +1083,6 @@ class ChatContainer extends React.Component {
         //     success(r) {
         //         console.log(r);
         //         console.log(data);
-                that.state.room.log.push(data);
-                that.setState(that.state);
-                that.autoScroll();
         //     }
         // });
     }
@@ -1121,6 +1121,7 @@ class ChatContainer extends React.Component {
         console.log(this.state);
         console.log(this.state.room);
         console.log(this.state.room.users);
+        console.log(msg);
         let data = {
             type: 'message',
             sender: this.state.room.users[this.props.peer.id],
@@ -1146,9 +1147,9 @@ class ChatContainer extends React.Component {
             success(r) {
                 console.log(r);
                 console.log(data);
-                that.postNewData(toServer);
+                that.postNewData(data);
                 $.each(Object.keys(cons), function (i, v) {
-                    cons[v].send(toServer);
+                    cons[v].send(data);
                 });
             }
         });

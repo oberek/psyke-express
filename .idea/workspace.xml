@@ -54,8 +54,8 @@
       <file leaf-file-name="Psyke_Babel.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="358">
-              <caret line="624" column="0" lean-forward="false" selection-start-line="624" selection-start-column="0" selection-end-line="625" selection-end-column="0" />
+            <state relative-caret-position="188">
+              <caret line="1242" column="45" lean-forward="true" selection-start-line="1242" selection-start-column="45" selection-end-line="1242" selection-end-column="45" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="e#34756#36518#0" expanded="false" />
@@ -92,6 +92,7 @@
       <find>that.props.logout</find>
       <find>setMode</find>
       <find>MODE.</find>
+      <find>notif</find>
     </findStrings>
     <replaceStrings>
       <replace>SHA</replace>
@@ -298,12 +299,12 @@
       <option name="presentableId" value="Default" />
       <updated>1496765820184</updated>
       <workItem from="1496765821622" duration="5556000" />
-      <workItem from="1496771432212" duration="3816000" />
+      <workItem from="1496771432212" duration="4332000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9372000" />
+    <option name="totallyTimeSpent" value="9888000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -424,8 +425,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="358">
-          <caret line="624" column="0" lean-forward="false" selection-start-line="624" selection-start-column="0" selection-end-line="625" selection-end-column="0" />
+        <state relative-caret-position="188">
+          <caret line="1242" column="45" lean-forward="true" selection-start-line="1242" selection-start-column="45" selection-end-line="1242" selection-end-column="45" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="e#34756#36518#0" expanded="false" />
