@@ -963,9 +963,7 @@ class ChatContainer extends React.Component {
             type: 'post',
             url: '/log',
             contentType: 'application/json',
-            data: JSON.stringify({
-                user_id: this.state.user._id
-            }),
+            data: JSON.stringify(data),
             success(data) {
                 this.state.room.log.push(data);
                 this.setState(this.state);
