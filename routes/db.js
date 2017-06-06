@@ -34,10 +34,27 @@ var RoomSchema = Schema({
     online_members: [String],
     log: [{
         type: String,
+        sender: {
+            username: String,
+            _id: String,
+            __v: Number
+        },
         msg: String,
-        sender: User
+        timestamp: String
     }]
 });
+/*
+"{
+    type: 'message',
+    sender: {
+        __v: 0,
+        username: 'admin',
+        _id: '5936e6df9ca7c14c9228f93f'
+        },
+    msg: 'hello world!',
+    timestamp: '1496770276473'
+}"
+*/
 var Room = mongoose.model('Room', RoomSchema);
 
 var dummy_data = {
