@@ -824,17 +824,23 @@ class ChatContainer extends React.Component {
             console.log(that.state.room);
             console.log(that.state.room.users);
             console.log(that.state.room.users[conn.peer]);
-            that.postNewData({
-                msg: that.state.room.users[conn.peer].username + ' has left the chat',
-                type: 'notif',
-                timestamp: (new Date()).toUTCString()
-            });
-            // that.postNewNotif({msg: that.state.room.users[this.peer].username + ' has left the chat'});
-            // dropUser(this.peer);
-            console.log(conn.peer, 'has disconnected');
-            let new_state = Object.assign({}, that.state);
-            delete new_state.room.users[conn.peer];
-            that.setState(new_state);
+            if(that.state.room.users[conn.peer] !== undefined){
+                that.postNewData({
+                    msg: that.state.room.users[conn.peer].username + ' has left the chat',
+                    type: 'notif',
+                    timestamp: (new Date()).toUTCString()
+                });
+                // that.postNewNotif({msg: that.state.room.users[this.peer].username + ' has left the chat'});
+                // dropUser(this.peer);
+                console.log(conn.peer, 'has disconnected');
+                let new_state = Object.assign({}, that.state);
+                delete new_state.room.users[conn.peer];
+                that.setState(new_state);
+            } else {
+                if(cons[conn.peer] !== undefined){
+                    delete  cons[conn.peer];
+                }
+            }
         });
 
         conn.on('error', function (err) {
@@ -946,6 +952,7 @@ class ChatContainer extends React.Component {
     postNewData(data) {
         this.state.room.log.push(data);
         this.setState(this.state);
+        this.autoScroll();
     }
 
     postNewError(err) {
