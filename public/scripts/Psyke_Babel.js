@@ -612,8 +612,8 @@ class RoomRack extends React.Component {
                                 <h3>Join an Existing Room</h3>
                                 <form id="join-room-form" role="form" data-toggle="validator"  onSubmit={this.joinExisting.bind(this)}>
                                     <div className="form-group">
-                                        <label className="form-label" htmlFor="join-room-input">Enter a name for your Room here:</label>
-                                        <input id="join-room-input" className="form-control" type="text" required />
+                                        <label className="form-label" htmlFor="join-room-input">Enter the Room's Name here:</label>
+                                        <input id="join-room-input" className="form-control" type="text" required placeholder="Cuzco's Old Room" />
                                     </div>
                                     <button type="submit" className="btn btn-success">Submit</button>
                                 </form>
@@ -622,7 +622,7 @@ class RoomRack extends React.Component {
                                 <form id="new-room-form" role="form" data-toggle="validator" onSubmit={this.newRoom.bind(this)}>
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="new-room-input">Enter a name for your Room here:</label>
-                                        <input id="new-room-input" className="form-control" type="text" required placeholder="Room Name"/>
+                                        <input id="new-room-input" className="form-control" type="text" required placeholder="Cuzco's New Room"/>
                                     </div>
                                     <button type="submit" className="btn btn-success">Submit</button>
                                 </form>
@@ -1386,6 +1386,10 @@ class App extends React.Component {
 
     swapMode(mode) {
         this.state.mode = mode;
+        if(recon){
+            clearInterval(recon);
+            recon = undefined;
+        }
         this.setState(this.state);
     }
 

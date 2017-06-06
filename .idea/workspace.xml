@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd58a46f-5d10-4752-a989-2a1195a39e98" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/scripts/Psyke_Babel.js" afterPath="$PROJECT_DIR$/public/scripts/Psyke_Babel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/routes/db.js" afterPath="$PROJECT_DIR$/routes/db.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -55,10 +54,11 @@
       <file leaf-file-name="Psyke_Babel.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="188">
-              <caret line="956" column="81" lean-forward="false" selection-start-line="956" selection-start-column="81" selection-end-line="956" selection-end-column="81" />
+            <state relative-caret-position="358">
+              <caret line="624" column="0" lean-forward="false" selection-start-line="624" selection-start-column="0" selection-end-line="625" selection-end-column="0" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
+                <element signature="e#34756#36518#0" expanded="false" />
               </folding>
             </state>
           </provider>
@@ -298,12 +298,12 @@
       <option name="presentableId" value="Default" />
       <updated>1496765820184</updated>
       <workItem from="1496765821622" duration="5556000" />
-      <workItem from="1496771432212" duration="3603000" />
+      <workItem from="1496771432212" duration="3816000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9159000" />
+    <option name="totallyTimeSpent" value="9372000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -374,6 +374,7 @@
           <caret line="967" column="30" lean-forward="false" selection-start-line="967" selection-start-column="30" selection-end-line="967" selection-end-column="30" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
+            <element signature="e#34756#36518#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -423,10 +424,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="188">
-          <caret line="956" column="81" lean-forward="false" selection-start-line="956" selection-start-column="81" selection-end-line="956" selection-end-column="81" />
+        <state relative-caret-position="358">
+          <caret line="624" column="0" lean-forward="false" selection-start-line="624" selection-start-column="0" selection-end-line="625" selection-end-column="0" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
+            <element signature="e#34756#36518#0" expanded="false" />
           </folding>
         </state>
       </provider>
