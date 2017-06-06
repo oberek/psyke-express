@@ -89,6 +89,7 @@ app.post('/login', function (req, res) {
             // console.log(user);
             console.log(user.password);
             // console.log(CryptoJS.AES.encrypt(req.body.password, secret));
+            console.log(req.body.password);
             if (user.password === req.body.password) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user.toJSON());
@@ -206,9 +207,9 @@ app.post('/connect', function (req, res) {
         }
     });
 
-    db.Room.findOne({_id: room_id}).exec(function (err, rm) {
+    db.Room.findOne({_id: room_id}).exec(function (err, room) {
        if(err) throw err;
-       var room = rm.toJSON();
+       // var room = rm.toJSON();
 
        res.send(JSON.stringify(room));
     });
@@ -217,15 +218,15 @@ app.post('/connect', function (req, res) {
 app.post('/disconnect', function (req, res) {
     console.log('/disconnect/');
     var user_id = req.body.user_id;
-    db.User.findOne({_id: user_id}).exec(function(err, usr){
+    db.User.findOne({_id: user_id}).exec(function(err, user){
         if(err) throw err;
 
-        var user = usr.toJSON();
+        // var user = usr.toJSON();
 
         for(var i = 0; i > user.rooms.length; i++){
             (function(){
                 var room_id = user.rooms[i];
-                db.Room.findOne({_id: room_id}).exec(function(err, oorm){
+                db.Room.findOne({_id: room_id}).exec(function(err, room){
                     if(err) throw err;
                     // var room = rm.toJSON();
 
@@ -285,8 +286,8 @@ app.post('/register', function (req, res) {
         if (usersFound.length > 0) {
             res.sendStatus(403);
         } else {
-            db.Room.findOne({room_name: 'Public Room'}).exec(function (err, rm) {
-                room = rm.toJSON();
+            db.Room.findOne({room_name: 'Public Room'}).exec(function (err, room) {
+                // room = rm.toJSON();
                 if (err) console.error.bind(console, "MongoDB Error: ");
                 if (room) {
                     var new_user = new db.User({

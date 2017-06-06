@@ -107,7 +107,7 @@ class Login extends React.Component {
         let error_container = $('#login-error');
         let z_username = $('#login_username').val().toString();
         let z_password = $('#login_password').val().toString();
-        z_password = CryptoJS.Sha256(z_password).toString();
+        z_password = CryptoJS.SHA256(z_password).toString();
         if (z_username === "" || z_password === "") {
             error_container.toggleClass('hidden', false);
             error_container.text('You need to provide a username and password');
@@ -215,7 +215,7 @@ class Register extends React.Component {
         let error_container = $('#register-error');
         let z_username = $('#register_username').val().toString();
         let z_password = $('#register_password').val().toString();
-        z_password = CryptoJS.Sha256(z_password).toString();
+        z_password = CryptoJS.SHA256(z_password).toString();
         console.log(z_username + "::" + z_password);
         if (z_username === "" || z_password === "") {
             error_container.toggleClass('hidden', false);
