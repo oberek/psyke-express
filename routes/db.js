@@ -6,9 +6,9 @@ var express = require('express');
 var mongoose = require('mongoose');
 // var CryptoJS = require('crypto-js');
 
-mongoose.connect('mongodb://127.0.0.1/my_database');
+// mongoose.connect('mongodb://127.0.0.1/my_database');
 // mongoose.connect('mongodb://psyke-tenurian.c9users.io/my_database');
-// mongoose.connect('mongodb://projectgroup:neumont@ds161931.mlab.com:61931/psyke-react');
+mongoose.connect('mongodb://projectgroup:neumont@ds161931.mlab.com:61931/psyke-react');
 
 var db = mongoose.connection;
 
