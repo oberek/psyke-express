@@ -26,22 +26,15 @@ var UserSchema = Schema({
     rooms: []
 });
 
+// var MessageObject = ;
+
 var User = mongoose.model('User', UserSchema);
 
 var RoomSchema = Schema({
     // room_id: String,
     room_name: {type: String, required: true, unique: true},
     online_members: [String],
-    log: [{
-        type: String,
-        sender: {
-            username: String,
-            _id: String,
-            __v: Number
-        },
-        msg: String,
-        timestamp: String
-    }]
+    log: [{}]
 });
 /*
 "{

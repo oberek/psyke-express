@@ -308,17 +308,38 @@ app.post('/log/', function (req, res) {
     console.log('/log');
     console.log('room_id: ', req.body.room_id);
     console.log('obj: ', req.body.obj);
+    var obj = req.body.obj;
+    console.log('obj.type: ', typeof obj.type);
+    console.log('obj.msg: ', typeof obj.msg);
+    console.log('obj.timestamp: ', typeof obj.timestamp);
+    console.log('obj.sender: ', typeof obj.sender);
+    console.log('obj.sender.username: ', typeof obj.sender.username);
+    console.log('obj.sender._id: ', typeof obj.sender._id);
+    // console.log('obj.sender.__v: ', typeof obj.sender.___v);
+    // var MessageObject = {
+    //     type: String,
+    //     sender: {
+    //         username: String,
+    //         _id: String,
+    //         __v: Number
+    //     },
+    //     msg: String,
+    //     timestamp: String
+    // };
+
 
     db.Room.findOne({_id: req.body.room_id}).exec(function (err, room) {
        if(err) throw err;
-
+       console.log("test: ",room);
        if(room){
-           room.log.push(req.body.obj);
+           room.log.push(obj);
+           console.log(room);
            room.markModified('propChanged');
+           room.save();
        }
     });
 
-    db.Room.findOne({_id: room._id}).exec(function(err, rm){
+    db.Room.findOne({_id: req.param.room_id}).exec(function(err, rm){
         console.log(rm);
     });
 

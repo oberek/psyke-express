@@ -965,6 +965,7 @@ class ChatContainer extends React.Component {
         let obj = Object.assign({}, data);
         console.log(obj);
         delete obj.sender.rooms;
+        delete obj.sender.__v;
 
         let toServer = {
             room_id: that.state.room._id,
