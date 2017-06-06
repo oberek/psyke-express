@@ -12,6 +12,11 @@ let cons = {};
 let calls = {};
 let useVoice = false;
 
+function updatePeerConnection(peer){
+    peer.on('disconnect', function(){
+        console.log('You have been disconnected');
+    });
+}
 
 // let inCall=false;
 let URL = window.URL || window.webkitURL;
@@ -870,6 +875,10 @@ class ChatContainer extends React.Component {
     peerSetup(p) {
         let that = this;
         if (p instanceof Peer) {
+            p.on('disconnect', function () {
+               console.log("You have been disconnected");
+            });
+
             p.on('connection', function (conn) {
                 console.log(conn);
                 console.log('Peer with id (' + conn.peer + ') has connected to you');
@@ -950,9 +959,19 @@ class ChatContainer extends React.Component {
     }
 
     postNewData(data) {
-        this.state.room.log.push(data);
-        this.setState(this.state);
-        this.autoScroll();
+        $.ajax({
+            type: 'post',
+            url: '/log',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                user_id: this.state.user._id
+            }),
+            success(data) {
+                this.state.room.log.push(data);
+                this.setState(this.state);
+                this.autoScroll();
+            }
+        });
     }
 
     postNewError(err) {
