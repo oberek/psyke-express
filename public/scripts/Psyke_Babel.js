@@ -962,29 +962,29 @@ class ChatContainer extends React.Component {
         let that = this;
         console.log(data);
 
-        let obj = Object.assign({}, data);
-        console.log(obj);
-        delete obj.sender.rooms;
-        delete obj.sender.__v;
-
-        let toServer = {
-            room_id: that.state.room._id,
-            obj: obj
-        };
-
-        $.ajax({
-            type: 'post',
-            url: '/log',
-            contentType: 'application/json',
-            data: JSON.stringify(toServer),
-            success(r) {
-                console.log(r);
-                console.log(data);
+        // let obj = Object.assign({}, data);
+        // console.log(obj);
+        // delete obj.sender.rooms;
+        // delete obj.sender.__v;
+        //
+        // let toServer = {
+        //     room_id: that.state.room._id,
+        //     obj: obj
+        // };
+        //
+        // $.ajax({
+        //     type: 'post',
+        //     url: '/log',
+        //     contentType: 'application/json',
+        //     data: JSON.stringify(toServer),
+        //     success(r) {
+        //         console.log(r);
+        //         console.log(data);
                 that.state.room.log.push(data);
                 that.setState(that.state);
                 that.autoScroll();
-            }
-        });
+        //     }
+        // });
     }
 
     postNewError(err) {
@@ -1027,11 +1027,36 @@ class ChatContainer extends React.Component {
             msg: msg,
             timestamp: (new Date().getTime()).toString()
         };
-        // that.postNewMessage(data);
-        that.postNewData(data);
-        $.each(Object.keys(cons), function (i, v) {
-            cons[v].send(data);
+
+        let obj = Object.assign({}, data);
+        console.log(obj);
+        delete obj.sender.rooms;
+        delete obj.sender.__v;
+
+        let toServer = {
+            room_id: that.state.room._id,
+            obj: obj
+        };
+
+        $.ajax({
+            type: 'post',
+            url: '/log',
+            contentType: 'application/json',
+            data: JSON.stringify(toServer),
+            success(r) {
+                console.log(r);
+                console.log(data);
+                that.postNewData(toServer);
+                $.each(Object.keys(cons), function (i, v) {
+                    cons[v].send(toServer);
+                });
+                // that.state.room.log.push(data);
+                // that.setState(that.state);
+                // that.autoScroll();
+            }
         });
+
+        // that.postNewMessage(data);
     }
 
     sendMessage(e) {
