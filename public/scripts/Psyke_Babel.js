@@ -961,11 +961,17 @@ class ChatContainer extends React.Component {
     postNewData(data) {
         let that = this;
         console.log(data);
+
+        let toServer = {
+            room_id: that.state.room._id,
+            obj: data
+        };
+
         $.ajax({
             type: 'post',
             url: '/log',
             contentType: 'application/json',
-            data: JSON.stringify(data),
+            data: JSON.stringify(toServer),
             success(r) {
                 console.log(r);
                 console.log(data);
