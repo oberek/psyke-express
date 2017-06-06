@@ -309,6 +309,19 @@ app.post('/log/', function (req, res) {
     console.log('room_id: ', req.body.room_id);
     console.log('obj: ', req.body.obj);
 
+    db.Room.findOne({_id: req.body.room_id}).exec(function (err, room) {
+       if(err) throw err;
+
+       if(room){
+           room.log.push(req.body.obj);
+           room.markModified('propChanged');
+       }
+    });
+
+    db.Room.findOne({_id: room._id}).exec(function(err, rm){
+        console.log(rm);
+    });
+
     //for testing porpoises
     res.sendStatus(200);
 });
