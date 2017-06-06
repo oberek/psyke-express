@@ -93,7 +93,6 @@ app.post('/login', function (req, res) {
             if (user.password === req.body.password) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user.toJSON());
-                /*with SHA256 hashing, this line is no longer useful*/
                 delete response.password;
                 response._id = user._id;
                 console.log(response);
@@ -222,6 +221,7 @@ app.post('/disconnect', function (req, res) {
         if(err) throw err;
 
         // var user = usr.toJSON();
+        console.log(user);
 
         for(var i = 0; i > user.rooms.length; i++){
             (function(){
@@ -243,19 +243,6 @@ app.post('/disconnect', function (req, res) {
 
         res.sendStatus(200);
     });
-    // var user_id = req.body.user_id;
-    // var user = db.users[user_id];
-    // if (user !== undefined) {
-    //     var i;
-    //     for (i = 0; i < user.rooms.length; i++) {
-    //         var t_room = db.rooms[user.rooms[i]];
-    //         if (t_room.online_members.indexOf(user_id) != -1) {
-    //             t_room.online_members.splice(t_room.online_members.indexOf(user_id), 1);
-    //         }
-    //     }
-    // }
-    // res.sendStatus(200);
-    // res.sendStatus(500);
 });
 
 app.post('/getRoom', function (req, res) {
