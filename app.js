@@ -245,21 +245,6 @@ app.post('/disconnect', function (req, res) {
     });
 });
 
-app.post('/getRoom', function (req, res) {
-    // var room = db.rooms[req.body.room_id];
-    // room.users = {};
-    // var i;
-    // for (i = 0; i < room.online_members; i++) {
-    //     var user_id = room.online_members[i];
-    //     var t_user = Object.assign({}, db.users[user_id]);
-    //     delete t_user.password;
-    //     room.users[user_id] = t_user;
-    // }
-    //
-    // res.send(JSON.stringify(room));
-    res.sendStatus(500);
-});
-
 app.post('/register', function (req, res) {
     var username = req.body.username;
     // var password = CryptoJS.AES.encrypt(req.body.password, secret).toString();
@@ -384,6 +369,43 @@ app.post('/newRoom', function(req, res){
             });
         }
     });
+});
+
+app.post('/joinRoom', function (req, res) {
+    console.log('/joinRoom');
+    var room_name = req.body.room_name;
+    var user_id = req.body.user_id;
+
+    db.Room.findOne({room_name: room_name}).exec(function (err, room) {
+        if(err) throw err;
+        if (room) {
+            console.log("room: ",room);
+
+            db.User.findOne({_id: user_id}).exec(function (err, user) {
+                if (err) throw err;
+                console.log("user: ",user);
+
+                if(user.rooms.indexOf(room) === -1){
+                    console.log("add room to user");
+                    user.rooms.push(room);
+                    user.markModified('propChanged');
+
+                    user.save(function (err) {
+                        if (err) throw err;
+                        console.log('new room saved to user');
+                    });
+
+                    res.send(JSON.stringify(room));
+                } else {
+                    res.sendStatus(403);
+                }
+            });
+        } else {
+            console.log("Room doesn't exist!");
+            res.sendStatus(404);
+        }
+    });
+
 });
 /* put all the app.get app.post and app.use above this line */
 

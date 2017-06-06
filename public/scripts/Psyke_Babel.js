@@ -11,6 +11,8 @@ let peer;
 let cons = {};
 let calls = {};
 let useVoice = false;
+let connectionAttempts = 0;
+let recon;
 
 function updatePeerConnection(peer){
     peer.on('disconnect', function(){
@@ -450,6 +452,7 @@ class Psyke extends React.Component {
                     <ChatContainer key={'ChatContainer' + this.props.user._id }
                                    peer={this.props.peer}
                                    user={this.props.user}
+                                   swapMode={this.props.swapMode.bind(this)}
                                    current_room={this.state.current_room}/>
                 </div>
             </div>
@@ -482,15 +485,58 @@ class RoomRack extends React.Component {
 
     componentDidMount() {
         $('#new-room-form').validator();
+        $('#join-room-form').validator();
     }
 
-    newRoom(e){
+    joinExisting(e){
+        e.preventDefault();
         let that = this;
         console.log(that.state);
         console.log(that.props);
         console.log(that.props.user_id);
+        let joinRoomInput = $('#join-room-input');
         let newRoomInput = $('#new-room-input');
+        let room_name = joinRoomInput.val();
+        if(room_name.length > 0){
+            // console.log(room_name);
+            $.ajax({
+                url: '/joinRoom',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    room_name: room_name,
+                    user_id: that.props.user_id
+                }),
+                success(data){
+                    console.log('Successfully created a new room!');
+                    console.log(data);
+
+
+
+                    let room = JSON.parse(data);
+
+                    joinRoomInput.val('');
+                    newRoomInput.val('');
+                    $('#newRoomModal').modal('toggle');
+                    that.props.addNewRoom(room);
+                },
+                error(err){
+                    console.log(err);
+                }
+            });
+        } else {
+            console.err('do something');
+        }
+    }
+
+    newRoom(e){
         e.preventDefault();
+        let that = this;
+        console.log(that.state);
+        console.log(that.props);
+        console.log(that.props.user_id);
+        let joinRoomInput = $('#join-room-input');
+        let newRoomInput = $('#new-room-input');
         let room_name = newRoomInput.val();
         if(room_name.length > 3){
             // console.log(room_name);
@@ -509,14 +555,15 @@ class RoomRack extends React.Component {
                     let room = JSON.parse(data);
 
                     that.props.addNewRoom(room);
+
+                    joinRoomInput.val('');
+                    newRoomInput.val('');
+                    $('#newRoomModal').modal('toggle');
                 },
                 error(err){
                     console.log(err);
                 }
             });
-
-            newRoomInput.val('');
-            $('#newRoomModal').modal('toggle');
         } else {
             console.err('do something');
         }
@@ -562,6 +609,16 @@ class RoomRack extends React.Component {
                                 <h4 className="modal-title">Create a Room</h4>
                             </div>
                             <div className="modal-body">
+                                <h3>Join an Existing Room</h3>
+                                <form id="join-room-form" role="form" data-toggle="validator"  onSubmit={this.joinExisting.bind(this)}>
+                                    <div className="form-group">
+                                        <label className="form-label" htmlFor="join-room-input">Enter a name for your Room here:</label>
+                                        <input id="join-room-input" className="form-control" type="text" required />
+                                    </div>
+                                    <button type="submit" className="btn btn-success">Submit</button>
+                                </form>
+                                <hr />
+                                <h3>Create a New Room</h3>
                                 <form id="new-room-form" role="form" data-toggle="validator" onSubmit={this.newRoom.bind(this)}>
                                     <div className="form-group">
                                         <label className="form-label" htmlFor="new-room-input">Enter a name for your Room here:</label>
@@ -875,8 +932,51 @@ class ChatContainer extends React.Component {
     peerSetup(p) {
         let that = this;
         if (p instanceof Peer) {
-            p.on('disconnect', function () {
-               console.log("You have been disconnected");
+            p.on('disconnected', function () {
+                console.log("Recon: ", recon);
+                if(recon === undefined){
+                    that.postNewData({
+                        type: 'notif',
+                        msg: "You have been disconnected from the server",
+                        timestamp: (new Date()).toUTCString()
+                    });
+                    recon = setInterval(function () {
+                        if(p.disconnected && connectionAttempts < 5){
+                            connectionAttempts++;
+                            that.postNewData({
+                                type: 'notif',
+                                msg: "Attempting to reconnect... ("+(connectionAttempts)+")",
+                                timestamp: (new Date()).toUTCString()
+                            });
+                            p.reconnect()
+                        } else if(connectionAttempts >= 5 && p.disconnected){
+                            clearInterval(recon);
+                            recon = undefined;
+                            that.postNewData({
+                                type: 'error',
+                                msg: "Lost Connection to the Server. Logging out.",
+                                timestamp: (new Date()).toUTCString()
+                            });
+                            connectionAttempts = 0;
+                            alert('Lost Connection to the Server.');
+                            delete_cookie("user");
+                            setTimeout(function () {
+                                that.props.swapMode(MODE.LOGIN);
+                            }, 2000);
+                        } else if(!p.disconnected){
+                            clearInterval(recon);
+                            recon = undefined;
+                            connectionAttempts = 0;
+                            that.postNewData({
+                                type: 'notif',
+                                msg: "You have been reconnected to the server.",
+                                timestamp: (new Date()).toUTCString()
+                            });
+                        }
+                    }, 3000);
+                } else {
+                    console.log("Recon is already defined as: ", recon);
+                }
             });
 
             p.on('connection', function (conn) {
@@ -1050,9 +1150,6 @@ class ChatContainer extends React.Component {
                 $.each(Object.keys(cons), function (i, v) {
                     cons[v].send(toServer);
                 });
-                // that.state.room.log.push(data);
-                // that.setState(that.state);
-                // that.autoScroll();
             }
         });
 
@@ -1298,8 +1395,12 @@ class App extends React.Component {
                 return <Login newUser={this.newUser.bind(this)} login={this.login.bind(this)}
                               swapMode={this.swapMode.bind(this)}/>;
             case MODE.PSYKE:
-                return <Psyke key={this.state.user._id} logout={this.logout.bind(this)} user={this.state.user}
-                              peer={this.state.peer}/>;
+                return <Psyke key={this.state.user._id}
+                              logout={this.logout.bind(this)}
+                              user={this.state.user}
+                              peer={this.state.peer}
+                              swapMode={this.swapMode.bind(this)}
+                />;
             case MODE.PSYKE_DEBUG:
                 return <Example />;
             case MODE.REGISTER:
