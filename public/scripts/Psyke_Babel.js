@@ -960,13 +960,15 @@ class ChatContainer extends React.Component {
 
     postNewData(data) {
         let that = this;
+        console.log(data);
         $.ajax({
             type: 'post',
             url: '/log',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success(d) {
-                console.log(d);
+            success(r) {
+                console.log(r);
+                console.log(data);
                 that.state.room.log.push(data);
                 that.setState(that.state);
                 that.autoScroll();
