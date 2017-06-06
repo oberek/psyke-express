@@ -88,10 +88,11 @@ app.post('/login', function (req, res) {
             console.log('user found');
             // console.log(user);
             console.log(user.password);
-            console.log(CryptoJS.AES.encrypt(req.body.password, secret));
-            if (user.password === CryptoJS.AES.encrypt(req.body.password, secret)) {
+            // console.log(CryptoJS.AES.encrypt(req.body.password, secret));
+            if (user.password === req.body.password) {
                 console.log('passwords match!');
                 var response = Object.assign({}, user.toJSON());
+                /*with SHA256 hashing, this line is no longer useful*/
                 delete response.password;
                 response._id = user._id;
                 console.log(response);
@@ -273,7 +274,11 @@ app.post('/getRoom', function (req, res) {
 
 app.post('/register', function (req, res) {
     var username = req.body.username;
-    var password = CryptoJS.AES.encrypt(req.body.password, secret);
+    // var password = CryptoJS.AES.encrypt(req.body.password, secret).toString();
+    // var password = CryptoJS.AES.encrypt(req.body.password, secret);
+    // var password = CryptoJS.SHA256(req.body.password);
+    var password = req.body.password;
+    console.log("p: ",password);
     db.User.find({username: username}).exec(function (err, usersFound) {
         if (err) console.error.bind(console, "MongoDB error");
 
