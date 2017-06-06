@@ -962,9 +962,12 @@ class ChatContainer extends React.Component {
         let that = this;
         console.log(data);
 
+        let obj = Object({}, data);
+        delete obj.sender.rooms;
+
         let toServer = {
             room_id: that.state.room._id,
-            obj: data
+            obj: obj
         };
 
         $.ajax({
