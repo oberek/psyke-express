@@ -962,7 +962,7 @@ class ChatContainer extends React.Component {
         let that = this;
         console.log(data);
 
-        let obj = Object({}, data);
+        let obj = Object.assign({}, data);
         console.log(obj);
         delete obj.sender.rooms;
 

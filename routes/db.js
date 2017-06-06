@@ -20,6 +20,14 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var Schema = mongoose.Schema;
 
 
+var UserSchema = Schema({
+    username: {type: String, required: true, unique: true},
+    password: {type: Object, required: true},
+    rooms: []
+});
+
+var User = mongoose.model('User', UserSchema);
+
 var RoomSchema = Schema({
     // room_id: String,
     room_name: {type: String, required: true, unique: true},
@@ -27,18 +35,10 @@ var RoomSchema = Schema({
     log: [{
         type: String,
         msg: String,
-        sender: String
+        sender: User
     }]
 });
-
-var UserSchema = Schema({
-    username: {type: String, required: true, unique: true},
-    password: {type: Object, required: true},
-    rooms: []
-});
-
 var Room = mongoose.model('Room', RoomSchema);
-var User = mongoose.model('User', UserSchema);
 
 var dummy_data = {
     rooms: [
