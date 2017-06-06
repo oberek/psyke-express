@@ -965,7 +965,8 @@ class ChatContainer extends React.Component {
             url: '/log',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success(data) {
+            success(d) {
+                console.log(d);
                 that.state.room.log.push(data);
                 that.setState(that.state);
                 that.autoScroll();
