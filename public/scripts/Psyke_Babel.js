@@ -978,7 +978,7 @@ class ChatContainer extends React.Component {
                     <ul className="streams">
                         {(this.state.room.streams).map((str) => {
                             return (
-                                <audio key={CryptoJS.SHA256(str).toString()} id={"stream-" + str._id} src={str.stream} autoPlay={true}>Stream</audio>
+                                <audio key={CryptoJS.SHA256(JSON.stringify(str)).toString()} id={"stream-" + str._id} src={str.stream} autoPlay={true}>Stream</audio>
                             );
                         })}
                     </ul>
