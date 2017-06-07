@@ -642,11 +642,6 @@ class ChatContainer extends React.Component {
                     type: 'notif',
                     timestamp: (new Date()).toUTCString()
                 });
-                that.postNewData({
-                    type: 'notif',
-                    timestamp: (new Date()).toUTCString(),
-                    msg: that.state.room.online_members[data.user_id].name + ' has joined the call.'
-                });
                 if (useVoice && that.state.room.inCall) {
                     let call = peer.call(data.user_id, window.localStream);
                     that.addCallStream(call);
