@@ -198,7 +198,10 @@ h1, h3 {
     padding: 10px;
 }
 
-
 .hidden{
     display: none;
+}
+
+.close {
+    float: right;
 }

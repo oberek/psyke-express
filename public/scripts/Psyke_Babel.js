@@ -18,7 +18,6 @@ let URL = window.URL || window.webkitURL;
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 const server_connection = {
     host: window.location.hostname,
-    // port: window.location.port || '8080',
     port: window.location.port,
     path: '/peer'
 };
@@ -31,15 +30,12 @@ const MODE = {
 };
 
 function inputValidator(evt){
-    // console.log(evt.target);
     let tar = evt.target;
     tar.value = tar.value.replace(/\W+/g, "");
 }
 
 window.onbeforeunload = function () {
     if (!peer.disconnected) {
-        // console.log('something');
-
         $.ajax({
             type: 'post',
             url: '/disconnect',
@@ -47,15 +43,10 @@ window.onbeforeunload = function () {
             data: JSON.stringify({
                 user_id: peer.id
             }),
-            success(data) {
-                // that.setState({mode: MODE.LOGIN, user: null, peer: that.state.peer});\
+            success() {
                 peer.destroy();
             }
         });
-
-        // fetch('/disconnect/' + peer.id).then((res) => {
-        //     confirm(res.status);
-        // });
     }
 };
 
@@ -88,29 +79,37 @@ function delete_cookie(name) {
     document.cookie = name + '=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
+class ErrorAlert extends React.Component{
+    render() {
+        return(
+            <div className="alert alert-danger alert-dismissable fade in">
+                <strong>Error!</strong> {this.props.msg} <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+            </div>
+        );
+    }
+}
+class WarningAlert extends React.Component{
+    render() {
+        return(
+            <div className="alert alert-warning alert-dismissable fade in">
+                <strong>Error!</strong> {this.props.msg} <a href="#" className="close" data-dismiss="alert" aria-label="close">&times;</a>
+            </div>
+        );
+    }
+}
+
 class Login extends React.Component {
-    //    constructor(props) {
-    //        super(props);
-    //        let that=this;
-    //        this.state={that: that};
-    //    }
-
-
+    state = {error: null};
     attemptLogin(e) {
-        // let component=this;
-        // console.log(component);
         e.preventDefault();
-
-        // console.log('Attempting login...');
-        // console.log(this);
         let that = this;
-        let error_container = $('#login-error');
         let z_username = $('#login_username').val().toString();
         let z_password = $('#login_password').val().toString();
         z_password = CryptoJS.SHA256(z_password).toString();
-        if (z_username === "" || z_password === "") {
-            error_container.toggleClass('hidden', false);
-            error_container.text('You need to provide a username and password');
+        if (z_username === "" || z_password === CryptoJS.SHA256("").toString()) {
+            this.setState({
+                error: <ErrorAlert msg="You need to provide a username and password" />
+            });
         } else {
             $.ajax({
                 type: 'POST',
@@ -121,37 +120,22 @@ class Login extends React.Component {
                     password:z_password
                 }),
                 success(data) {
-                    // console.log('Success');
-                    // console.log(data);
                     let d = JSON.parse(data);
                     setCookie('user', JSON.stringify(d), 15 * 60);
                     that.props.login(MODE.PSYKE, d);
                 },
                 error(err) {
-                    error_container.text("Status: " + err.status + " \nStatus Code: " + err.statusCode);
-                    // console.log('err');
-                    console.error('Error: ', err);
-                    // db.users += JSON.stringify({
-                    //     username: z_username,
-                    //     password: z_password
-                    // });
-                    // that.props.register(MODE.REGISTER, null);
+                    if(err.status === 403){
+                        that.setState({
+                            error: <ErrorAlert msg="Invalid username or password"/>
+                        });
+                    } else if(err.status === 404){
+                        that.setState({
+                            error: <ErrorAlert msg="No user with that username exists."/>
+                        });
+                    }
                 }
             });
-
-            // fetch('/login/' + z_username + '/' + z_password)
-            //     .then(res => res.json())
-            //     .then((d) => {
-            //         console.log(d);
-            //         if (d.result) {
-            //             //do something
-            //             setCookie('user', JSON.stringify(d.result), 15 * 60);
-            //             this.props.login(MODE.PSYKE, d.result);
-            //         } else {
-            //             error_container.text('Username or Password are incorrect');
-            //             error_container.toggleClass('hidden', false);
-            //         }
-            //     });
         }
     }
 
@@ -172,29 +156,25 @@ class Login extends React.Component {
         return (
             <div className="container">
                 <h1>Login</h1>
-                <span id="login-error" className="hidden"> errors go here </span>
+                <div id="login-errors">
+                    {(this.state.error === undefined)?"":this.state.error}
+                </div>
                 <form id="login-form" data-toggle="validator" onSubmit={this.attemptLogin.bind(this)}>
                     <div className="form-group">
                         <label htmlFor="username"> Username: </label>
-                        <input id="login_username" className="form-control" name="username" type="text"
-                               placeholder="Username" required/>
+                        <input id="login_username" className="form-control" name="username" type="text" placeholder="Username" required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password"> Password: </label> <input id="login_password"
-                                                                             className="form-control" name="password"
-                                                                             type="password" placeholder="Password"
-                                                                             required/>
+                        <label htmlFor="password"> Password: </label> <input id="login_password" className="form-control" name="password" type="password" placeholder="Password" required/>
                     </div>
-                    <input className="btn btn-success" type="submit" value="Submit"
-                           onClick={ this.attemptLogin.bind(this) }/>
+                    <input className="btn btn-success" type="submit" value="Submit" onClick={ this.attemptLogin.bind(this) }/>
                 </form>
-                {/*<p> Don 't have an account? <a onClick={this.registerOnClickHandler()} >Register</a> for a new one</p> */}
                 <button className="btn btn-primary" onClick={this.registerOnClickHandler()}> Register</button>
-
             </div>
         );
     };
 }
+
 class Register extends React.Component {
     constructor(props) {
         super(props);
@@ -205,21 +185,15 @@ class Register extends React.Component {
     }
 
     attemptRegister(e) {
-        // let component=this;
-        // console.log(component);
         e.preventDefault();
-
-        // console.log('Attempting register...');
-        // console.log(this);
         let that = this;
-        let error_container = $('#register-error');
         let z_username = $('#register_username').val().toString();
         let z_password = $('#register_password').val().toString();
         z_password = CryptoJS.SHA256(z_password).toString();
-        // console.log(z_username + "::" + z_password);
         if (z_username === "" || z_password === "") {
-            error_container.toggleClass('hidden', false);
-            error_container.text('You need to provide a username and password');
+            that.setState({
+                error: <ErrorAlert msg="You need to provide a username and password"/>
+            });
         } else {
             $.ajax({
                 type: 'POST',
@@ -230,36 +204,19 @@ class Register extends React.Component {
                     password: z_password
                 }),
                 success(data) {
-                    // console.log('Success');
-                    // console.log(data);
                     let d = JSON.parse(data);
-                    // console.log(d);
                     setCookie('user', JSON.stringify(d), 15 * 60);
                     that.props.register(MODE.PSYKE, d);
                 },
                 error(err) {
-                    // console.log('err');
-                    console.err("Error: ", err);
-                    // db.users += JSON.stringify({
-                    //     username: z_username,
-                    //     password: z_password
-                    // });
+                    console.error("Error: ", err);
+                    if(err.status === 403){
+                        that.setState({
+                            error: <WarningAlert msg="Username is already taken"/>
+                        });
+                    }
                 }
             });
-
-            // fetch('/register/' + z_username + '/' + z_password)
-            //     .then(res => res.json())
-            //     .then((d) => {
-            //         console.log(d);
-            //         if (d.result) {
-            //             //do something
-            //             setCookie('user', JSON.stringify(d.result), 15 * 60);
-            //             this.props.register(MODE.PSYKE, d.result);
-            //         } else {
-            //             error_container.text('Username or Password are incorrect');
-            //             error_container.toggleClass('hidden', false);
-            //         }
-            //     });
         }
     }
 
@@ -280,7 +237,8 @@ class Register extends React.Component {
         return (
             <div className="container">
                 <h1>Register</h1>
-                <span id="register-error" className="hidden"> errors go here </span>
+                <div id="register-errors">
+                </div>
                 <form id="register-form" data-toggle="validator" role="form"
                       onSubmit={ this.attemptRegister.bind(this) }>
                     <div className="form-group">
@@ -305,7 +263,6 @@ class Register extends React.Component {
                         </div>
                     </div>
                     <div className="form-group">
-                        {/*<button type="submit" className="btn btn-primary">Submit</button>*/}
                         <input className="btn btn-success" type="submit" value="Submit"/>
                     </div>
                 </form>
@@ -314,50 +271,6 @@ class Register extends React.Component {
             </div>
         );
     };
-}
-
-class Example extends React.Component {
-    state = {
-        users: [],
-        rooms: {}
-    };
-
-    componentDidMount() {
-        fetch('/users')
-            .then(res => res.json())
-            .then(users => {
-                fetch('/rooms')
-                    .then(res => res.json())
-                    .then(rooms => this.setState({
-                        users, rooms
-                    }));
-            });
-    }
-
-    render() {
-        return ( <div className="App">
-                <h1> Users </h1> {
-                this.state.users.map(user =>
-                    <div key={
-                        user._id
-                    }> Username: {
-                        user.username
-                    } <br />
-                        Rooms:
-                        <ul className="rooms"> {
-                            user.rooms.map(_id => {
-                                return ( <li key={
-                                    _id
-                                }> {
-                                    this.state.rooms[_id].room_name
-                                } </li>);
-                            })
-                        } </ul>
-                    </div>
-                )
-            } </div>
-        );
-    }
 }
 
 class Psyke extends React.Component {
@@ -374,50 +287,9 @@ class Psyke extends React.Component {
     componentDidMount() {
         let user = this.props.user;
         let that = this;
-        // console.log(JSON.stringify(user));
-        // console.log(user);
-        // console.log(user.rooms);
-        // that.setState({
-        //     current_room: user.rooms[0]._id,
-        //     rooms: user.rooms
-        // });
-
         that.state.current_room = user.rooms[0]._id;
         that.state.rooms = user.rooms;
-        // console.log(that.state.rooms);
-
         that.setState(that.state);
-
-        // $.ajax({
-        //     type: 'POST',
-        //     url: '/getUserRooms',
-        //     contentType: 'application/json',
-        //     data: JSON.stringify({
-        //         user_id: user._id
-        //     }),
-        //     success(data) {
-        //         console.log('Success');
-        //         console.log(data);
-        //         let r=JSON.parse(data);
-        //
-        //         let rms=[];
-        //         $.each(r, (i, v) => {
-        //             rms.push(v);
-        //         });
-        //         that.setState({
-        //             current_room: rms[0]._id,
-        //             rooms: rms
-        //         });
-        //
-        //         // let d=JSON.parse(data);
-        //         // setCookie('user', JSON.stringify(d.result), 15 * 60);
-        //         // that.props.login(MODE.PSYKE, d.result);
-        //     },
-        //     error(err) {
-        //         console.log('err');
-        //         console.log(err);
-        //     }
-        // });
     }
 
     updateCurrentRoom(_id) {
@@ -425,7 +297,6 @@ class Psyke extends React.Component {
             current_room: _id,
             rooms: this.state.rooms
         });
-        // console.log('should update chat container props');
     }
 
     render() {
@@ -456,14 +327,18 @@ class Psyke extends React.Component {
 class RoomRack extends React.Component {
     state = {
         current_room: null,
-        rooms: []
+        rooms: [],
+        errors: {
+            newRoom: false,
+            joinRoom: false
+        }
     };
 
     updateCurrentRoom(_id) {
-        // console.log(_id);
         this.setState({
             current_room: _id,
-            rooms: this.state.rooms
+            rooms: this.state.rooms,
+            errors: this.state.errors
         });
         this.props.updateCurrentRoom(_id);
     }
@@ -471,7 +346,8 @@ class RoomRack extends React.Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             current_room: nextProps.current_room,
-            rooms: nextProps.rooms
+            rooms: nextProps.rooms,
+            errors: this.state.errors
         });
     }
 
@@ -484,14 +360,10 @@ class RoomRack extends React.Component {
     joinExisting(e){
         e.preventDefault();
         let that = this;
-        // console.log(that.state);
-        // console.log(that.props);
-        // console.log(that.props.user_id);
         let joinRoomInput = $('#join-room-input');
         let newRoomInput = $('#new-room-input');
         let room_name = joinRoomInput.val();
         if(room_name.length > 0){
-            // console.log(room_name);
             $.ajax({
                 url: '/joinRoom',
                 type: 'POST',
@@ -501,38 +373,36 @@ class RoomRack extends React.Component {
                     user_id: that.props.user_id
                 }),
                 success(data){
-                    // console.log('Successfully created a new room!');
-                    // console.log(data);
-
-
-
                     let room = JSON.parse(data);
-
                     joinRoomInput.val('');
                     newRoomInput.val('');
                     $('#newRoomModal').modal('toggle');
                     that.props.addNewRoom(room);
                 },
                 error(err){
-                    console.err('Error: ', err);
+                    if(err.status === 404){
+                        that.state.errors.joinRoom = <WarningAlert msg="No room with that name exists"/>;
+                    } else if(err.status === 403){
+                        that.state.errors.joinRoom = <WarningAlert msg="You have already joined that room."/>;
+                    } else {
+                        that.state.errors.joinRoom = <ErrorAlert msg="CRITICAL ERROR: See console for detailed information"/>;
+                    }
+                    that.setState(that.state);
                 }
             });
         } else {
-            console.err('do something');
+            that.state.errors.joinRoom = <WarningAlert msg="You must provide a name for the room."/>;
+            that.setState(that.state);
         }
     }
 
     newRoom(e){
         e.preventDefault();
         let that = this;
-        // console.log(that.state);
-        // console.log(that.props);
-        // console.log(that.props.user_id);
         let joinRoomInput = $('#join-room-input');
         let newRoomInput = $('#new-room-input');
         let room_name = newRoomInput.val();
         if(room_name.length > 3){
-            // console.log(room_name);
             $.ajax({
                 url: '/newRoom',
                 type: 'POST',
@@ -542,47 +412,35 @@ class RoomRack extends React.Component {
                     user_id: that.props.user_id
                 }),
                 success(data){
-                    // console.log('Successfully created a new room!');
-                    // console.log(data);
-
                     let room = JSON.parse(data);
-
                     that.props.addNewRoom(room);
-
                     joinRoomInput.val('');
                     newRoomInput.val('');
                     $('#newRoomModal').modal('toggle');
                 },
                 error(err){
-                    console.err('Error ', err);
+                    if(err.status === 403){
+                        that.state.errors.newRoom = <WarningAlert msg="A Room already exists with that name"/>;
+                        that.setState(that.state);
+                    }
                 }
             });
         } else {
-            console.err('do something');
+            that.state.errors.joinRoom = <WarningAlert msg="You must provide a name for the room."/>;
+            that.setState(that.state);
         }
     }
 
     render() {
         return (
             <div id="room-rack">
-                <h4> Room
-                    Rack </h4> { /*eventually turn the list into a list of new components, but a list of names is good for now*/ }
+                <h4> Room Rack </h4>
                 <ul id="room-list"> {
                     this.state.rooms.map((room) => {
-                        return ( <li key={
-                            room._id
-                        }>
-                            <button id={
-                                room._id
-                            }
-                                    className={
-                                        (this.state.current_room === room._id ? "current " : "") + "room btn"
-                                    }
-                                    onClick={
-                                        () => this.updateCurrentRoom(room._id)
-                                    }> {
-                                room.room_name
-                            } </button>
+                        return ( <li key={ room._id }>
+                            <button id={ room._id } className={ (this.state.current_room === room._id ? "current " : "") + "room btn" } onClick={ () => this.updateCurrentRoom(room._id) }>
+                                { room.room_name }
+                            </button>
                         </li>);
                     })
                 } </ul>
@@ -602,6 +460,9 @@ class RoomRack extends React.Component {
                                 <h4 className="modal-title">Create a Room</h4>
                             </div>
                             <div className="modal-body">
+                                <div id="join-room-errors">
+                                    {(this.state.errors.joinRoom)?this.state.errors.joinRoom:""}
+                                </div>
                                 <h3>Join an Existing Room</h3>
                                 <form id="join-room-form" role="form" data-toggle="validator"  onSubmit={this.joinExisting.bind(this)}>
                                     <div className="form-group">
@@ -611,6 +472,9 @@ class RoomRack extends React.Component {
                                     <button type="submit" className="btn btn-success">Submit</button>
                                 </form>
                                 <hr />
+                                <div id="new-room-errors">
+                                    {(this.state.errors.newRoom)?this.state.errors.newRoom:""}
+                                </div>
                                 <h3>Create a New Room</h3>
                                 <form id="new-room-form" role="form" data-toggle="validator" onSubmit={this.newRoom.bind(this)}>
                                     <div className="form-group">
@@ -664,31 +528,6 @@ class Message extends React.Component {
     }
 }
 
-// class UserLi extends React.Component{
-//     render(){
-//         if(this.props.inCall){
-//             if(this.props.localUser===this.props.user._id){
-//                 //it's the local user... add the mute button
-//             } else {
-//                 return(
-//                     //localUser={this.props.peer.id} inCall={this.state.room.inCall} user={user}
-//                     <li className="user">
-//                         {this.props.user.username}
-//                         <audio src={this.props.call.s}></audio>
-//                     </li>
-//                 );
-//             }
-//         } else {
-//             return(
-//                 //localUser={this.props.peer.id} inCall={this.state.room.inCall} user={user}
-//                 <li className="user">
-//                     {this.props.user.username}
-//                 </li>
-//             );
-//         }
-//     }
-// }
-
 class ChatContainer extends React.Component {
     state = {
         room: {
@@ -700,17 +539,11 @@ class ChatContainer extends React.Component {
     };
 
     componentDidMount() {
-        // console.log(this.props);
         this.peerSetup(this.props.peer);
-        // console.log(typeof this.state.room.log);
     }
 
     componentWillReceiveProps(nextProps) {
         let that = this;
-        // console.log('ChatComponent - componentWillReceiveProps');
-        // $.each(Object.values(cons), function (i, v) {
-        //     console.log(v);
-        // });
 
         $.each(Object.keys(cons), function (i, v) {
             cons[v].close();
@@ -726,28 +559,19 @@ class ChatContainer extends React.Component {
                 user_id: nextProps.user._id
             }),
             success(data) {
-                // console.log('Success');
-                // console.log(data);
-                // console.log(JSON.parse(data));
                 let r = JSON.parse(data);
-                // console.log('connected local user to the room with id ' + nextProps.current_room);
                 r.users = {};
                 r.streams = [];
-                // console.log(nextProps.user._id);
                 r.users[nextProps.user._id] = nextProps.user;
                 r.log.unshift(that.state.room.log[0]);
                 that.state.room = r;
                 that.setState(that.state);
-                // console.log(r);
 
                 $.each(r.online_members, function (i, peer_id) {
-                    // console.log(peer_id, peer.id);
                     if (peer_id !== nextProps.peer.id) {
                         let conn = peer.connect(peer_id);
-                        // console.log(conn);
                         that.addDataConnection(conn);
                     } else {
-                        // console.log('add self to users list');
                     }
                 });
 
@@ -757,7 +581,6 @@ class ChatContainer extends React.Component {
 
     decodeData(data) {
         let that = this;
-        // console.log(data);
         switch (data.type) {
             case 'info-request':
                 cons[data.user_id].send({
@@ -778,28 +601,14 @@ class ChatContainer extends React.Component {
                             timestamp: (new Date()).toUTCString()
                         });
                     }
-                    // that.postNewNotif({msg: data.user.username + ' has joined the chat'});
                     let room = that.state.room;
-                    // room.inCall = false;
-                    // console.log(data.user);
                     room.users[data.user._id] = data.user;
                     that.setState({room: room});
-                    // console.log('user info added');
-                    // that.forceUpdate();
                 }
-                // room.online_members[data.user_id] = data.content;
-                // addUser(data.content);
                 break;
             case 'message':
-            // that.postNewData(data);
-            // // that.postNewMessage(data);
-            // that.state.room.log.push(data);
-            // break;
             case 'whisper':
                 that.postNewData(data);
-                // // that.postNewWhisper(data);
-                // that.state.room.log.push(data);
-                // that.forceUpdate();
                 break;
             case 'disconnect':
                 that.postNewData({
@@ -807,8 +616,6 @@ class ChatContainer extends React.Component {
                     type: 'notif',
                     timestamp: (new Date()).toUTCString()
                 });
-                // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has left the chat.'});
-                // dropUser(data.user_id);
                 break;
             case 'call-request':
                 that.postNewData({
@@ -816,7 +623,11 @@ class ChatContainer extends React.Component {
                     type: 'notif',
                     timestamp: (new Date()).toUTCString()
                 });
-                // that.postNewNotif({msg: room.online_members[data.user_id].name + ' has joined the call.'});
+                that.postNewData({
+                    type: 'notif',
+                    timestamp: (new Date()).toUTCString(),
+                    msg: room.online_members[data.user_id].name + ' has joined the call.'
+                });
                 if (useVoice && that.state.room.inCall) {
                     let call = peer.call(data.user_id, window.localStream);
                     that.addCallStream(call);
@@ -834,7 +645,11 @@ class ChatContainer extends React.Component {
                 }
                 break;
             default:
-                that.postNewData({msg: JSON.stringify(data), type: 'err', timestamp: (new Date()).toUTCString()});
+                that.postNewData({
+                    msg: JSON.stringify(data),
+                    type: 'err',
+                    timestamp: (new Date()).toUTCString()
+                });
                 break;
         }
     }
@@ -844,26 +659,16 @@ class ChatContainer extends React.Component {
         call.answer(window.localStream);
         if (calls[call.peer] === undefined) {
             calls[call.peer] = call;
-            // let user_li = $('#user-' + call.peer);
-            //console.log('waiting for stream');
             call.on('stream', function (stream) {
-                // user_li.append($('<audio controls class="hidden userstream" id="audio-' + call.peer + '" src="' + URL.createObjectURL(stream) + '" autoplay></audio>'));
-                // $('#user-'+call.peer).append(<audio id={'stream-'+call.peer} autoPlay={true} src={URL.createObjectURL(stream)}>User Stream</audio>);
                 let str = {
                     id: call.peer,
                     stream: URL.createObjectURL(stream)
                 };
                 that.state.room.streams.push(str);
                 that.setState(stream);
-                // that.forceUpdate();
             });
             call.on('close', function () {
                 $('#stream-' + call.peer).remove();
-                // console.log('something');
-                // if(that.state.room.inCall){
-                // that.postNewData({msg: that.state.room.users[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
-                // }
-                // that.postNewNotif({msg: room.online_members[call.peer].username + ' has left the call'});
                 delete calls[call.peer];
             });
         }
@@ -876,18 +681,12 @@ class ChatContainer extends React.Component {
         });
 
         conn.on('close', function () {
-            // console.log(that.state.room);
-            // console.log(that.state.room.users);
-            // console.log(that.state.room.users[conn.peer]);
             if(that.state.room.users[conn.peer] !== undefined){
                 that.postNewData({
                     msg: that.state.room.users[conn.peer].username + ' has left the chat',
                     type: 'notif',
                     timestamp: (new Date()).toUTCString()
                 });
-                // that.postNewNotif({msg: that.state.room.users[this.peer].username + ' has left the chat'});
-                // dropUser(this.peer);
-                // console.log(conn.peer, 'has disconnected');
                 let new_state = Object.assign({}, that.state);
                 delete new_state.room.users[conn.peer];
                 that.setState(new_state);
@@ -900,22 +699,17 @@ class ChatContainer extends React.Component {
 
         conn.on('error', function (err) {
             that.postNewData({msg: err, type: 'err', timestamp: (new Date()).toUTCString()});
-            // that.postNewError({msg: err});
-            // console.log(err);
         });
     }
 
     addDataConnection(conn) {
         let that = this;
-        // console.log(conn);
         cons[conn.peer] = conn;
         if (conn.open) {
             that.addConnEventListeners(conn);
             conn.send({type: 'info-request', user_id: peer.id});
         } else {
-            // console.log('waiting for conn to open');
             conn.on('open', function () {
-                // console.log('conn has opened');
                 that.addConnEventListeners(conn);
                 conn.send({type: 'info-request', user_id: peer.id});
             });
@@ -926,7 +720,6 @@ class ChatContainer extends React.Component {
         let that = this;
         if (p instanceof Peer) {
             p.on('disconnected', function () {
-                // console.log("Recon: ", recon);
                 if(recon === undefined){
                     that.postNewData({
                         type: 'notif',
@@ -967,14 +760,10 @@ class ChatContainer extends React.Component {
                             });
                         }
                     }, 3000);
-                } else {
-                    // console.log("Recon is already defined as: ", recon);
                 }
             });
 
             p.on('connection', function (conn) {
-                // console.log(conn);
-                // console.log('Peer with id (' + conn.peer + ') has connected to you');
                 that.addDataConnection(conn);
                 conn.send({type: 'info-request', user_id: p._id});
             });
@@ -994,29 +783,19 @@ class ChatContainer extends React.Component {
         let that = this;
 
         function step2() {
-            // console.log('step2');
             if (useVoice) {
                 $.each(Object.values(cons), function (i, conn) {
-                    // console.log(conn);
                     if (that.state.room.inCall) {
-                        //disconnect from the call
                         cons[conn.peer].send({type: 'hangup', user: that.state.room.users[that.props.peer.id]})
                         delete calls[conn.peer];
                     } else {
-                        //request the other peer to call me
                         conn.send({type: 'call-request', user_id: that.props.peer.id});
                     }
                 });
                 that.state.room.inCall = !that.state.room.inCall;
                 that.setState(that.state);
-                // that.setState({room: that.state.room, inCall: !that.state.inCall, useVoice: that.state.useVoice});
-            } else {
-                // console.log('useVoice is false');
             }
-            // that.forceUpdate();
         }
-
-        // console.log(navigator);
 
         if (window.localStream === undefined) {
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
@@ -1024,24 +803,15 @@ class ChatContainer extends React.Component {
                 window.localStream = stream;
                 step2();
             }, function () {
-                // console.log(window.localStream);
                 that.postNewData(
                     {
                         type: 'error',
                         msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https',
                         timestamp: (new Date()).toUTCString()
                     });
-                // that.postNewError(
-                //     {
-                //         type: 'error',
-                //         msg: 'Something went wrong with your input devices. Aborting call\nPlease check your audio devices and make sure your are using https',
-                //         timestamp: (new Date()).toUTCString()
-                //     });
-                // console.log()
                 console.error('shit happened');
             });
         } else {
-            // console.log('window.localStream already initialized');
             step2();
         }
     }
@@ -1052,69 +822,13 @@ class ChatContainer extends React.Component {
     }
 
     postNewData(data) {
-        // let that = this;
-        // console.log(data);
         this.state.room.log.push(data);
         this.autoScroll();
         this.setState(this.state);
-
-        // let obj = Object.assign({}, data);
-        // console.log(obj);
-        // delete obj.sender.rooms;
-        // delete obj.sender.__v;
-        //
-        // let toServer = {
-        //     room_id: that.state.room._id,
-        //     obj: obj
-        // };
-        //
-        // $.ajax({
-        //     type: 'post',
-        //     url: '/log',
-        //     contentType: 'application/json',
-        //     data: JSON.stringify(toServer),
-        //     success(r) {
-        //         console.log(r);
-        //         console.log(data);
-        //     }
-        // });
     }
-
-    postNewError(err) {
-        // let messages = $('#messages');
-        // messages.append($('<li class="message error">').text('ERROR: ' + err.msg));
-        this.state.room.log.push(err);
-        this.autoScroll();
-    };
-
-    postNewNotif(msg) {
-        // let messages = $('#messages');
-        // messages.append($('<li class="message notif">').text('!! ' + msg.msg));
-        this.state.room.log += msg;
-        this.autoScroll();
-    };
-
-    postNewMessage(data) {
-        // let messages = $('#messages');
-        // console.log(this);
-        // messages.append($('<li class="message">').text(this.state.room.users[data.user_id].username + ': ' + data.content));
-        this.state.room.log += data;
-        this.autoScroll();
-    };
-
-    postNewWhisper(whisper) {
-        // let messages = $('#messages');
-        // messages.append($('<li class="message whisper">').text(((whisper.sender === this.props.peer.id) ? 'To' : 'From') + ' ' + ((whisper.sender === this.props.peer.id) ? this.state.room.users[whisper.target].username : this.state.room.users[whisper.sender].username) + ': ' + whisper.content));
-        this.autoScroll();
-    };
 
     broadcast(msg) {
         let that = this;
-        // console.log(this);
-        // console.log(this.state);
-        // console.log(this.state.room);
-        // console.log(this.state.room.users);
-        // console.log(msg);
         let data = {
             type: 'message',
             sender: this.state.room.users[this.props.peer.id],
@@ -1123,7 +837,6 @@ class ChatContainer extends React.Component {
         };
 
         let obj = Object.assign({}, data);
-        // console.log(obj);
         delete obj.sender.rooms;
         delete obj.sender.__v;
 
@@ -1137,17 +850,13 @@ class ChatContainer extends React.Component {
             url: '/log',
             contentType: 'application/json',
             data: JSON.stringify(toServer),
-            success(r) {
-                // console.log(r);
-                // console.log(data);
+            success() {
                 that.postNewData(data);
                 $.each(Object.keys(cons), function (i, v) {
                     cons[v].send(data);
                 });
             }
         });
-
-        // that.postNewMessage(data);
     }
 
     sendMessage(e) {
@@ -1168,7 +877,6 @@ class ChatContainer extends React.Component {
                         type: 'error',
                         timestamp: (new Date()).toUTCString()
                     });
-                    // that.postNewError({msg: 'You must supply a username to whisper to.'});
                 } else {
                     let unam = splitter[0].substr(msg.indexOf('@') + 1);
                     if (unam === room.users[that.props.peer.id].username) {
@@ -1177,7 +885,6 @@ class ChatContainer extends React.Component {
                             type: 'error',
                             timestamp: (new Date()).toUTCString()
                         });
-                        // that.postNewError({msg: 'You can\'t whisper to yourself', type: 'error'});
                     } else {
                         let target = null;
                         $.each(Object.keys(room.users), function (i, v) {
@@ -1188,7 +895,6 @@ class ChatContainer extends React.Component {
                         });
                         if (target === null) {
                             that.postNewData({msg: 'User not found.', timestamp: (new Date()).toUTCString()});
-                            // that.postNewError({msg: 'User not found.'});
                         } else {
                             let msg_content = msg.substr(msg.indexOf(splitter[1]));
                             let whisper = {
@@ -1198,7 +904,6 @@ class ChatContainer extends React.Component {
                                 sender: that.state.room.users[that.props.peer.id],
                                 timestamp: (new Date()).toUTCString()
                             };
-                            // that.postNewWhisper(whisper);
                             that.postNewData(whisper);
                             cons[target._id].send(whisper);
                         }
@@ -1206,7 +911,6 @@ class ChatContainer extends React.Component {
                 }
             } else {
                 that.postNewData({msg: 'You must supply a message', type: 'error'});
-                // that.postNewError({msg: 'You must supply a message'});
             }
         }
         else {
@@ -1220,13 +924,10 @@ class ChatContainer extends React.Component {
         return (
             <div id="chat-container">
                 <div id="chat">
-                    {/*<h3>Chatlog for {this.state.room.room_name}</h3>*/}
                     <ul id="messages">
                         {(this.state.room.log).map((msg) => {
                             switch (msg.type) {
                                 case 'message':
-                                // {console.log(CryptoJS.SHA256(JSON.stringify(msg)))}
-                                // {console.log(CryptoJS.SHA256(JSON.stringify(msg)).toString())}
                                     return <Message id={CryptoJS.SHA256(JSON.stringify(msg)).toString()} key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} room={this.state.room} sender={msg.sender} message={msg.msg}/>;
                                     break;
                                 case 'whisper':
@@ -1242,20 +943,17 @@ class ChatContainer extends React.Component {
                         })}
                     </ul>
                     <form id="message-box" onSubmit={this.sendMessage.bind(this)}>
-                        <input id="user-input" type="text" required={true} autoComplete="off"
-                               placeholder="Enter Message here, or @USERNAME to whisper someone"/>
+                        <input id="user-input" type="text" required={true} autoComplete="off" placeholder="Enter Message here, or @USERNAME to whisper someone"/>
                         <input type="file" className="hidden" accept="image/*|audio/*|video/*"/>
                         <button id="send-message">Send</button>
                     </form>
                 </div>
                 <div id="user-rack">
-                    <button id="call" className={(this.state.room.inCall) ? "muted" : ""}
-                            onClick={this.joinCall.bind(this)}>{(this.state.room.inCall) ? "Leave Call" : "Join Call"}</button>
+                    <button id="call" className={(this.state.room.inCall) ? "muted" : ""} onClick={this.joinCall.bind(this)}>{(this.state.room.inCall) ? "Leave Call" : "Join Call"}</button>
                     <h3>Users</h3>
                     <ul id="current-users">
                         {Object.values(this.state.room.users).map((user) => {
                             return (
-                                //localUser={this.props.peer.id} inCall={this.state.room.inCall} user={user}
                                 <li key={user._id} id={"user-" + user._id} className="user">
                                     {user.username}
                                     {this.state.room.inCall ? peer.id === user._id ? <MuteButton /> : '' : ''}
@@ -1266,8 +964,7 @@ class ChatContainer extends React.Component {
                     <ul className="streams">
                         {(this.state.room.streams).map((str) => {
                             return (
-                                <audio key={str._id} id={"stream-" + str._id} src={str.stream} autoPlay={true}>
-                                    Stream</audio>
+                                <audio key={str._id} id={"stream-" + str._id} src={str.stream} autoPlay={true}>Stream</audio>
                             );
                         })}
                     </ul>
@@ -1290,13 +987,10 @@ class MuteButton extends React.Component {
     }
 
     render() {
-        return ( <button onClick={
-                this.MuteLocal
-            }
-                         className={
-                             this.state.muted ? 'muted' : ''
-                         }>
-                <i className="fa fa-microphone-slash"> </i></button>
+        return (
+            <button onClick={ this.MuteLocal } className={ this.state.muted ? 'muted' : '' }>
+                <i className="fa fa-microphone-slash"> </i>
+            </button>
         );
     }
 }
@@ -1311,9 +1005,7 @@ class App extends React.Component {
     componentDidMount() {
         let cookie_data = getCookie('user');
         if (cookie_data) {
-            // console.log(cookie_data);
             let user = JSON.parse(cookie_data);
-            // this.setState({mode: MODE.PSYKE, user: user});
             peer = new Peer(user._id, server_connection);
             this.setState({
                 mode: MODE.PSYKE,
@@ -1341,7 +1033,7 @@ class App extends React.Component {
             data: JSON.stringify({
                 user_id: this.state.user._id
             }),
-            success(data) {
+            success() {
                 that.setState({
                     mode: MODE.LOGIN,
                     user: null,
@@ -1356,6 +1048,11 @@ class App extends React.Component {
         });
 
         peer.destroy();
+
+        if(recon !== undefined){
+            clearInterval(recon);
+            recon = undefined;
+        }
     }
 
     login(mode, user) {
@@ -1368,7 +1065,6 @@ class App extends React.Component {
     }
 
     register(mode, user) {
-        // console.log(user);
         peer = new Peer(user._id, server_connection);
         this.setState({
             mode: mode,
@@ -1389,15 +1085,9 @@ class App extends React.Component {
     rendererMode() {
         switch (this.state.mode) {
             case MODE.LOGIN:
-                return <Login newUser={this.newUser.bind(this)} login={this.login.bind(this)}
-                              swapMode={this.swapMode.bind(this)}/>;
+                return <Login newUser={this.newUser.bind(this)} login={this.login.bind(this)} swapMode={this.swapMode.bind(this)}/>;
             case MODE.PSYKE:
-                return <Psyke key={this.state.user._id}
-                              logout={this.logout.bind(this)}
-                              user={this.state.user}
-                              peer={this.state.peer}
-                              swapMode={this.swapMode.bind(this)}
-                />;
+                return <Psyke key={this.state.user._id} logout={this.logout.bind(this)} user={this.state.user} peer={this.state.peer} swapMode={this.swapMode.bind(this)} />;
             case MODE.PSYKE_DEBUG:
                 return <Example />;
             case MODE.REGISTER:
