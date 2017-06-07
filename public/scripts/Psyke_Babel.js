@@ -189,10 +189,21 @@ class Register extends React.Component {
         let that = this;
         let z_username = $('#register_username').val().toString();
         let z_password = $('#register_password').val().toString();
-        z_password = CryptoJS.SHA256(z_password).toString();
-        if (z_username === "" || z_password === "") {
+        let pass_confirm = $('#inputPasswordConfirm').val().toString();
+        // z_password = CryptoJS.SHA256(z_password).toString();
+        // pass_confirm = CryptoJS.SHA256(pass_confirm).toString();
+        let passHash = CryptoJS.SHA256(z_password).toString();
+        if(pass_confirm === ""){
+            that.setState({
+                error: <ErrorAlert msg="Please confirm your password" />
+            });
+        } else if (z_username === "" || z_password === "") {
             that.setState({
                 error: <ErrorAlert msg="You need to provide a username and password"/>
+            });
+        } else if(z_password !== pass_confirm){
+            that.setState({
+                error: <ErrorAlert msg="Passwords do not match!"/>
             });
         } else {
             $.ajax({
@@ -201,7 +212,7 @@ class Register extends React.Component {
                 contentType: 'application/json',
                 data: JSON.stringify({
                     username: z_username,
-                    password: z_password
+                    password: passHash
                 }),
                 success(data) {
                     let d = JSON.parse(data);
