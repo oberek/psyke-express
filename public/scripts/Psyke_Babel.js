@@ -1002,7 +1002,7 @@ class MuteButton extends React.Component {
 
     render() {
         return (
-            <button onClick={ this.MuteLocal } className={ this.state.muted ? 'muted' : '' }>
+            <button onClick={ this.MuteLocal } className={ (this.state.muted ? 'btn-info' : '') + ' btn' }>
                 <i className="fa fa-microphone-slash"> </i>
             </button>
         );
