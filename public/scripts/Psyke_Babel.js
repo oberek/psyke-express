@@ -14,13 +14,6 @@ let useVoice = false;
 let connectionAttempts = 0;
 let recon;
 
-function updatePeerConnection(peer){
-    peer.on('disconnect', function(){
-        console.log('You have been disconnected');
-    });
-}
-
-// let inCall=false;
 let URL = window.URL || window.webkitURL;
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 const server_connection = {
@@ -38,14 +31,14 @@ const MODE = {
 };
 
 function inputValidator(evt){
-    console.log(evt.target);
+    // console.log(evt.target);
     let tar = evt.target;
     tar.value = tar.value.replace(/\W+/g, "");
 }
 
 window.onbeforeunload = function () {
     if (!peer.disconnected) {
-        console.log('something');
+        // console.log('something');
 
         $.ajax({
             type: 'post',
@@ -108,7 +101,7 @@ class Login extends React.Component {
         // console.log(component);
         e.preventDefault();
 
-        console.log('Attempting login...');
+        // console.log('Attempting login...');
         // console.log(this);
         let that = this;
         let error_container = $('#login-error');
@@ -128,16 +121,16 @@ class Login extends React.Component {
                     password:z_password
                 }),
                 success(data) {
-                    console.log('Success');
-                    console.log(data);
+                    // console.log('Success');
+                    // console.log(data);
                     let d = JSON.parse(data);
                     setCookie('user', JSON.stringify(d), 15 * 60);
                     that.props.login(MODE.PSYKE, d);
                 },
                 error(err) {
                     error_container.text("Status: " + err.status + " \nStatus Code: " + err.statusCode);
-                    console.log('err');
-                    console.log(err);
+                    // console.log('err');
+                    console.error('Error: ', err);
                     // db.users += JSON.stringify({
                     //     username: z_username,
                     //     password: z_password
@@ -216,14 +209,14 @@ class Register extends React.Component {
         // console.log(component);
         e.preventDefault();
 
-        console.log('Attempting register...');
+        // console.log('Attempting register...');
         // console.log(this);
         let that = this;
         let error_container = $('#register-error');
         let z_username = $('#register_username').val().toString();
         let z_password = $('#register_password').val().toString();
         z_password = CryptoJS.SHA256(z_password).toString();
-        console.log(z_username + "::" + z_password);
+        // console.log(z_username + "::" + z_password);
         if (z_username === "" || z_password === "") {
             error_container.toggleClass('hidden', false);
             error_container.text('You need to provide a username and password');
@@ -237,16 +230,16 @@ class Register extends React.Component {
                     password: z_password
                 }),
                 success(data) {
-                    console.log('Success');
-                    console.log(data);
+                    // console.log('Success');
+                    // console.log(data);
                     let d = JSON.parse(data);
-                    console.log(d);
+                    // console.log(d);
                     setCookie('user', JSON.stringify(d), 15 * 60);
                     that.props.register(MODE.PSYKE, d);
                 },
                 error(err) {
-                    console.log('err');
-                    console.log(err);
+                    // console.log('err');
+                    console.err("Error: ", err);
                     // db.users += JSON.stringify({
                     //     username: z_username,
                     //     password: z_password
@@ -381,9 +374,9 @@ class Psyke extends React.Component {
     componentDidMount() {
         let user = this.props.user;
         let that = this;
-        console.log(JSON.stringify(user));
-        console.log(user);
-        console.log(user.rooms);
+        // console.log(JSON.stringify(user));
+        // console.log(user);
+        // console.log(user.rooms);
         // that.setState({
         //     current_room: user.rooms[0]._id,
         //     rooms: user.rooms
@@ -391,7 +384,7 @@ class Psyke extends React.Component {
 
         that.state.current_room = user.rooms[0]._id;
         that.state.rooms = user.rooms;
-        console.log(that.state.rooms);
+        // console.log(that.state.rooms);
 
         that.setState(that.state);
 
@@ -432,7 +425,7 @@ class Psyke extends React.Component {
             current_room: _id,
             rooms: this.state.rooms
         });
-        console.log('should update chat container props');
+        // console.log('should update chat container props');
     }
 
     render() {
@@ -467,7 +460,7 @@ class RoomRack extends React.Component {
     };
 
     updateCurrentRoom(_id) {
-        console.log(_id);
+        // console.log(_id);
         this.setState({
             current_room: _id,
             rooms: this.state.rooms
@@ -491,9 +484,9 @@ class RoomRack extends React.Component {
     joinExisting(e){
         e.preventDefault();
         let that = this;
-        console.log(that.state);
-        console.log(that.props);
-        console.log(that.props.user_id);
+        // console.log(that.state);
+        // console.log(that.props);
+        // console.log(that.props.user_id);
         let joinRoomInput = $('#join-room-input');
         let newRoomInput = $('#new-room-input');
         let room_name = joinRoomInput.val();
@@ -508,8 +501,8 @@ class RoomRack extends React.Component {
                     user_id: that.props.user_id
                 }),
                 success(data){
-                    console.log('Successfully created a new room!');
-                    console.log(data);
+                    // console.log('Successfully created a new room!');
+                    // console.log(data);
 
 
 
@@ -521,7 +514,7 @@ class RoomRack extends React.Component {
                     that.props.addNewRoom(room);
                 },
                 error(err){
-                    console.log(err);
+                    console.err('Error: ', err);
                 }
             });
         } else {
@@ -532,9 +525,9 @@ class RoomRack extends React.Component {
     newRoom(e){
         e.preventDefault();
         let that = this;
-        console.log(that.state);
-        console.log(that.props);
-        console.log(that.props.user_id);
+        // console.log(that.state);
+        // console.log(that.props);
+        // console.log(that.props.user_id);
         let joinRoomInput = $('#join-room-input');
         let newRoomInput = $('#new-room-input');
         let room_name = newRoomInput.val();
@@ -549,8 +542,8 @@ class RoomRack extends React.Component {
                     user_id: that.props.user_id
                 }),
                 success(data){
-                    console.log('Successfully created a new room!');
-                    console.log(data);
+                    // console.log('Successfully created a new room!');
+                    // console.log(data);
 
                     let room = JSON.parse(data);
 
@@ -561,7 +554,7 @@ class RoomRack extends React.Component {
                     $('#newRoomModal').modal('toggle');
                 },
                 error(err){
-                    console.log(err);
+                    console.err('Error ', err);
                 }
             });
         } else {
@@ -707,14 +700,14 @@ class ChatContainer extends React.Component {
     };
 
     componentDidMount() {
-        console.log(this.props);
+        // console.log(this.props);
         this.peerSetup(this.props.peer);
-        console.log(typeof this.state.room.log);
+        // console.log(typeof this.state.room.log);
     }
 
     componentWillReceiveProps(nextProps) {
         let that = this;
-        console.log('ChatComponent - componentWillReceiveProps');
+        // console.log('ChatComponent - componentWillReceiveProps');
         // $.each(Object.values(cons), function (i, v) {
         //     console.log(v);
         // });
@@ -733,28 +726,28 @@ class ChatContainer extends React.Component {
                 user_id: nextProps.user._id
             }),
             success(data) {
-                console.log('Success');
-                console.log(data);
-                console.log(JSON.parse(data));
+                // console.log('Success');
+                // console.log(data);
+                // console.log(JSON.parse(data));
                 let r = JSON.parse(data);
-                console.log('connected local user to the room with id ' + nextProps.current_room);
+                // console.log('connected local user to the room with id ' + nextProps.current_room);
                 r.users = {};
                 r.streams = [];
-                console.log(nextProps.user._id);
+                // console.log(nextProps.user._id);
                 r.users[nextProps.user._id] = nextProps.user;
                 r.log.unshift(that.state.room.log[0]);
                 that.state.room = r;
                 that.setState(that.state);
-                console.log(r);
+                // console.log(r);
 
                 $.each(r.online_members, function (i, peer_id) {
-                    console.log(peer_id, peer.id);
+                    // console.log(peer_id, peer.id);
                     if (peer_id !== nextProps.peer.id) {
                         let conn = peer.connect(peer_id);
-                        console.log(conn);
+                        // console.log(conn);
                         that.addDataConnection(conn);
                     } else {
-                        console.log('add self to users list');
+                        // console.log('add self to users list');
                     }
                 });
 
@@ -764,7 +757,7 @@ class ChatContainer extends React.Component {
 
     decodeData(data) {
         let that = this;
-        console.log(data);
+        // console.log(data);
         switch (data.type) {
             case 'info-request':
                 cons[data.user_id].send({
@@ -788,10 +781,10 @@ class ChatContainer extends React.Component {
                     // that.postNewNotif({msg: data.user.username + ' has joined the chat'});
                     let room = that.state.room;
                     // room.inCall = false;
-                    console.log(data.user);
+                    // console.log(data.user);
                     room.users[data.user._id] = data.user;
                     that.setState({room: room});
-                    console.log('user info added');
+                    // console.log('user info added');
                     // that.forceUpdate();
                 }
                 // room.online_members[data.user_id] = data.content;
@@ -866,7 +859,7 @@ class ChatContainer extends React.Component {
             });
             call.on('close', function () {
                 $('#stream-' + call.peer).remove();
-                console.log('something');
+                // console.log('something');
                 // if(that.state.room.inCall){
                 // that.postNewData({msg: that.state.room.users[call.peer].username + ' has left the call', type: 'notif', timestamp: (new Date()).toUTCString()});
                 // }
@@ -883,9 +876,9 @@ class ChatContainer extends React.Component {
         });
 
         conn.on('close', function () {
-            console.log(that.state.room);
-            console.log(that.state.room.users);
-            console.log(that.state.room.users[conn.peer]);
+            // console.log(that.state.room);
+            // console.log(that.state.room.users);
+            // console.log(that.state.room.users[conn.peer]);
             if(that.state.room.users[conn.peer] !== undefined){
                 that.postNewData({
                     msg: that.state.room.users[conn.peer].username + ' has left the chat',
@@ -894,7 +887,7 @@ class ChatContainer extends React.Component {
                 });
                 // that.postNewNotif({msg: that.state.room.users[this.peer].username + ' has left the chat'});
                 // dropUser(this.peer);
-                console.log(conn.peer, 'has disconnected');
+                // console.log(conn.peer, 'has disconnected');
                 let new_state = Object.assign({}, that.state);
                 delete new_state.room.users[conn.peer];
                 that.setState(new_state);
@@ -908,21 +901,21 @@ class ChatContainer extends React.Component {
         conn.on('error', function (err) {
             that.postNewData({msg: err, type: 'err', timestamp: (new Date()).toUTCString()});
             // that.postNewError({msg: err});
-            console.log(err);
+            // console.log(err);
         });
     }
 
     addDataConnection(conn) {
         let that = this;
-        console.log(conn);
+        // console.log(conn);
         cons[conn.peer] = conn;
         if (conn.open) {
             that.addConnEventListeners(conn);
             conn.send({type: 'info-request', user_id: peer.id});
         } else {
-            console.log('waiting for conn to open');
+            // console.log('waiting for conn to open');
             conn.on('open', function () {
-                console.log('conn has opened');
+                // console.log('conn has opened');
                 that.addConnEventListeners(conn);
                 conn.send({type: 'info-request', user_id: peer.id});
             });
@@ -933,7 +926,7 @@ class ChatContainer extends React.Component {
         let that = this;
         if (p instanceof Peer) {
             p.on('disconnected', function () {
-                console.log("Recon: ", recon);
+                // console.log("Recon: ", recon);
                 if(recon === undefined){
                     that.postNewData({
                         type: 'notif',
@@ -975,13 +968,13 @@ class ChatContainer extends React.Component {
                         }
                     }, 3000);
                 } else {
-                    console.log("Recon is already defined as: ", recon);
+                    // console.log("Recon is already defined as: ", recon);
                 }
             });
 
             p.on('connection', function (conn) {
-                console.log(conn);
-                console.log('Peer with id (' + conn.peer + ') has connected to you');
+                // console.log(conn);
+                // console.log('Peer with id (' + conn.peer + ') has connected to you');
                 that.addDataConnection(conn);
                 conn.send({type: 'info-request', user_id: p._id});
             });
@@ -1001,10 +994,10 @@ class ChatContainer extends React.Component {
         let that = this;
 
         function step2() {
-            console.log('step2');
+            // console.log('step2');
             if (useVoice) {
                 $.each(Object.values(cons), function (i, conn) {
-                    console.log(conn);
+                    // console.log(conn);
                     if (that.state.room.inCall) {
                         //disconnect from the call
                         cons[conn.peer].send({type: 'hangup', user: that.state.room.users[that.props.peer.id]})
@@ -1018,12 +1011,12 @@ class ChatContainer extends React.Component {
                 that.setState(that.state);
                 // that.setState({room: that.state.room, inCall: !that.state.inCall, useVoice: that.state.useVoice});
             } else {
-                console.log('useVoice is false');
+                // console.log('useVoice is false');
             }
             // that.forceUpdate();
         }
 
-        console.log(navigator);
+        // console.log(navigator);
 
         if (window.localStream === undefined) {
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
@@ -1031,7 +1024,7 @@ class ChatContainer extends React.Component {
                 window.localStream = stream;
                 step2();
             }, function () {
-                console.log(window.localStream);
+                // console.log(window.localStream);
                 that.postNewData(
                     {
                         type: 'error',
@@ -1048,7 +1041,7 @@ class ChatContainer extends React.Component {
                 console.error('shit happened');
             });
         } else {
-            console.log('window.localStream already initialized');
+            // console.log('window.localStream already initialized');
             step2();
         }
     }
@@ -1060,7 +1053,7 @@ class ChatContainer extends React.Component {
 
     postNewData(data) {
         // let that = this;
-        console.log(data);
+        // console.log(data);
         this.state.room.log.push(data);
         this.autoScroll();
         this.setState(this.state);
@@ -1118,10 +1111,10 @@ class ChatContainer extends React.Component {
     broadcast(msg) {
         let that = this;
         // console.log(this);
-        console.log(this.state);
-        console.log(this.state.room);
-        console.log(this.state.room.users);
-        console.log(msg);
+        // console.log(this.state);
+        // console.log(this.state.room);
+        // console.log(this.state.room.users);
+        // console.log(msg);
         let data = {
             type: 'message',
             sender: this.state.room.users[this.props.peer.id],
@@ -1130,7 +1123,7 @@ class ChatContainer extends React.Component {
         };
 
         let obj = Object.assign({}, data);
-        console.log(obj);
+        // console.log(obj);
         delete obj.sender.rooms;
         delete obj.sender.__v;
 
@@ -1145,8 +1138,8 @@ class ChatContainer extends React.Component {
             contentType: 'application/json',
             data: JSON.stringify(toServer),
             success(r) {
-                console.log(r);
-                console.log(data);
+                // console.log(r);
+                // console.log(data);
                 that.postNewData(data);
                 $.each(Object.keys(cons), function (i, v) {
                     cons[v].send(data);
@@ -1229,22 +1222,21 @@ class ChatContainer extends React.Component {
                 <div id="chat">
                     {/*<h3>Chatlog for {this.state.room.room_name}</h3>*/}
                     <ul id="messages">
-                        {console.log(this.state.room.log)}
                         {(this.state.room.log).map((msg) => {
                             switch (msg.type) {
                                 case 'message':
-                                    return <Message key={msg.timestamp} room={this.state.room} sender={msg.sender}
-                                                    message={msg.msg}/>;
+                                // {console.log(CryptoJS.SHA256(JSON.stringify(msg)))}
+                                // {console.log(CryptoJS.SHA256(JSON.stringify(msg)).toString())}
+                                    return <Message id={CryptoJS.SHA256(JSON.stringify(msg)).toString()} key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} room={this.state.room} sender={msg.sender} message={msg.msg}/>;
                                     break;
                                 case 'whisper':
-                                    return <Whisper key={msg.timestamp} room={this.state.room} sender={msg.sender}
-                                                    target={msg.target} message={msg.msg}/>;
+                                    return <Whisper key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} room={this.state.room} sender={msg.sender} target={msg.target} message={msg.msg}/>;
                                     break;
                                 case 'notif':
-                                    return <Notification key={msg.timestamp} message={msg.msg}/>;
+                                    return <Notification key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} message={msg.msg}/>;
                                     break;
                                 case 'error':
-                                    return <ErrorMsg key={msg.timestamp} message={msg.msg}/>;
+                                    return <ErrorMsg key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} message={msg.msg}/>;
                                     break;
                             }
                         })}
@@ -1253,7 +1245,7 @@ class ChatContainer extends React.Component {
                         <input id="user-input" type="text" required={true} autoComplete="off"
                                placeholder="Enter Message here, or @USERNAME to whisper someone"/>
                         <input type="file" className="hidden" accept="image/*|audio/*|video/*"/>
-                        <button id="send-message" onClick={console.log('send-message onClick')}>Send</button>
+                        <button id="send-message">Send</button>
                     </form>
                 </div>
                 <div id="user-rack">
@@ -1319,7 +1311,7 @@ class App extends React.Component {
     componentDidMount() {
         let cookie_data = getCookie('user');
         if (cookie_data) {
-            console.log(cookie_data);
+            // console.log(cookie_data);
             let user = JSON.parse(cookie_data);
             // this.setState({mode: MODE.PSYKE, user: user});
             peer = new Peer(user._id, server_connection);
@@ -1376,7 +1368,7 @@ class App extends React.Component {
     }
 
     register(mode, user) {
-        console.log(user);
+        // console.log(user);
         peer = new Peer(user._id, server_connection);
         this.setState({
             mode: mode,
