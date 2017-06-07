@@ -679,7 +679,7 @@ class ChatContainer extends React.Component {
                     stream: URL.createObjectURL(stream)
                 };
                 that.state.room.streams.push(str);
-                that.setState(stream);
+                that.setState(that.state);
             });
             call.on('close', function () {
                 $('#stream-' + call.peer).remove();
