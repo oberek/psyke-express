@@ -88,6 +88,7 @@ class ErrorAlert extends React.Component{
         );
     }
 }
+
 class WarningAlert extends React.Component{
     render() {
         return(
@@ -287,11 +288,15 @@ class Register extends React.Component {
 class Psyke extends React.Component {
     state = {
         current_room: null,
-        rooms: []
+        rooms: null
     };
 
     addNewRoom(room){
         this.state.rooms.push(room);
+        let user = Object.assign({}, this.props.user);
+        user.rooms.push(room);
+        delete_cookie('user');
+        setCookie('user', user, 5*60*1000);
         this.setState(this.state);
     }
 
@@ -360,6 +365,7 @@ class RoomRack extends React.Component {
             rooms: nextProps.rooms,
             errors: this.state.errors
         });
+        this.forceUpdate();
     }
 
 
@@ -448,11 +454,13 @@ class RoomRack extends React.Component {
                 <h4> Room Rack </h4>
                 <ul id="room-list"> {
                     this.state.rooms.map((room) => {
-                        return ( <li key={ room._id }>
-                            <button id={ room._id } className={ (this.state.current_room === room._id ? "current " : "") + "room btn" } onClick={ () => this.updateCurrentRoom(room._id) }>
-                                { room.room_name }
-                            </button>
-                        </li>);
+                        return (
+                            <li key={ room._id }>
+                                <button id={ room._id } className={ ((this.state.current_room === room._id) ? "current " : "") + "room btn" } onClick={ () => this.updateCurrentRoom(room._id) }>
+                                    { room.room_name }
+                                </button>
+                            </li>
+                        );
                     })
                 } </ul>
                 <div className="wrapper">
@@ -637,7 +645,7 @@ class ChatContainer extends React.Component {
                 that.postNewData({
                     type: 'notif',
                     timestamp: (new Date()).toUTCString(),
-                    msg: room.online_members[data.user_id].name + ' has joined the call.'
+                    msg: that.state.room.online_members[data.user_id].name + ' has joined the call.'
                 });
                 if (useVoice && that.state.room.inCall) {
                     let call = peer.call(data.user_id, window.localStream);
@@ -1017,6 +1025,7 @@ class App extends React.Component {
         let cookie_data = getCookie('user');
         if (cookie_data) {
             let user = JSON.parse(cookie_data);
+            console.log(user);
             peer = new Peer(user._id, server_connection);
             this.setState({
                 mode: MODE.PSYKE,
