@@ -23,6 +23,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = app.listen(PORT);
+peerServer = ExpressPeerServer(server, options);
+
+app.use('/api/', peerServer);
 
 var options = {
     debug: true
@@ -247,7 +250,7 @@ app.use('/', function (req, res) {
     res.sendFile(path.join(__dirname, '/public/psyke.html'));
 });
 
-app.use('/peer', ExpressPeerServer(server, options));
+// app.use('/peer', ExpressPeerServer(server, options));
 
 module.exports = app;
 
@@ -256,7 +259,7 @@ server.on('connection', function (id) {
 server.on('disconnect', function (id) {});
 
 console.log('listening on: localhost:' + PORT);
-server.listen(PORT);
+// server.listen(PORT);
 
 function normalizePort(val) {
     var port = parseInt(val, 10);

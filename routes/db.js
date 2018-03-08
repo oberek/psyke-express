@@ -7,7 +7,8 @@ var mongoose = require('mongoose');
 
 // mongoose.connect('mongodb://127.0.0.1/my_database');
 // mongoose.connect('mongodb://projectgroup:neumont@ds161931.mlab.com:61931/psyke-react');
-mongoose.connect('mongodb://production_user:production_password@ds139817.mlab.com:39817/psyke');
+// mongoose.connect('mongodb://production_user:production_password@ds139817.mlab.com:39817/psyke');
+mongoose.connect('mongodb://spoon:970728392FDEC6E63D8EBBF766626EE8FC63AD982D9A6808746B495444C96583@ds113626.mlab.com:13626/psyke-demo');
 
 var db = mongoose.connection;
 
