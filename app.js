@@ -9,6 +9,8 @@ var db = require('./routes/db');
 
 var app = express();
 
+var online_users = [];
+
 var PORT = normalizePort(process.env.port || '8080');
 
 app.set('port', PORT);
@@ -23,8 +25,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 var server = app.listen(PORT);
-peerServer = ExpressPeerServer(server, options);
+var peerServer = ExpressPeerServer(server, options);
 
+app.use('/peer/', peerServer);
 app.use('/api/', peerServer);
 
 var options = {
@@ -34,18 +37,30 @@ var options = {
 app.post('/login', function (req, res) {
     db.User.findOne({username: req.body.username}).exec(function (err, user) {
         if (err) throw err;
-
         if (user !== null) {
+            console.log(user._id.toString());
+            console.log(online_users);
+            console.log(online_users.indexOf(user._id.toString()));
+
             if (user.password === req.body.password) {
-                var response = Object.assign({}, user.toJSON());
-                delete response.password;
-                response._id = user._id;
-                res.send(JSON.stringify(response));
+                if(online_users.indexOf(user._id.toString()) === -1){
+                    online_users.push(user._id+"");
+                    console.log(online_users);
+
+                    var response = Object.assign({}, user.toJSON());
+                    delete response.password;
+                    response._id = user._id;
+                    res.send(JSON.stringify(response));
+
+                } else {
+                    res.sendStatus(418);
+                }
             } else {
                 res.sendStatus(403);
             }
         } else {
-            res.sendStatus(404);
+            //404 tells the user that the username doesn't exist; 403 just says invalid username or password
+            res.sendStatus(403);
         }
 
     });
@@ -54,7 +69,6 @@ app.post('/login', function (req, res) {
 app.post('/connect', function (req, res) {
     var room_id = req.body.room_id;
     var user_id = req.body.user_id;
-
     db.User.findOne({_id: user_id}).exec(function (err, user) {
         if (err) throw err;
         for (var i = 0; i < user.rooms.length; i++) {
@@ -64,9 +78,8 @@ app.post('/connect', function (req, res) {
                     if (err) throw err;
 
                     if (room) {
-
-                        if (room._id.toString()===room_id && room.online_members.indexOf(user._id) === -1) {
-                            room.online_members.push(user._id);
+                        if (room._id.toString()===room_id && room.online_members.indexOf(user._id.toString()) === -1) {
+                            room.online_members.push(user._id.toString());
                             room.markModified('propChanged');
 
                             room.save(function (err) {
@@ -74,7 +87,7 @@ app.post('/connect', function (req, res) {
                             });
 
                         } else if (room._id.toString() !== room_id && room.online_members.indexOf(user._id) !== -1) {
-                            room.online_members.splice(room.online_members.indexOf(user._id), 1);
+                            room.online_members.splice(room.online_members.indexOf(user._id.toString()), 1);
                             room.markModified('propChanged');
 
                             room.save(function (err) {
@@ -90,7 +103,7 @@ app.post('/connect', function (req, res) {
 
     db.Room.findOne({_id: room_id}).exec(function (err, room) {
        if(err) throw err;
-
+       console.log('106', room);
        res.send(JSON.stringify(room));
     });
 });
@@ -102,6 +115,7 @@ app.post('/disconnect', function (req, res) {
 
         for(var i = 0; i > user.rooms.length; i++){
             (function(){
+
                 var room_id = user.rooms[i];
                 db.Room.findOne({_id: room_id}).exec(function(err, room){
                     if(err) throw err;
@@ -118,6 +132,18 @@ app.post('/disconnect', function (req, res) {
 
         res.sendStatus(200);
     });
+});
+
+peerServer.on('connection', function(id){
+    console.log('user with id '+id+' has connected');
+});
+
+peerServer.on('disconnect', function(id) {
+    console.log('user with id ' + id + ' has disconnected');
+    if(online_users.indexOf(id.toString()) !== -1){
+        online_users.splice(online_users.indexOf(id.toString()), 1);
+        console.log(id.toString(), online_users);
+    }
 });
 
 app.post('/register', function (req, res) {
@@ -253,10 +279,13 @@ app.use('/', function (req, res) {
 // app.use('/peer', ExpressPeerServer(server, options));
 
 module.exports = app;
-
-server.on('connection', function (id) {
-});
-server.on('disconnect', function (id) {});
+//
+// server.on('connection', function (id) {
+//     console.log('connection',id);
+// });
+// server.on('disconnect', function (id) {
+//     console.log('disconnect',id);
+// });
 
 console.log('listening on: localhost:' + PORT);
 // server.listen(PORT);

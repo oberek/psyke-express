@@ -134,6 +134,10 @@ class Login extends React.Component {
                         that.setState({
                             error: <ErrorAlert msg="No user with that username exists."/>
                         });
+                    } else if(err.status === 418){
+                        that.setState({
+                            error: <ErrorAlert msg="User is already logged in." />
+                        });
                     }
                 }
             });
@@ -163,10 +167,11 @@ class Login extends React.Component {
                 <form id="login-form" data-toggle="validator" onSubmit={this.attemptLogin.bind(this)}>
                     <div className="form-group">
                         <label htmlFor="username"> Username: </label>
-                        <input id="login_username" className="form-control" name="username" type="text" placeholder="Username" required/>
+                        <input id="login_username" className="form-control" name="username" type="text" autoComplete="username" placeholder="Username" required/>
                     </div>
                     <div className="form-group">
-                        <label htmlFor="password"> Password: </label> <input id="login_password" className="form-control" name="password" type="password" placeholder="Password" required/>
+                        <label htmlFor="password"> Password: </label>
+                        <input id="login_password" className="form-control" name="password" type="password" autoComplete="current-password" placeholder="Password" required/>
                     </div>
                     <input className="btn btn-success" type="submit" value="Submit" onClick={ this.attemptLogin.bind(this) }/>
                 </form>
@@ -556,7 +561,7 @@ class ChatContainer extends React.Component {
             streams: []
         }
     };
-
+strike
     componentDidMount() {
         this.peerSetup(this.props.peer);
     }
@@ -579,6 +584,7 @@ class ChatContainer extends React.Component {
             }),
             success(data) {
                 let r = JSON.parse(data);
+                console.log(r);
                 r.users = {};
                 r.streams = [];
                 r.users[nextProps.user._id] = nextProps.user;
@@ -587,10 +593,13 @@ class ChatContainer extends React.Component {
                 that.setState(that.state);
 
                 $.each(r.online_members, function (i, peer_id) {
-                    if (peer_id !== nextProps.peer.id) {
+                    if (peer_id !== nextProps.peer.id.toString()) {
+                        console.log('Attempting to connect to user with id '+ peer_id);
                         let conn = peer.connect(peer_id);
                         that.addDataConnection(conn);
+                        console.log(conn);
                     } else {
+                        console.log('Bypassing current user (id: '+peer_id+')');
                     }
                 });
 
@@ -689,6 +698,7 @@ class ChatContainer extends React.Component {
     }
 
     addConnEventListeners(conn) {
+    console.log('addConnEventListeners');
         let that = this;
         conn.on('data', function (data) {
             that.decodeData(data);
@@ -717,7 +727,9 @@ class ChatContainer extends React.Component {
     }
 
     addDataConnection(conn) {
+    console.log('addDataConnection');
         let that = this;
+        console.log(conn.peer);
         cons[conn.peer] = conn;
         if (conn.open) {
             that.addConnEventListeners(conn);
