@@ -13,6 +13,7 @@ let calls = {};
 let useVoice = false;
 let connectionAttempts = 0;
 let recon;
+let NOTIF_REMOVE_DELAY = 2500;
 
 let URL = window.URL || window.webkitURL;
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
@@ -521,7 +522,7 @@ class RoomRack extends React.Component {
 
 class Notification extends React.Component {
     render() {
-        return ( <li className="message notif"><strong>!!</strong> { this.props.message } </li> );
+        return ( <li id={this.props.eyedee} className="message notif"><strong>!!</strong> { this.props.message } </li> );
     }
 }
 
@@ -561,7 +562,6 @@ class ChatContainer extends React.Component {
             streams: []
         }
     };
-strike
     componentDidMount() {
         this.peerSetup(this.props.peer);
     }
@@ -960,7 +960,10 @@ strike
                                     return <Whisper key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} room={this.state.room} sender={msg.sender} target={msg.target} message={msg.msg}/>;
                                     break;
                                 case 'notif':
-                                    return <Notification key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} message={msg.msg}/>;
+                                    setTimeout(() => {
+                                        $('#'+CryptoJS.SHA256(JSON.stringify(msg)).toString()).remove();
+                                    }, NOTIF_REMOVE_DELAY);
+                                    return <Notification eyedee={CryptoJS.SHA256(JSON.stringify(msg)).toString()} key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} message={msg.msg}/>;
                                     break;
                                 case 'error':
                                     return <ErrorMsg key={CryptoJS.SHA256(JSON.stringify(msg)).toString()} message={msg.msg}/>;

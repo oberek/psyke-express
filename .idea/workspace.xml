@@ -3,9 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="cd58a46f-5d10-4752-a989-2a1195a39e98" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change beforePath="$PROJECT_DIR$/app.js" afterPath="$PROJECT_DIR$/app.js" />
+      <change beforePath="$PROJECT_DIR$/public/psyke.html" afterPath="$PROJECT_DIR$/public/psyke.html" />
       <change beforePath="$PROJECT_DIR$/public/scripts/Psyke_Babel.js" afterPath="$PROJECT_DIR$/public/scripts/Psyke_Babel.js" />
-      <change beforePath="$PROJECT_DIR$/public/scripts/peer.js" afterPath="" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -18,113 +17,117 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Psyke_Babel.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="829">
-              <caret line="729" column="37" lean-forward="true" selection-start-line="729" selection-start-column="37" selection-end-line="729" selection-end-column="37" />
-              <folding>
-                <element signature="e#516#587#0" expanded="false" />
-                <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-                <element signature="e#732#1057#0" expanded="false" />
-                <element signature="n#!!block;n#setCookie#0" expanded="false" />
-                <element signature="n#!!block;n#getCookie#0" expanded="false" />
-                <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
-                <element signature="n#ErrorAlert#0" expanded="false" />
-                <element signature="n#WarningAlert#0" expanded="false" />
-                <element signature="n#Login#0" expanded="false" />
-                <element signature="n#!!block;n#registerOnClickHandler#0;n#Login#0" expanded="false" />
-                <element signature="n#Register#0" expanded="false" />
-                <element signature="n#!!block;n#loginOnClickHandler#0;n#Register#0" expanded="false" />
-                <element signature="n#!!block;n#componentDidMount#0;n#Register#0" expanded="false" />
-                <element signature="n#!!block;n#render#0;n#Register#0" expanded="false" />
-                <element signature="n#Psyke#0" expanded="false" />
-                <element signature="n#RoomRack#0" expanded="false" />
-                <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
-                <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
-                <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-                <element signature="n#Notification#0" expanded="false" />
-                <element signature="n#ErrorMsg#0" expanded="false" />
-                <element signature="n#Whisper#0" expanded="false" />
-                <element signature="n#Message#0" expanded="false" />
-                <element signature="e#32151#32500#0" expanded="false" />
-                <element signature="e#32738#34912#0" expanded="false" />
-                <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
-                <element signature="n#MuteButton#0" expanded="false" />
-                <element signature="n#App#0" expanded="false" />
-                <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/.gitignore">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="189">
-              <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="psyke.html" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/public/psyke.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="29" column="43" lean-forward="true" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="App.css" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/public/stylesheets/App.css">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4389">
-              <caret line="209" column="18" lean-forward="false" selection-start-line="209" selection-start-column="18" selection-end-line="209" selection-end-column="18" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="db.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/routes/db.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="3" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="3" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="36" column="3" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="3" />
-              <folding>
-                <element signature="e#866#885#0" expanded="false" />
-                <element signature="e#927#1996#0" expanded="false" />
-                <element signature="e#3630#4419#0" expanded="false" />
-                <element signature="e#4463#4520#0" expanded="false" />
-                <element signature="e#4565#4806#0" expanded="false" />
-                <element signature="e#4852#6255#0" expanded="false" />
-                <element signature="e#6297#6666#0" expanded="false" />
-                <element signature="e#6709#7620#0" expanded="false" />
-                <element signature="e#8811#8876#0" expanded="false" />
-                <element signature="n#!!block;n#normalizePort#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <splitter split-orientation="horizontal" split-proportion="0.5">
+      <split-first>
+        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+          <file leaf-file-name="Psyke_Babel.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="252">
+                  <caret line="14" column="10" lean-forward="true" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
+                  <folding>
+                    <element signature="e#547#618#0" expanded="false" />
+                    <element signature="n#!!block;n#inputValidator#0" expanded="false" />
+                    <element signature="e#763#1088#0" expanded="false" />
+                    <element signature="n#!!block;n#setCookie#0" expanded="false" />
+                    <element signature="n#!!block;n#getCookie#0" expanded="false" />
+                    <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
+                    <element signature="n#ErrorAlert#0" expanded="false" />
+                    <element signature="n#WarningAlert#0" expanded="false" />
+                    <element signature="n#Login#0" expanded="false" />
+                    <element signature="n#!!block;n#registerOnClickHandler#0;n#Login#0" expanded="false" />
+                    <element signature="n#Register#0" expanded="false" />
+                    <element signature="n#!!block;n#loginOnClickHandler#0;n#Register#0" expanded="false" />
+                    <element signature="n#!!block;n#componentDidMount#0;n#Register#0" expanded="false" />
+                    <element signature="n#!!block;n#render#0;n#Register#0" expanded="false" />
+                    <element signature="n#Psyke#0" expanded="false" />
+                    <element signature="n#RoomRack#0" expanded="false" />
+                    <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
+                    <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
+                    <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
+                    <element signature="n#ErrorMsg#0" expanded="false" />
+                    <element signature="n#Whisper#0" expanded="false" />
+                    <element signature="n#Message#0" expanded="false" />
+                    <element signature="e#32198#32547#0" expanded="false" />
+                    <element signature="e#32785#34959#0" expanded="false" />
+                    <element signature="n#MuteButton#0" expanded="false" />
+                    <element signature="n#App#0" expanded="false" />
+                    <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/.gitignore">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="189">
+                  <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="psyke.html" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/public/psyke.html">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="588">
+                  <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="App.css" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/public/stylesheets/App.css">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="4389">
+                  <caret line="209" column="18" lean-forward="false" selection-start-line="209" selection-start-column="18" selection-end-line="209" selection-end-column="18" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="db.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/routes/db.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="3" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="3" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-first>
+      <split-second>
+        <leaf>
+          <file leaf-file-name="app.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/app.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="461">
+                  <caret line="127" column="72" lean-forward="true" selection-start-line="127" selection-start-column="72" selection-end-line="127" selection-end-column="72" />
+                  <folding>
+                    <element signature="e#866#885#0" expanded="false" />
+                    <element signature="e#927#1996#0" expanded="false" />
+                    <element signature="e#2041#3582#0" expanded="false" />
+                    <element signature="e#4463#4520#0" expanded="false" />
+                    <element signature="e#4852#6255#0" expanded="false" />
+                    <element signature="e#6297#6666#0" expanded="false" />
+                    <element signature="e#6709#7620#0" expanded="false" />
+                    <element signature="e#8811#8876#0" expanded="false" />
+                    <element signature="n#!!block;n#normalizePort#0" expanded="false" />
+                  </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+        </leaf>
+      </split-second>
+    </splitter>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>/newRoom</find>
       <find>//</find>
       <find>login</find>
       <find>setTimeout(function(){</find>
@@ -149,11 +152,12 @@
       <find>#messages</find>
       <find>messages</find>
       <find>ChatContainer</find>
-      <find>notif</find>
       <find>autoScroll()</find>
       <find>peer.on</find>
       <find>peer</find>
       <find>/connect</find>
+      <find>add</find>
+      <find>notif</find>
     </findStrings>
     <replaceStrings>
       <replace>SHA</replace>
@@ -177,6 +181,7 @@
         <option value="$PROJECT_DIR$/public/stylesheets/App.css" />
         <option value="$PROJECT_DIR$/routes/db.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/psyke.html" />
         <option value="$PROJECT_DIR$/public/scripts/Psyke_Babel.js" />
       </list>
     </option>
@@ -229,6 +234,13 @@
               <item name="psyke-express" type="462c0819:PsiDirectoryNode" />
               <item name="public" type="462c0819:PsiDirectoryNode" />
               <item name="scripts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="psyke-express" type="b2602c69:ProjectViewProjectNode" />
+              <item name="psyke-express" type="462c0819:PsiDirectoryNode" />
+              <item name="public" type="462c0819:PsiDirectoryNode" />
+              <item name="scripts" type="462c0819:PsiDirectoryNode" />
+              <item name="peer.js" type="620a8d5e:NestingTreeNode" />
             </path>
           </expand>
           <select />
@@ -351,17 +363,18 @@
       <workItem from="1496823342377" duration="609000" />
       <workItem from="1520550073216" duration="5381000" />
       <workItem from="1520845403926" duration="198000" />
-      <workItem from="1520854509753" duration="2593000" />
+      <workItem from="1520854509753" duration="3923000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28847000" />
+    <option name="totallyTimeSpent" value="30177000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="27" width="1920" height="1053" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13489583" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.13489583" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -389,7 +402,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="5" />
+      <option name="time" value="6" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -399,9 +412,9 @@
         <state relative-caret-position="6681">
           <caret line="393" column="101" lean-forward="true" selection-start-line="393" selection-start-column="101" selection-end-line="393" selection-end-column="101" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -418,13 +431,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -471,9 +482,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -490,9 +500,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -531,9 +540,9 @@
         <state relative-caret-position="21114">
           <caret line="1242" column="45" lean-forward="true" selection-start-line="1242" selection-start-column="45" selection-end-line="1242" selection-end-column="45" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -550,13 +559,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -571,9 +578,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -604,9 +610,9 @@
         <state relative-caret-position="16439">
           <caret line="967" column="30" lean-forward="false" selection-start-line="967" selection-start-column="30" selection-end-line="967" selection-end-column="30" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -623,13 +629,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -684,9 +688,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -701,9 +704,9 @@
         <state relative-caret-position="230">
           <caret line="643" column="19" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="1121" selection-end-column="58" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -720,13 +723,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -739,9 +740,9 @@
         <state relative-caret-position="6902">
           <caret line="639" column="20" lean-forward="false" selection-start-line="639" selection-start-column="20" selection-end-line="639" selection-end-column="100" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -758,13 +759,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -811,9 +810,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -828,9 +826,9 @@
         <state relative-caret-position="6681">
           <caret line="393" column="101" lean-forward="true" selection-start-line="393" selection-start-column="101" selection-end-line="393" selection-end-column="101" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -847,13 +845,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -900,9 +896,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -919,9 +914,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -960,9 +954,9 @@
         <state relative-caret-position="21114">
           <caret line="1242" column="45" lean-forward="true" selection-start-line="1242" selection-start-column="45" selection-end-line="1242" selection-end-column="45" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -979,13 +973,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -1000,9 +992,8 @@
           <folding>
             <element signature="e#866#885#0" expanded="false" />
             <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
             <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
             <element signature="e#4852#6255#0" expanded="false" />
             <element signature="e#6297#6666#0" expanded="false" />
             <element signature="e#6709#7620#0" expanded="false" />
@@ -1033,9 +1024,9 @@
         <state relative-caret-position="16439">
           <caret line="967" column="30" lean-forward="false" selection-start-line="967" selection-start-column="30" selection-end-line="967" selection-end-column="30" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -1052,13 +1043,11 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
@@ -1090,6 +1079,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/public/scripts/peer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/routes/db.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1098,14 +1097,40 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="461">
+          <caret line="127" column="72" lean-forward="true" selection-start-line="127" selection-start-column="72" selection-end-line="127" selection-end-column="72" />
+          <folding>
+            <element signature="e#866#885#0" expanded="false" />
+            <element signature="e#927#1996#0" expanded="false" />
+            <element signature="e#2041#3582#0" expanded="false" />
+            <element signature="e#4463#4520#0" expanded="false" />
+            <element signature="e#4852#6255#0" expanded="false" />
+            <element signature="e#6297#6666#0" expanded="false" />
+            <element signature="e#6709#7620#0" expanded="false" />
+            <element signature="e#8811#8876#0" expanded="false" />
+            <element signature="n#!!block;n#normalizePort#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/psyke.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="588">
+          <caret line="28" column="0" lean-forward="true" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/scripts/Psyke_Babel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="829">
-          <caret line="729" column="37" lean-forward="true" selection-start-line="729" selection-start-column="37" selection-end-line="729" selection-end-column="37" />
+        <state relative-caret-position="252">
+          <caret line="14" column="10" lean-forward="true" selection-start-line="14" selection-start-column="10" selection-end-line="14" selection-end-column="10" />
           <folding>
-            <element signature="e#516#587#0" expanded="false" />
+            <element signature="e#547#618#0" expanded="false" />
             <element signature="n#!!block;n#inputValidator#0" expanded="false" />
-            <element signature="e#732#1057#0" expanded="false" />
+            <element signature="e#763#1088#0" expanded="false" />
             <element signature="n#!!block;n#setCookie#0" expanded="false" />
             <element signature="n#!!block;n#getCookie#0" expanded="false" />
             <element signature="n#!!block;n#delete_cookie#0" expanded="false" />
@@ -1122,52 +1147,15 @@
             <element signature="n#!!block;n#joinExisting#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#newRoom#0;n#RoomRack#0" expanded="false" />
             <element signature="n#!!block;n#render#0;n#RoomRack#0" expanded="false" />
-            <element signature="n#Notification#0" expanded="false" />
             <element signature="n#ErrorMsg#0" expanded="false" />
             <element signature="n#Whisper#0" expanded="false" />
             <element signature="n#Message#0" expanded="false" />
-            <element signature="e#32151#32500#0" expanded="false" />
-            <element signature="e#32738#34912#0" expanded="false" />
-            <element signature="n#!!block;n#render#0;n#ChatContainer#0" expanded="false" />
+            <element signature="e#32198#32547#0" expanded="false" />
+            <element signature="e#32785#34959#0" expanded="false" />
             <element signature="n#MuteButton#0" expanded="false" />
             <element signature="n#App#0" expanded="false" />
             <element signature="n#!!block;n#logout#0;n#App#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="36" column="3" lean-forward="false" selection-start-line="36" selection-start-column="0" selection-end-line="36" selection-end-column="3" />
-          <folding>
-            <element signature="e#866#885#0" expanded="false" />
-            <element signature="e#927#1996#0" expanded="false" />
-            <element signature="e#3630#4419#0" expanded="false" />
-            <element signature="e#4463#4520#0" expanded="false" />
-            <element signature="e#4565#4806#0" expanded="false" />
-            <element signature="e#4852#6255#0" expanded="false" />
-            <element signature="e#6297#6666#0" expanded="false" />
-            <element signature="e#6709#7620#0" expanded="false" />
-            <element signature="e#8811#8876#0" expanded="false" />
-            <element signature="n#!!block;n#normalizePort#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/scripts/peer.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/public/psyke.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="29" column="43" lean-forward="true" selection-start-line="29" selection-start-column="43" selection-end-line="29" selection-end-column="43" />
-          <folding />
         </state>
       </provider>
     </entry>
